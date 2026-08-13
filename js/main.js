@@ -22,7 +22,22 @@ function renderNav(activePage) {
     <nav class="navbar">
       <div class="navbar-inner">
         <a href="index.html" class="nav-brand" aria-label="napell.space home">
-          <div class="nav-brand-icon">N</div>
+          <div class="nav-brand-icon">
+            <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="napell-lg" x1="4" y1="2" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#1d9bf0"/>
+                  <stop offset="1" stop-color="#7c5cff"/>
+                </linearGradient>
+              </defs>
+              <path d="M24 2 44 13v22L24 46 4 35V13Z" fill="url(#napell-lg)" fill-opacity="0.16" stroke="url(#napell-lg)" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M16.5 33V15l15 18V15" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="6.5" cy="12.5" r="1.8" fill="#7c5cff"/>
+              <circle cx="41.5" cy="35.5" r="1.8" fill="#1d9bf0"/>
+              <circle cx="41.5" cy="12.5" r="1.2" fill="#7cffff"/>
+              <circle cx="6.5" cy="35.5" r="1.2" fill="#7cffff"/>
+            </svg>
+          </div>
           <div class="nav-brand-text">
             <span class="nav-brand-name" data-i18n="nav_brand"></span>
             <span class="nav-brand-tag" data-i18n="nav_tagline"></span>
