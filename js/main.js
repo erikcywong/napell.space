@@ -21,8 +21,8 @@ function renderNav(activePage) {
   return `
     <nav class="navbar">
       <div class="navbar-inner">
-        <a href="index.html" class="nav-brand">
-          <div class="nav-brand-icon">CI</div>
+        <a href="index.html" class="nav-brand" aria-label="napell.space home">
+          <div class="nav-brand-icon">N</div>
           <div class="nav-brand-text">
             <span class="nav-brand-name" data-i18n="nav_brand"></span>
             <span class="nav-brand-tag" data-i18n="nav_tagline"></span>
@@ -62,7 +62,7 @@ function renderNav(activePage) {
               </button>
             </div>
           </div>
-          <button class="nav-mobile-toggle" onclick="toggleMobileNav()">
+          <button class="nav-mobile-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation" aria-expanded="false">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="3" y1="6" x2="21" y2="6"/>
               <line x1="3" y1="12" x2="21" y2="12"/>
@@ -174,8 +174,25 @@ document.addEventListener('click', (e) => {
 
 function toggleMobileNav() {
   const links = document.getElementById('nav-links');
-  if (links) links.classList.toggle('show');
+  const btn = document.querySelector('.nav-mobile-toggle');
+  if (links) {
+    const isOpen = links.classList.toggle('show');
+    if (btn) btn.setAttribute('aria-expanded', String(isOpen));
+  }
 }
+
+function closeMobileNav() {
+  const links = document.getElementById('nav-links');
+  const btn = document.querySelector('.nav-mobile-toggle');
+  if (links) links.classList.remove('show');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+// Close mobile nav when a nav link is clicked
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('.nav-link');
+  if (link) closeMobileNav();
+});
 
 /* ─── Toast Notification ─── */
 function showToast(message, type = 'info') {
@@ -213,8 +230,28 @@ window.renderDynamicContent = function(lang) {
     footerContainer.innerHTML = renderFooter();
   }
 
-  // Re-apply translations (already done by I18N.apply, but nav/footer were just re-rendered)
-  I18N.apply();
+  // Translate newly rendered nav/footer elements without triggering recursion
+  document.querySelectorAll('#nav-container [data-i18n], #footer-container [data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = I18N.t(key);
+    el.textContent = Array.isArray(val) ? val.join(' ') : val;
+  });
+  document.querySelectorAll('#nav-container [data-i18n-attr], #footer-container [data-i18n-attr]').forEach(el => {
+    const pairs = el.getAttribute('data-i18n-attr').split(';');
+    pairs.forEach(pair => {
+      const [attr, key] = pair.split(':').map(s => s.trim());
+      if (attr && key) el.setAttribute(attr, I18N.t(key));
+    });
+  });
+
+  // Keep language toggle label in sync
+  const toggle = document.getElementById('lang-current-label');
+  if (toggle) toggle.textContent = I18N.translations[I18N._lang]._lang_label;
+
+  // Highlight active language option
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === I18N._lang);
+  });
 
   // Page-specific dynamic content
   const page = document.body.dataset.page;
