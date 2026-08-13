@@ -131,7 +131,6 @@ function renderFooter() {
   return `
     <footer class="footer">
       <div class="footer-brand" data-i18n="nav_brand"></div>
-      <div class="footer-text"><span data-i18n="footer_ico"></span> · ICO Foundation · www.icofoundation.cn</div>
       <div class="footer-text">© ${year} napell.space. <span data-i18n="footer_rights"></span></div>
       <div class="footer-disclaimer" data-i18n="footer_disclaimer"></div>
       <div class="footer-text" style="margin-top: 16px; color: var(--accent); font-weight: 600;" data-i18n="footer_made"></div>

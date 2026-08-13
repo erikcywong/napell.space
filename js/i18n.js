@@ -34,14 +34,14 @@ const I18N = {
       nav_costs: 'Costs',
       nav_efficiency: 'Efficiency',
       nav_value_chain: 'Value Chain',
-      nav_collaboration: 'ICO Collaboration',
+      nav_collaboration: 'Climate Response',
       nav_brand: 'napell.space',
       nav_tagline: 'Aeroponic Coffee Cultivation System',
 
       // ─── Landing Hero ───
       hero_eyebrow: 'Aeroponic Coffee Cultivation System',
       hero_title: 'From Cost Structure to Industrial Innovation',
-      hero_subtitle: 'A data-driven commercial model for scalable, climate-resilient coffee seedling production — in collaboration with the International Coffee Organization Foundation.',
+      hero_subtitle: 'A data-driven commercial model for scalable, climate-resilient coffee seedling production.',
       hero_cta_explore: 'Explore the Model',
       hero_cta_data: 'View Cost Data',
 
@@ -258,28 +258,28 @@ const I18N = {
       vc_point_title_6: 'Speed to Market',
       vc_point_desc_6: '4-month cycles vs. 8–12 months traditional — 3× faster time-to-field for new varietal deployment.',
 
-      // ─── ICO Collaboration Page ───
-      ico_title: 'ICO Foundation Collaboration',
-      ico_intro: 'The aeroponic coffee cultivation system aligns directly with the International Coffee Organization\'s climate resilience agenda — addressing the existential threat facing 125 million livelihoods and the $200B+ global coffee economy.',
+      // ─── Climate Response Page ───
+      ico_title: 'Climate Response',
+      ico_intro: 'The aeroponic coffee cultivation system aligns directly with the global climate resilience agenda — addressing the existential threat facing 125 million livelihoods and the $200B+ global coffee economy.',
       ico_section_crisis: 'The Climate Crisis',
       ico_section_solution: 'Our Response',
       ico_section_partnership: 'Partnership Framework',
       ico_section_roadmap: 'Implementation Roadmap',
 
-      ico_crisis_desc: 'ICO models project a 50% decline in coffee arable land by 2050 — driven by accelerating El Niño cycles and rising temperatures across the coffee belt. Arabica suitability could drop by 72% in worst-case scenarios.',
+      ico_crisis_desc: 'Climate models project a 50% decline in coffee arable land by 2050 — driven by accelerating El Niño cycles and rising temperatures across the coffee belt. Arabica suitability could drop by 72% in worst-case scenarios.',
       ico_crisis_stat_1: 'Arable Land Decline by 2050',
       ico_crisis_stat_2: 'Temperature Rise in Coffee Belt',
       ico_crisis_stat_3: 'Livelihoods at Risk',
       ico_crisis_stat_4: 'Arabica Suitability Loss (Worst Case)',
 
-      ico_solution_desc: 'Our aeroponic system directly addresses ICO\'s climate resilience mandate: it removes coffee cultivation from vulnerable outdoor environments, produces seedlings year-round in controlled conditions, and enables rapid deployment of climate-adapted varietals to replace failing traditional plantations.',
-      ico_solution_alignment: 'Alignment with ICO Climate Programme',
+      ico_solution_desc: 'Our aeroponic system directly addresses the global climate resilience mandate: it removes coffee cultivation from vulnerable outdoor environments, produces seedlings year-round in controlled conditions, and enables rapid deployment of climate-adapted varietals to replace failing traditional plantations.',
+      ico_solution_alignment: 'Climate Resilience Alignment',
 
-      ico_partner_desc: 'The partnership framework with ICO Foundation encompasses technology transfer, data sharing, and joint field deployment across coffee-producing nations most vulnerable to climate disruption.',
+      ico_partner_desc: 'Our partnership framework encompasses technology transfer, data sharing, and joint field deployment across coffee-producing nations most vulnerable to climate disruption.',
       ico_partner_pillar_1: 'Technology Transfer',
-      ico_partner_pillar_1_desc: 'Open-license the aeroponic system design to ICO member states — enabling local fabrication and deployment.',
+      ico_partner_pillar_1_desc: 'Open-license the aeroponic system design to coffee-producing nations — enabling local fabrication and deployment.',
       ico_partner_pillar_2: 'Data Sharing',
-      ico_partner_pillar_2_desc: 'Share cultivation metrics, yield data, and climate adaptation results with ICO\'s global research database.',
+      ico_partner_pillar_2_desc: 'Share cultivation metrics, yield data, and climate adaptation results with the global research database.',
       ico_partner_pillar_3: 'Field Deployment',
       ico_partner_pillar_3_desc: 'Joint pilot programs in Brazil, Vietnam, Ethiopia, and Yemen — the most climate-vulnerable origins.',
       ico_partner_pillar_4: 'Capacity Building',
@@ -288,8 +288,8 @@ const I18N = {
       ico_phase_1: 'Phase 1 — Validation',
       ico_phase_1_desc: 'Operational data from Longgang facility (81 systems, 615K trees/yr) validates commercial viability.',
       ico_phase_1_status: 'In Progress',
-      ico_phase_2: 'Phase 2 — ICO Partnership',
-      ico_phase_2_desc: 'Formalize technology transfer agreement with ICO Foundation. Begin data integration.',
+      ico_phase_2: 'Phase 2 — Strategic Partnership',
+      ico_phase_2_desc: 'Formalize technology transfer agreements with strategic partners. Begin data integration.',
       ico_phase_2_status: 'Planning',
       ico_phase_3: 'Phase 3 — Pilot Deployment',
       ico_phase_3_desc: 'Deploy 3 pilot systems in climate-vulnerable regions. 12-month field evaluation.',
@@ -301,7 +301,7 @@ const I18N = {
       // ─── Footer ───
       footer_rights: 'All rights reserved.',
       footer_disclaimer: 'Data derived from operational cost analysis. Revenue projections are estimates based on current market conditions.',
-      footer_ico: 'In collaboration with ICO Foundation',
+      footer_ico: '',
       footer_made: 'Built with data. Driven by innovation.',
 
       // ─── Tooltips ───
@@ -383,14 +383,14 @@ const I18N = {
       nav_costs: '成本分析',
       nav_efficiency: '生产效率',
       nav_value_chain: '产业链价值',
-      nav_collaboration: 'ICO合作',
+      nav_collaboration: '气候响应',
       nav_brand: 'napell.space',
       nav_tagline: '气雾栽培咖啡育苗系统',
 
       // ─── Landing Hero ───
       hero_eyebrow: '气雾栽培咖啡育苗系统',
       hero_title: '从成本结构到产业创新',
-      hero_subtitle: '面向规模化、气候韧性咖啡种苗生产的数据驱动商业模型 — 与国际咖啡组织基金会合作推进。',
+      hero_subtitle: '面向规模化、气候韧性咖啡种苗生产的数据驱动商业模型。',
       hero_cta_explore: '探索模型',
       hero_cta_data: '查看成本数据',
 
@@ -607,28 +607,28 @@ const I18N = {
       vc_point_title_6: '上市速度',
       vc_point_desc_6: '4个月周期 vs. 传统8-12个月 — 新品种部署速度提升3倍。',
 
-      // ─── ICO Collaboration Page ───
-      ico_title: 'ICO基金会合作',
-      ico_intro: '气雾栽培咖啡育苗系统与国际咖啡组织的气候韧性议程直接对接 — 应对威胁1.25亿人生计和2000亿美元以上全球咖啡经济的生存性危机。',
+      // ─── Climate Response Page ───
+      ico_title: '气候响应',
+      ico_intro: '气雾栽培咖啡育苗系统与全球气候韧性议程直接对接 — 应对威胁1.25亿人生计和2000亿美元以上全球咖啡经济的生存性危机。',
       ico_section_crisis: '气候危机',
       ico_section_solution: '我们的回应',
       ico_section_partnership: '合作框架',
       ico_section_roadmap: '实施路线图',
 
-      ico_crisis_desc: 'ICO模型预测到2050年咖啡种植地将减少50% — 由加速的厄尔尼诺周期和咖啡带气温上升驱动。在最坏情况下，阿拉比卡适宜性可能下降72%。',
+      ico_crisis_desc: '气候模型预测到2050年咖啡种植地将减少50% — 由加速的厄尔尼诺周期和咖啡带气温上升驱动。在最坏情况下，阿拉比卡适宜性可能下降72%。',
       ico_crisis_stat_1: '到2050年种植地减少',
       ico_crisis_stat_2: '咖啡带气温上升',
       ico_crisis_stat_3: '受威胁生计',
       ico_crisis_stat_4: '阿拉比卡适宜性损失（最坏情况）',
 
-      ico_solution_desc: '我们的气雾栽培系统直接回应ICO的气候韧性使命：将咖啡种植移出脆弱的户外环境，在受控条件下全年生产种苗，并实现气候适应品种的快速部署以替代衰败的传统种植园。',
-      ico_solution_alignment: '与ICO气候计划的对齐',
+      ico_solution_desc: '我们的气雾栽培系统直接回应全球气候韧性使命：将咖啡种植移出脆弱的户外环境，在受控条件下全年生产种苗，并实现气候适应品种的快速部署以替代衰败的传统种植园。',
+      ico_solution_alignment: '气候韧性对齐',
 
-      ico_partner_desc: '与ICO基金会的合作框架涵盖技术转让、数据共享和在最易受气候影响咖啡产区的联合田间部署。',
+      ico_partner_desc: '我们的合作框架涵盖技术转让、数据共享和在最易受气候影响咖啡产区的联合田间部署。',
       ico_partner_pillar_1: '技术转让',
-      ico_partner_pillar_1_desc: '向ICO成员国开放许可气雾系统设计 — 实现本地制造和部署。',
+      ico_partner_pillar_1_desc: '向咖啡产国开放许可气雾系统设计 — 实现本地制造和部署。',
       ico_partner_pillar_2: '数据共享',
-      ico_partner_pillar_2_desc: '向ICO全球研究数据库共享栽培指标、产量数据和气候适应成果。',
+      ico_partner_pillar_2_desc: '向全球研究数据库共享栽培指标、产量数据和气候适应成果。',
       ico_partner_pillar_3: '田间部署',
       ico_partner_pillar_3_desc: '在巴西、越南、埃塞俄比亚和也门开展联合试点项目 — 最易受气候影响的产区。',
       ico_partner_pillar_4: '能力建设',
@@ -637,8 +637,8 @@ const I18N = {
       ico_phase_1: '第一阶段 — 验证',
       ico_phase_1_desc: '龙岗设施（81套系统，年产61.5万棵）的运营数据验证商业可行性。',
       ico_phase_1_status: '进行中',
-      ico_phase_2: '第二阶段 — ICO合作',
-      ico_phase_2_desc: '与ICO基金会正式签署技术转让协议。开始数据整合。',
+      ico_phase_2: '第二阶段 — 战略合作',
+      ico_phase_2_desc: '与战略合作伙伴正式签署技术转让协议。开始数据整合。',
       ico_phase_2_status: '规划中',
       ico_phase_3: '第三阶段 — 试点部署',
       ico_phase_3_desc: '在气候脆弱地区部署3套试点系统。12个月田间评估。',
@@ -650,7 +650,7 @@ const I18N = {
       // ─── Footer ───
       footer_rights: '保留所有权利。',
       footer_disclaimer: '数据来源于运营成本分析。收入预测基于当前市场条件的估算。',
-      footer_ico: '与ICO基金会合作',
+      footer_ico: '',
       footer_made: '数据驱动，创新引领。',
 
       // ─── Tooltips ───
@@ -732,14 +732,14 @@ const I18N = {
       nav_costs: 'التكاليف',
       nav_efficiency: 'الكفاءة',
       nav_value_chain: 'سلسلة القيمة',
-      nav_collaboration: 'تعاون ICO',
+      nav_collaboration: 'الاستجابة المناخية',
       nav_brand: 'napell.space',
       nav_tagline: 'نظام زراعة البن بالرذاذ الهوائي',
 
       // ─── Landing Hero ───
       hero_eyebrow: 'نظام زراعة البن بالرذاذ الهوائي',
       hero_title: 'من هيكل التكلفة إلى الابتكار الصناعي',
-      hero_subtitle: 'نموذج تجاري قائم على البيانات لإنتاج شتلات البن المقاوم للمناخ والقابل للتوسع — بالتعاون مع مؤسسة المنظمة الدولية للبن.',
+      hero_subtitle: 'نموذج تجاري قائم على البيانات لإنتاج شتلات البن المقاوم للمناخ والقابل للتوسع.',
       hero_cta_explore: 'استكشف النموذج',
       hero_cta_data: 'عرض بيانات التكلفة',
 
@@ -956,28 +956,28 @@ const I18N = {
       vc_point_title_6: 'سرعة الوصول للسوق',
       vc_point_desc_6: 'دورات 4 أشهر مقابل 8-12 شهر تقليدية — أسرع 3 مرات في نشر الأصناف الجديدة.',
 
-      // ─── ICO Collaboration Page ───
-      ico_title: 'تعاون مؤسسة ICO',
-      ico_intro: 'يتماشى نظام زراعة البن بالرذاذ الهوائي مباشرة مع جدول أعمال المرونة المناخية للمنظمة الدولية للبن — مواجهة التهديد الوجودي الذي يواجه 125 مليون لقمة عيش واقتصاد البن العالمي البالغ 200 مليار دولار+.',
+      // ─── Climate Response Page ───
+      ico_title: 'الاستجابة المناخية',
+      ico_intro: 'يتماشى نظام زراعة البن بالرذاذ الهوائي مباشرة مع جدول أعمال المرونة المناخية العالمي — مواجهة التهديد الوجودي الذي يواجه 125 مليون لقمة عيش واقتصاد البن العالمي البالغ 200 مليار دولار+.',
       ico_section_crisis: 'أزمة المناخ',
       ico_section_solution: 'استجابتنا',
       ico_section_partnership: 'إطار الشراكة',
       ico_section_roadmap: 'خارطة طريق التنفيذ',
 
-      ico_crisis_desc: 'تتوقع نماذج ICO انخفاضًا بنسبة 50% في الأراضي الصالحة لزراعة البن بحلول 2050 — مدفوعًا بتسارع دورات النينيو وارتفاع درجات الحرارة عبر حزام البن. قد تنخفض ملاءمة أرابيكا بنسبة 72% في أسوأ السيناريوهات.',
+      ico_crisis_desc: 'تتوقع نماذج المناخ انخفاضًا بنسبة 50% في الأراضي الصالحة لزراعة البن بحلول 2050 — مدفوعًا بتسارع دورات النينيو وارتفاع درجات الحرارة عبر حزام البن. قد تنخفض ملاءمة أرابيكا بنسبة 72% في أسوأ السيناريوهات.',
       ico_crisis_stat_1: 'انخفاض الأراضي الصالحة بحلول 2050',
       ico_crisis_stat_2: 'ارتفاع حرارة حزام البن',
       ico_crisis_stat_3: 'لقم عيش معرضة للخطر',
       ico_crisis_stat_4: 'فقدان ملاءمة أرابيكا (أسوأ حالة)',
 
-      ico_solution_desc: 'يوجه نظامنا الهوائي تفويض المرونة المناخية لـ ICO مباشرة: يزيل زراعة البن من البيئات الخارجية الهشة، ينتج الشتلات على مدار العام في ظروف محمية، ويمكّن النشر السريع لأصناف متكيفة مع المناخ لاستبدال المزارع التقليدية المتدهورة.',
-      ico_solution_alignment: 'التوافق مع برنامج مناخ ICO',
+      ico_solution_desc: 'يوجه نظامنا الهوائي تفويض المرونة المناخية العالمي مباشرة: يزيل زراعة البن من البيئات الخارجية الهشة، ينتج الشتلات على مدار العام في ظروف محمية، ويمكّن النشر السريع لأصناف متكيفة مع المناخ لاستبدال المزارع التقليدية المتدهورة.',
+      ico_solution_alignment: 'التوافق المناخي',
 
-      ico_partner_desc: 'يشتمل إطار الشراكة مع مؤسسة ICO على نقل التكنولوجيا ومشاركة البيانات والنشر الميداني المشترك عبر الدول المنتجة للبن الأكثر عرضة لتغير المناخ.',
+      ico_partner_desc: 'يشتمل إطار الشراكة لدينا على نقل التكنولوجيا ومشاركة البيانات والنشر الميداني المشترك عبر الدول المنتجة للبن الأكثر عرضة لتغير المناخ.',
       ico_partner_pillar_1: 'نقل التكنولوجيا',
-      ico_partner_pillar_1_desc: 'ترخيص مفتوح لتصميم النظام الهوائي لدول ICO — تمكين التصنيع والنشر المحلي.',
+      ico_partner_pillar_1_desc: 'ترخيص مفتوح لتصميم النظام الهوائي لدول إنتاج البن — تمكين التصنيع والنشر المحلي.',
       ico_partner_pillar_2: 'مشاركة البيانات',
-      ico_partner_pillar_2_desc: 'مشاركة مقاييس الزراعة وبيانات الإنتاج ونتائج التكيف المناخي مع قاعدة بيانات ICO العالمية.',
+      ico_partner_pillar_2_desc: 'مشاركة مقاييس الزراعة وبيانات الإنتاج ونتائج التكيف المناخي مع قاعدة البيانات العالمية.',
       ico_partner_pillar_3: 'النشر الميداني',
       ico_partner_pillar_3_desc: 'برامج تجريبية مشتركة في البرازيل وفيتنام وإثيوبيا واليمن — أكثر مناطق الإنتاج عرضة للمناخ.',
       ico_partner_pillar_4: 'بناء القدرات',
@@ -986,8 +986,8 @@ const I18N = {
       ico_phase_1: 'المرحلة 1 — التحقق',
       ico_phase_1_desc: 'بيانات التشغيل من منشأة لونغقانغ (81 نظامًا، 615 ألف شجرة/سنة) تتحقق من الجدوى التجارية.',
       ico_phase_1_status: 'قيد التنفيذ',
-      ico_phase_2: 'المرحلة 2 — شراكة ICO',
-      ico_phase_2_desc: 'إضفاء الطابع الرسمي على اتفاقية نقل التكنولوجيا مع مؤسسة ICO. بدء تكامل البيانات.',
+      ico_phase_2: 'المرحلة 2 — شراكة استراتيجية',
+      ico_phase_2_desc: 'إضفاء الطابع الرسمي على اتفاقيات نقل التكنولوجيا مع شركاء استراتيجيين. بدء تكامل البيانات.',
       ico_phase_2_status: 'تخطيط',
       ico_phase_3: 'المرحلة 3 — نشر تجريبي',
       ico_phase_3_desc: 'نشر 3 أنظمة تجريبية في مناطق هشة مناخيًا. تقييم ميداني 12 شهرًا.',
@@ -999,7 +999,7 @@ const I18N = {
       // ─── Footer ───
       footer_rights: 'جميع الحقوق محفوظة.',
       footer_disclaimer: 'البيانات مستمدة من تحليل تكاليف التشغيل. توقعات الإيراد مبنية على تقديرات وفق ظروف السوق الحالية.',
-      footer_ico: 'بالتعاون مع مؤسسة ICO',
+      footer_ico: '',
       footer_made: 'مدفوع بالبيانات. يُقاده بالابتكار.',
 
       // ─── Tooltips ───

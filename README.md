@@ -2,7 +2,7 @@
 
 **Aeroponic Coffee Cultivation System — Commercial Business Model & Value Chain Analysis**
 
-Tri-lingual (English / Mandarin / Arabic) data-driven analysis of an aeroponic coffee seedling cultivation facility, in collaboration with the [ICO Foundation](https://www.icofoundation.cn).
+Tri-lingual (English / Mandarin / Arabic) data-driven analysis of an aeroponic coffee seedling cultivation facility.
 
 ## Overview
 
@@ -29,7 +29,7 @@ This project presents a transparent, data-backed commercial model for industrial
 3. **Costs** — Detailed cost breakdown (equipment, materials, consumables, utilities, per-seedling)
 4. **Efficiency** — Cultivation density, cycles, yield projections, traditional vs. aeroponic comparison
 5. **Value Chain** — Value creation across upstream, midstream, downstream coffee supply chain
-6. **ICO Collaboration** — Climate crisis context, partnership framework, implementation roadmap
+6. **Climate Response** — Climate crisis context, partnership framework, implementation roadmap
 
 ## Languages
 
