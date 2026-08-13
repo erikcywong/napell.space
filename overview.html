@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overview — Costs to Innovation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='48' font-weight='bold' text-anchor='middle' fill='%23000'>CI</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="overview">
+  <div id="nav-container"></div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="overview_title"></h1>
+      <p class="page-intro" data-i18n="overview_intro"></p>
+    </div>
+
+    <!-- System Architecture -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="overview_section_system"></h2>
+      <p class="section-desc" data-i18n="sys_arch_desc"></p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3 class="card-title" data-i18n="sys_arch_panel"></h3>
+          <ul class="info-list">
+            <li data-i18n="sys_arch_panel_early"></li>
+            <li data-i18n="sys_arch_panel_late"></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="card-title" data-i18n="sys_arch_infra"></h3>
+          <ul class="info-list" id="infra-list">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- System Specs Table -->
+      <div class="data-table-wrap">
+        <table class="data-table" id="specs-table">
+          <thead>
+            <tr>
+              <th data-i18n="tbl_item"></th>
+              <th data-i18n="nav_overview"></th>
+            </tr>
+          </thead>
+          <tbody id="specs-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Commercial Model -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="overview_section_model"></h2>
+      <p class="section-desc" data-i18n="model_desc"></p>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="model_unit_econ"></h3>
+        <p class="card-desc" data-i18n="model_unit_econ_desc"></p>
+        <div style="margin-top: 24px;">
+          <div class="progress-row">
+            <div class="progress-label">
+              <span data-i18n="pt_total"></span>
+              <span>¥6.614</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 26.5%; background: var(--red);"></div>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-label">
+              <span data-i18n="kpi_margin"></span>
+              <span>73.5%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 73.5%; background: var(--green);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scale Options -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="overview_section_scale"></h2>
+      <div class="card-grid" style="margin-bottom: 24px;">
+        <div class="card">
+          <h3 class="card-title" data-i18n="scale_opt1"></h3>
+          <p class="card-desc" data-i18n="scale_opt1_desc"></p>
+        </div>
+        <div class="card" style="border-color: var(--accent);">
+          <h3 class="card-title" style="color: var(--accent);" data-i18n="scale_opt2"></h3>
+          <p class="card-desc" data-i18n="scale_opt2_desc"></p>
+        </div>
+      </div>
+
+      <div class="data-table-wrap">
+        <table class="data-table" id="scale-table">
+          <thead>
+            <tr>
+              <th data-i18n="scale_table_header_sc"></th>
+              <th data-i18n="scale_table_header_a"></th>
+              <th data-i18n="scale_table_header_b"></th>
+            </tr>
+          </thead>
+          <tbody id="scale-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function renderOverviewContent(lang) {
+      // Infrastructure list
+      const infraList = document.getElementById('infra-list');
+      if (infraList) {
+        const items = I18N.t('sys_arch_infra_items');
+        if (Array.isArray(items)) {
+          infraList.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+        }
+      }
+
+      // Specs table
+      const specsTbody = document.getElementById('specs-tbody');
+      if (specsTbody) {
+        const s = APP_DATA.system;
+        const rows = [
+          { label: I18N.t('nav_overview') + ' — Length', val: s.length_m + ' ' + I18N.t('unit_m') },
+          { label: I18N.t('nav_overview') + ' — Width', val: s.width_m + ' ' + I18N.t('unit_m') },
+          { label: I18N.t('nav_overview') + ' — Layer Height', val: s.layer_height_m + ' ' + I18N.t('unit_m') },
+          { label: I18N.t('density_panel_early'), val: s.panel_early_grid + ' ' + I18N.t('unit_cm') },
+          { label: I18N.t('density_panel_late'), val: s.panel_late_grid + ' ' + I18N.t('unit_cm') },
+          { label: I18N.t('density_per_system_early'), val: s.early_seedlings_per_system.toLocaleString() + ' ' + I18N.t('density_label_seedlings') },
+          { label: I18N.t('density_per_system_late'), val: s.late_seedlings_per_system.toLocaleString() + ' ' + I18N.t('density_label_seedlings') },
+          { label: I18N.t('cycle_seedling_duration'), val: s.early_cycle_months + ' ' + I18N.t('unit_months') },
+          { label: I18N.t('cycle_large_duration'), val: s.late_cycle_months + ' ' + I18N.t('unit_months') },
+          { label: I18N.t('kpi_batches_year'), val: s.batches_per_year },
+          { label: I18N.t('kpi_sale_price'), val: '¥' + s.sale_price_per_seedling },
+          { label: I18N.t('seedling_target_size_cm', 'Target Seedling Size'), val: s.seedling_target_size_cm + ' ' + I18N.t('unit_cm') }
+        ];
+        specsTbody.innerHTML = rows.map(r => `<tr><td>${r.label}</td><td class="num">${r.val}</td></tr>`).join('');
+      }
+
+      // Scale table
+      const scaleTbody = document.getElementById('scale-tbody');
+      if (scaleTbody) {
+        const a = APP_DATA.scales.a, b = APP_DATA.scales.b;
+        const rows = [
+          { key: 'scale_row_land', a: APP_DATA.facility.total_acres_scale_a + ' ' + I18N.t('unit_acres'), b: APP_DATA.facility.total_acres_scale_b + ' ' + I18N.t('unit_acres') },
+          { key: 'scale_row_seeds', a: a.seeds.toLocaleString(), b: b.seeds.toLocaleString() },
+          { key: 'scale_row_output', a: a.annual_output.toLocaleString(), b: b.annual_output.toLocaleString() },
+          { key: 'scale_row_equipment', a: '¥' + a.equipment_cost.toLocaleString(), b: '¥' + b.equipment_cost.toLocaleString() },
+          { key: 'scale_row_materials', a: '¥' + a.materials_cost.toLocaleString(), b: '¥' + b.materials_cost.toLocaleString() },
+          { key: 'scale_row_consumables', a: '¥' + a.consumables_cost.toLocaleString(), b: '¥' + b.consumables_cost.toLocaleString() },
+          { key: 'scale_row_total', a: '¥' + a.total_startup.toLocaleString(), b: '¥' + b.total_startup.toLocaleString(), isTotal: true },
+          { key: 'scale_row_revenue', a: '¥' + a.annual_revenue.toLocaleString(), b: '¥' + b.annual_revenue.toLocaleString() }
+        ];
+        scaleTbody.innerHTML = rows.map(r =>
+          `<tr class="${r.isTotal ? 'grand-total' : ''}"><td data-i18n="${r.key}">${I18N.t(r.key)}</td><td class="num">${r.a}</td><td class="num">${r.b}</td></tr>`
+        ).join('');
+      }
+    }
+
+    // Render after i18n loads
+    if (document.readyState !== 'loading') renderOverviewContent(I18N.getLang());
+    document.addEventListener('DOMContentLoaded', () => renderOverviewContent(I18N.getLang()));
+  </script>
+</body>
+</html>

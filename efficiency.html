@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Efficiency — Costs to Innovation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='48' font-weight='bold' text-anchor='middle' fill='%23000'>CI</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="efficiency">
+  <div id="nav-container"></div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="eff_title"></h1>
+      <p class="page-intro" data-i18n="eff_intro"></p>
+    </div>
+
+    <!-- Cultivation Density -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="eff_section_density"></h2>
+      <div class="card-grid">
+        <div class="card" data-tooltip="" id="density-card-early">
+          <h3 class="card-title" data-i18n="density_panel_early"></h3>
+          <div class="stat-grid" style="margin-top: 16px;">
+            <div class="stat-block stat-block-accent">
+              <div class="stat-block-value">11,400</div>
+              <div class="stat-block-label" data-i18n="density_per_system_early"></div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-block-value">102,600</div>
+              <div class="stat-block-label" data-i18n="density_total_early"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-tooltip="" id="density-card-late">
+          <h3 class="card-title" data-i18n="density_panel_late"></h3>
+          <div class="stat-grid" style="margin-top: 16px;">
+            <div class="stat-block stat-block-accent">
+              <div class="stat-block-value">2,850</div>
+              <div class="stat-block-label" data-i18n="density_per_system_late"></div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-block-value">205,200</div>
+              <div class="stat-block-label" data-i18n="density_total_late"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Growth Cycles & Batch Rotation -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="eff_section_cycles"></h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3 class="card-title" data-i18n="cycle_seedling"></h3>
+          <p class="card-desc" data-i18n="cycle_seedling_duration"></p>
+          <div class="progress-row" style="margin-top: 16px;">
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 33%; background: var(--accent);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="card-title" data-i18n="cycle_large"></h3>
+          <p class="card-desc" data-i18n="cycle_large_duration"></p>
+          <div class="progress-row" style="margin-top: 16px;">
+            <div class="progress-track">
+              <div class="progress-fill" style="width: 67%; background: var(--orange);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="border-color: var(--green);">
+          <h3 class="card-title" style="color: var(--green);" data-i18n="kpi_batches_year"></h3>
+          <p class="card-desc" data-i18n="cycle_batches"></p>
+          <div style="font-size: 36px; font-weight: 800; color: var(--green); margin-top: 8px;">3</div>
+        </div>
+      </div>
+      <p class="section-desc" style="margin-top: 16px;" data-i18n="cycle_rotation"></p>
+    </div>
+
+    <!-- Annual Yield Projection -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="eff_section_yield"></h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3 class="card-title" data-i18n="yield_scale_a"></h3>
+          <div class="stat-grid" style="margin-top: 16px;">
+            <div class="stat-block">
+              <div class="stat-block-value">342K</div>
+              <div class="stat-block-label" data-i18n="yield_label_trees"></div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-block-value">3</div>
+              <div class="stat-block-label" data-i18n="yield_label_batches"></div>
+            </div>
+            <div class="stat-block stat-block-accent">
+              <div class="stat-block-value">¥8.55M</div>
+              <div class="stat-block-label" data-i18n="yield_revenue"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="border-color: var(--accent);">
+          <h3 class="card-title" style="color: var(--accent);" data-i18n="yield_scale_b"></h3>
+          <div class="stat-grid" style="margin-top: 16px;">
+            <div class="stat-block">
+              <div class="stat-block-value">615K</div>
+              <div class="stat-block-label" data-i18n="yield_label_trees"></div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-block-value">3</div>
+              <div class="stat-block-label" data-i18n="yield_label_batches"></div>
+            </div>
+            <div class="stat-block stat-block-accent">
+              <div class="stat-block-value">¥15.4M</div>
+              <div class="stat-block-label" data-i18n="yield_revenue"></div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+            <div class="progress-label">
+              <span data-i18n="yield_price"></span>
+              <span>¥25 / <span data-i18n="unit_per_seedling"></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison: Traditional vs Aeroponic -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="eff_section_comparison"></h2>
+      <div class="data-table-wrap">
+        <table class="comp-table" id="comp-table">
+          <thead>
+            <tr>
+              <th data-i18n="comp_metric"></th>
+              <th data-i18n="comp_traditional"></th>
+              <th data-i18n="comp_aeroponic"></th>
+            </tr>
+          </thead>
+          <tbody id="comp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function renderEfficiencyContent(lang) {
+      // Comparison table
+      const compTbody = document.getElementById('comp-tbody');
+      if (compTbody) {
+        compTbody.innerHTML = APP_DATA.comparison.map(c => {
+          return `<tr>
+            <td class="metric" data-i18n="${c.metric_key}">${I18N.t(c.metric_key)}</td>
+            <td class="trad" data-i18n="${c.trad_key}">${I18N.t(c.trad_key)}</td>
+            <td class="aero" data-i18n="${c.aero_key}">${I18N.t(c.aero_key)}</td>
+          </tr>`;
+        }).join('');
+      }
+
+      // Tooltips
+      const early = document.getElementById('density-card-early');
+      if (early) early.setAttribute('data-tooltip', I18N.t('tip_density'));
+      const late = document.getElementById('density-card-late');
+      if (late) late.setAttribute('data-tooltip', I18N.t('tip_density'));
+    }
+
+    if (document.readyState !== 'loading') renderEfficiencyContent(I18N.getLang());
+    document.addEventListener('DOMContentLoaded', () => renderEfficiencyContent(I18N.getLang()));
+  </script>
+</body>
+</html>

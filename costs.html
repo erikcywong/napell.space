@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Costs — Costs to Innovation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='48' font-weight='bold' text-anchor='middle' fill='%23000'>CI</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="costs">
+  <div id="nav-container"></div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="costs_title"></h1>
+      <p class="page-intro" data-i18n="costs_intro"></p>
+    </div>
+
+    <!-- Equipment & Infrastructure -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="costs_section_equipment"></h2>
+      <div class="data-table-wrap">
+        <table class="data-table" id="equipment-table">
+          <thead>
+            <tr>
+              <th data-i18n="tbl_item"></th>
+              <th data-i18n="tbl_unit"></th>
+              <th data-i18n="tbl_unit_price"></th>
+              <th data-i18n="tbl_qty_45"></th>
+              <th data-i18n="tbl_qty_81"></th>
+              <th data-i18n="tbl_note"></th>
+            </tr>
+          </thead>
+          <tbody id="equipment-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Materials -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="costs_section_materials"></h2>
+      <div class="data-table-wrap">
+        <table class="data-table" id="materials-table">
+          <thead>
+            <tr>
+              <th data-i18n="tbl_item"></th>
+              <th data-i18n="tbl_qty_45"></th>
+              <th data-i18n="tbl_qty_81"></th>
+            </tr>
+          </thead>
+          <tbody id="materials-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dynamic Consumables -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="costs_section_consumables"></h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3 class="card-title">Part 1 — <span data-i18n="costs_section_consumables"></span></h3>
+          <div class="data-table-wrap">
+            <table class="data-table" id="consumables-table">
+              <thead>
+                <tr>
+                  <th data-i18n="tbl_item"></th>
+                  <th data-i18n="tbl_item" data-i18n-attr="title:dyn_scale_b"></th>
+                  <th data-i18n="tbl_unit_price"></th>
+                  <th data-i18n="tbl_subtotal"></th>
+                </tr>
+              </thead>
+              <tbody id="consumables-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Part 2 — <span data-i18n="cost_item_germination"></span></h3>
+          <div class="data-table-wrap">
+            <table class="data-table" id="germination-table">
+              <thead>
+                <tr>
+                  <th data-i18n="tbl_item"></th>
+                  <th data-i18n="tbl_item"></th>
+                  <th data-i18n="tbl_unit_price"></th>
+                  <th data-i18n="tbl_subtotal"></th>
+                </tr>
+              </thead>
+              <tbody id="germination-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Utilities -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="costs_section_utilities"></h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3 class="card-title">Electricity</h3>
+          <div class="data-table-wrap">
+            <table class="data-table" id="elec-table">
+              <tbody id="elec-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Water</h3>
+          <div class="data-table-wrap">
+            <table class="data-table" id="water-table">
+              <tbody id="water-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-Seedling Cost Breakdown -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="costs_section_per_tree"></h2>
+      <p class="section-desc" data-i18n="tip_per_tree"></p>
+      <div class="data-table-wrap">
+        <table class="data-table" id="per-tree-table">
+          <thead>
+            <tr>
+              <th data-i18n="tbl_item"></th>
+              <th data-i18n="tbl_unit_price"></th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody id="per-tree-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Investment Summary -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="costs_section_summary"></h2>
+      <div class="stat-grid">
+        <div class="stat-block stat-block-accent" data-tooltip="" id="sum-investment">
+          <div class="stat-block-value">¥2.82M</div>
+          <div class="stat-block-label" data-i18n="kpi_investment"></div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-value">¥665K</div>
+          <div class="stat-block-label" data-i18n="costs_section_equipment"></div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-value">¥737K</div>
+          <div class="stat-block-label" data-i18n="costs_section_materials"></div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-value">¥1.42M</div>
+          <div class="stat-block-label" data-i18n="costs_section_consumables"></div>
+        </div>
+        <div class="stat-block stat-block-warn">
+          <div class="stat-block-value">¥6.61</div>
+          <div class="stat-block-label" data-i18n="kpi_per_tree_cost"></div>
+        </div>
+        <div class="stat-block" style="border-color: var(--green);">
+          <div class="stat-block-value" style="color: var(--green);">¥18.39</div>
+          <div class="stat-block-label">Gross Profit / Seedling</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function renderCostsContent(lang) {
+      // Equipment table
+      const eqTbody = document.getElementById('equipment-tbody');
+      if (eqTbody) {
+        eqTbody.innerHTML = APP_DATA.equipment.map(item => {
+          const unitLabel = item.unit_key ? I18N.t(item.unit_key) : '';
+          return `<tr>
+            <td data-i18n="${item.i18n_key}">${I18N.t(item.i18n_key)}</td>
+            <td>${unitLabel}</td>
+            <td class="num">¥${item.unit_price.toLocaleString()}</td>
+            <td class="num">¥${item.qty_45.toLocaleString()}</td>
+            <td class="num">¥${item.qty_81.toLocaleString()}</td>
+            <td class="note" data-i18n="${item.note_key}">${I18N.t(item.note_key)}</td>
+          </tr>`;
+        }).join('');
+      }
+
+      // Materials table
+      const matTbody = document.getElementById('materials-tbody');
+      if (matTbody) {
+        matTbody.innerHTML = APP_DATA.materials.map(m => {
+          const label = lang === 'zh' ? m.label_zh : lang === 'ar' ? m.label_ar : m.label_en;
+          return `<tr>
+            <td>${label}</td>
+            <td class="num">¥${m.qty_45.toLocaleString()}</td>
+            <td class="num">¥${m.qty_81.toLocaleString()}</td>
+          </tr>`;
+        }).join('') + `
+          <tr class="subtotal">
+            <td data-i18n="tbl_subtotal">${I18N.t('tbl_subtotal')}</td>
+            <td class="num">¥${APP_DATA.materials_subtotal_45.toLocaleString()}</td>
+            <td class="num">¥${APP_DATA.materials_subtotal_81.toLocaleString()}</td>
+          </tr>`;
+      }
+
+      // Consumables table
+      const consTbody = document.getElementById('consumables-tbody');
+      if (consTbody) {
+        consTbody.innerHTML = APP_DATA.consumables.map(c => {
+          return `<tr>
+            <td data-i18n="${c.i18n_key}">${I18N.t(c.i18n_key)}</td>
+            <td class="num">${c.qty ? c.qty.toLocaleString() : '—'}</td>
+            <td class="num">¥${c.unit_price.toLocaleString()}</td>
+            <td class="num">¥${c.total.toLocaleString()}</td>
+          </tr>`;
+        }).join('') + `
+          <tr class="subtotal">
+            <td data-i18n="tbl_subtotal">${I18N.t('tbl_subtotal')}</td>
+            <td colspan="2"></td>
+            <td class="num">¥${APP_DATA.consumables_subtotal_1.toLocaleString()}</td>
+          </tr>`;
+      }
+
+      // Germination table
+      const germTbody = document.getElementById('germination-tbody');
+      if (germTbody) {
+        germTbody.innerHTML = APP_DATA.germination.map(g => {
+          return `<tr>
+            <td data-i18n="${g.i18n_key}">${I18N.t(g.i18n_key)}</td>
+            <td class="num">${g.qty ? g.qty.toLocaleString() : '—'}</td>
+            <td class="num">¥${g.unit_price.toLocaleString()}</td>
+            <td class="num">¥${g.total.toLocaleString()}</td>
+          </tr>`;
+        }).join('') + `
+          <tr class="subtotal">
+            <td data-i18n="tbl_subtotal">${I18N.t('tbl_subtotal')}</td>
+            <td colspan="2"></td>
+            <td class="num">¥${APP_DATA.germination_subtotal_2.toLocaleString()}</td>
+          </tr>
+          <tr class="grand-total">
+            <td colspan="3">Total Dynamic Consumables</td>
+            <td class="num">¥${APP_DATA.consumables_total.toLocaleString()}</td>
+          </tr>`;
+      }
+
+      // Electricity table
+      const elecTbody = document.getElementById('elec-tbody');
+      if (elecTbody) {
+        const e = APP_DATA.utilities.electricity;
+        elecTbody.innerHTML = `
+          <tr><td>Compressor (Main)</td><td class="num">${e.compressor_kw} ${I18N.t('unit_kw')}</td></tr>
+          <tr><td>Cold Dryer</td><td class="num">${e.cold_dryer_kw} ${I18N.t('unit_kw')}</td></tr>
+          <tr><td>Solenoid Valves</td><td class="num">${e.solenoid_valves_kw} ${I18N.t('unit_kw')}</td></tr>
+          <tr><td>Nutrient Pump (Seedling)</td><td class="num">${e.nutrient_pump_seedling_kw} ${I18N.t('unit_kw')}</td></tr>
+          <tr><td>Nutrient Pump (Large)</td><td class="num">${e.nutrient_pump_large_kw} ${I18N.t('unit_kw')}</td></tr>
+          <tr><td>Fertilizer Machine</td><td class="num">${e.fertilizer_machine_kw} ${I18N.t('unit_kw')}</td></tr>
+          <tr class="subtotal"><td>Total Electricity</td><td class="num">¥${e.total_electricity.toLocaleString()}</td></tr>`;
+      }
+
+      // Water table
+      const waterTbody = document.getElementById('water-tbody');
+      if (waterTbody) {
+        const w = APP_DATA.utilities.water;
+        waterTbody.innerHTML = `
+          <tr><td data-i18n="cost_item_water_rate">${I18N.t('cost_item_water_rate')}</td><td class="num">¥${w.rate_per_m3} ${I18N.t('unit_per_m3')}</td></tr>
+          <tr><td>Annual Budget</td><td class="num">¥${w.annual_budget.toLocaleString()}</td></tr>`;
+      }
+
+      // Per-seedling table
+      const ptTbody = document.getElementById('per-tree-tbody');
+      if (ptTbody) {
+        const total = APP_DATA.per_seedling_total;
+        ptTbody.innerHTML = APP_DATA.per_seedling.map(p => {
+          const pct = ((p.cost / total) * 100).toFixed(1);
+          const label = lang === 'zh' ? p.label_zh : lang === 'ar' ? p.label_ar : p.label_en;
+          return `<tr>
+            <td data-i18n="${p.i18n_key}">${label}</td>
+            <td class="num">¥${p.cost.toFixed(3)}</td>
+            <td class="num">${pct}%</td>
+          </tr>`;
+        }).join('') + `
+          <tr class="grand-total">
+            <td data-i18n="pt_total">${I18N.t('pt_total')}</td>
+            <td class="num">¥${total.toFixed(3)}</td>
+            <td class="num">100%</td>
+          </tr>`;
+      }
+
+      // Update tooltip
+      const sumInv = document.getElementById('sum-investment');
+      if (sumInv) sumInv.setAttribute('data-tooltip', I18N.t('tip_investment'));
+    }
+
+    if (document.readyState !== 'loading') renderCostsContent(I18N.getLang());
+    document.addEventListener('DOMContentLoaded', () => renderCostsContent(I18N.getLang()));
+  </script>
+</body>
+</html>

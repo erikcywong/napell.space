@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICO Collaboration — Costs to Innovation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='48' font-weight='bold' text-anchor='middle' fill='%23000'>CI</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="collaboration">
+  <div id="nav-container"></div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="ico_title"></h1>
+      <p class="page-intro" data-i18n="ico_intro"></p>
+    </div>
+
+    <!-- Climate Crisis -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="ico_section_crisis"></h2>
+      <p class="section-desc" data-i18n="ico_crisis_desc"></p>
+      <div class="stat-grid">
+        <div class="stat-block stat-block-danger" data-tooltip="" id="ico-stat-1">
+          <div class="stat-block-value">−50%</div>
+          <div class="stat-block-label" data-i18n="ico_crisis_stat_1"></div>
+        </div>
+        <div class="stat-block stat-block-warn">
+          <div class="stat-block-value">+2.4°C</div>
+          <div class="stat-block-label" data-i18n="ico_crisis_stat_2"></div>
+        </div>
+        <div class="stat-block stat-block-danger">
+          <div class="stat-block-value">125M</div>
+          <div class="stat-block-label" data-i18n="ico_crisis_stat_3"></div>
+        </div>
+        <div class="stat-block stat-block-danger">
+          <div class="stat-block-value">−72%</div>
+          <div class="stat-block-label" data-i18n="ico_crisis_stat_4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Our Response -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="ico_section_solution"></h2>
+      <p class="section-desc" data-i18n="ico_solution_desc"></p>
+
+      <div class="card">
+        <h3 class="card-title" data-i18n="ico_solution_alignment"></h3>
+        <div class="card-grid" style="margin-top: 16px;">
+          <div class="card" style="background: var(--bg-secondary);">
+            <div style="font-size: 32px; margin-bottom: 8px;">🏭</div>
+            <h4 style="font-size: 14px; margin-bottom: 6px;" data-i18n="comp_climate"></h4>
+            <p style="font-size: 13px; color: var(--text-secondary);" data-i18n="comp_aero_climate"></p>
+          </div>
+          <div class="card" style="background: var(--bg-secondary);">
+            <div style="font-size: 32px; margin-bottom: 8px;">📅</div>
+            <h4 style="font-size: 14px; margin-bottom: 6px;" data-i18n="comp_year_round"></h4>
+            <p style="font-size: 13px; color: var(--text-secondary);" data-i18n="comp_aero_year_round"></p>
+          </div>
+          <div class="card" style="background: var(--bg-secondary);">
+            <div style="font-size: 32px; margin-bottom: 8px;">💧</div>
+            <h4 style="font-size: 14px; margin-bottom: 6px;" data-i18n="comp_water"></h4>
+            <p style="font-size: 13px; color: var(--text-secondary);" data-i18n="comp_aero_water"></p>
+          </div>
+          <div class="card" style="background: var(--bg-secondary);">
+            <div style="font-size: 32px; margin-bottom: 8px;">⚡</div>
+            <h4 style="font-size: 14px; margin-bottom: 6px;" data-i18n="comp_cycle"></h4>
+            <p style="font-size: 13px; color: var(--text-secondary);" data-i18n="comp_aero_cycle"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Partnership Framework -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="ico_section_partnership"></h2>
+      <p class="section-desc" data-i18n="ico_partner_desc"></p>
+      <div class="card-grid" id="pillar-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Implementation Roadmap -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="ico_section_roadmap"></h2>
+      <div class="timeline" id="timeline">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- ICO Link -->
+    <div class="section" style="text-align: center;">
+      <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <h3 class="card-title">ICO Foundation</h3>
+        <p class="card-desc" data-i18n="footer_ico"></p>
+        <a href="https://www.icofoundation.cn" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 16px;">www.icofoundation.cn</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function renderCollaborationContent(lang) {
+      // Pillars
+      const pillarGrid = document.getElementById('pillar-grid');
+      if (pillarGrid) {
+        pillarGrid.innerHTML = APP_DATA.ico_pillars.map(p => {
+          return `<div class="card pillar-card">
+            <div class="pillar-icon">${p.icon}</div>
+            <h4 class="pillar-title" data-i18n="${p.title_key}">${I18N.t(p.title_key)}</h4>
+            <p class="pillar-desc" data-i18n="${p.desc_key}">${I18N.t(p.desc_key)}</p>
+          </div>`;
+        }).join('');
+      }
+
+      // Timeline
+      const timeline = document.getElementById('timeline');
+      if (timeline) {
+        timeline.innerHTML = APP_DATA.roadmap.map(r => {
+          const badgeClass = r.status_type === 'active' ? 'badge-active' :
+                            r.status_type === 'planning' ? 'badge-planning' : 'badge-future';
+          return `<div class="timeline-item">
+            <h4 class="timeline-title" data-i18n="${r.phase_key}">${I18N.t(r.phase_key)}</h4>
+            <p class="timeline-desc" data-i18n="${r.desc_key}">${I18N.t(r.desc_key)}</p>
+            <span class="badge ${badgeClass}" data-i18n="${r.status_key}">${I18N.t(r.status_key)}</span>
+          </div>`;
+        }).join('');
+      }
+
+      // Tooltip
+      const s1 = document.getElementById('ico-stat-1');
+      if (s1) s1.setAttribute('data-tooltip', I18N.t('tip_climate'));
+    }
+
+    if (document.readyState !== 'loading') renderCollaborationContent(I18N.getLang());
+    document.addEventListener('DOMContentLoaded', () => renderCollaborationContent(I18N.getLang()));
+  </script>
+</body>
+</html>

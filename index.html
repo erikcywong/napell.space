@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aeroponic Coffee Cultivation System — Commercial Business Model & Value Chain Analysis. In collaboration with ICO Foundation.">
+  <title>Costs to Innovation — Aeroponic Coffee Cultivation System</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='48' font-weight='bold' text-anchor='middle' fill='%23000'>CI</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+
+  <!-- Language Modal -->
+  <div id="modal-container"></div>
+
+  <!-- Navbar -->
+  <div id="nav-container"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow animate-in" data-i18n="hero_eyebrow"></div>
+    <h1 class="hero-title animate-in delay-1" data-i18n="hero_title"></h1>
+    <p class="hero-subtitle animate-in delay-2" data-i18n="hero_subtitle"></p>
+    <div class="hero-cta-group animate-in delay-3">
+      <a href="overview.html" class="btn btn-primary" data-i18n="hero_cta_explore"></a>
+      <a href="costs.html" class="btn btn-secondary" data-i18n="hero_cta_data"></a>
+    </div>
+
+    <!-- KPI Grid -->
+    <div class="kpi-grid animate-in delay-4">
+      <div class="kpi-card kpi-accent" data-tooltip="" id="kpi-investment">
+        <div class="kpi-label" data-i18n="kpi_investment"></div>
+        <div class="kpi-value">¥2.82M</div>
+      </div>
+      <div class="kpi-card kpi-green">
+        <div class="kpi-label" data-i18n="kpi_annual_output"></div>
+        <div class="kpi-value">615K</div>
+        <div class="kpi-unit" data-i18n="density_label_seedlings"></div>
+      </div>
+      <div class="kpi-card kpi-orange">
+        <div class="kpi-label" data-i18n="kpi_revenue"></div>
+        <div class="kpi-value">¥15.4M</div>
+        <div class="kpi-unit" data-i18n="unit_per_year"></div>
+      </div>
+      <div class="kpi-card kpi-green">
+        <div class="kpi-label" data-i18n="kpi_margin"></div>
+        <div class="kpi-value">73.5%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" data-i18n="kpi_per_tree_cost"></div>
+        <div class="kpi-value">¥6.61</div>
+      </div>
+      <div class="kpi-card kpi-accent">
+        <div class="kpi-label" data-i18n="kpi_sale_price"></div>
+        <div class="kpi-value">¥25</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" data-i18n="kpi_growth_cycle"></div>
+        <div class="kpi-value">4</div>
+        <div class="kpi-unit" data-i18n="unit_months"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" data-i18n="kpi_batches_year"></div>
+        <div class="kpi-value">3</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" data-i18n="kpi_land_area"></div>
+        <div class="kpi-value">10.8</div>
+        <div class="kpi-unit" data-i18n="unit_acres"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" data-i18n="kpi_systems"></div>
+        <div class="kpi-value">81</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page Navigation Cards -->
+  <section class="page-content">
+    <div class="section">
+      <h2 class="section-title" data-i18n="nav_overview"></h2>
+      <div class="card-grid">
+        <a href="overview.html" class="card" style="text-decoration: none; color: inherit;">
+          <div class="card-title" data-i18n="overview_section_system"></div>
+          <div class="card-desc" data-i18n="overview_intro"></div>
+        </a>
+        <a href="costs.html" class="card" style="text-decoration: none; color: inherit;">
+          <div class="card-title" data-i18n="costs_title"></div>
+          <div class="card-desc" data-i18n="costs_intro"></div>
+        </a>
+        <a href="efficiency.html" class="card" style="text-decoration: none; color: inherit;">
+          <div class="card-title" data-i18n="eff_title"></div>
+          <div class="card-desc" data-i18n="eff_intro"></div>
+        </a>
+        <a href="value-chain.html" class="card" style="text-decoration: none; color: inherit;">
+          <div class="card-title" data-i18n="vc_title"></div>
+          <div class="card-desc" data-i18n="vc_intro"></div>
+        </a>
+        <a href="collaboration.html" class="card" style="text-decoration: none; color: inherit;">
+          <div class="card-title" data-i18n="ico_title"></div>
+          <div class="card-desc" data-i18n="ico_intro"></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Home-specific dynamic content
+    function renderHomeContent(lang) {
+      // Update tooltips
+      const kpiInv = document.getElementById('kpi-investment');
+      if (kpiInv) kpiInv.setAttribute('data-tooltip', I18N.t('tip_investment'));
+    }
+  </script>
+</body>
+</html>
