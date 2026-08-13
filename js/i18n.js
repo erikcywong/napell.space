@@ -35,7 +35,7 @@ const I18N = {
       nav_efficiency: 'Efficiency',
       nav_value_chain: 'Value Chain',
       nav_collaboration: 'ICO Collaboration',
-      nav_brand: 'Costs to Innovation',
+      nav_brand: 'napell.space',
       nav_tagline: 'Aeroponic Coffee Cultivation System',
 
       // ─── Landing Hero ───
@@ -384,7 +384,7 @@ const I18N = {
       nav_efficiency: '生产效率',
       nav_value_chain: '产业链价值',
       nav_collaboration: 'ICO合作',
-      nav_brand: '从成本到创新',
+      nav_brand: 'napell.space',
       nav_tagline: '气雾栽培咖啡育苗系统',
 
       // ─── Landing Hero ───
@@ -733,7 +733,7 @@ const I18N = {
       nav_efficiency: 'الكفاءة',
       nav_value_chain: 'سلسلة القيمة',
       nav_collaboration: 'تعاون ICO',
-      nav_brand: 'من التكلفة إلى الابتكار',
+      nav_brand: 'napell.space',
       nav_tagline: 'نظام زراعة البن بالرذاذ الهوائي',
 
       // ─── Landing Hero ───
