@@ -284,11 +284,18 @@ function initPage() {
   }
 }
 
-// Run init before i18n.apply
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    initPage();
-  });
-} else {
+// Run init after all scripts parsed, then initialize i18n
+function runInit() {
   initPage();
+  if (typeof I18N !== 'undefined' && typeof I18N.init === 'function') {
+    I18N.init();
+  } else {
+    console.error('[main] I18N not loaded; translations unavailable.');
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', runInit);
+} else {
+  runInit();
 }

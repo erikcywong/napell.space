@@ -1061,14 +1061,13 @@ const I18N = {
 
   /**
    * Initialize the i18n system
-   * Reads stored language or defaults to 'en'
-   * If no language stored and on landing page, shows modal
+   * Reads stored language or defaults to browser detection
+   * Always applies translations, then shows language modal on first visit
    */
   init() {
     const stored = localStorage.getItem('cti-lang');
     if (stored && this.translations[stored]) {
       this._lang = stored;
-      this.apply();
     } else {
       // Detect browser language
       const browserLang = navigator.language || navigator.userLanguage;
@@ -1079,12 +1078,13 @@ const I18N = {
         else this._lang = 'en';
       }
     }
-    // Check if modal should show
-    const forceModal = sessionStorage.getItem('cti-modal-shown');
-    if (!forceModal) {
+
+    // Apply translations first (nav/footer/modal must already be injected)
+    this.apply();
+
+    // Show language modal on first visit
+    if (!sessionStorage.getItem('cti-modal-shown')) {
       this.showModal();
-    } else {
-      this.apply();
     }
   },
 
@@ -1210,9 +1210,5 @@ const I18N = {
   }
 };
 
-// Auto-init on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => I18N.init());
-} else {
-  I18N.init();
-}
+// NOTE: main.js calls I18N.init() after injecting nav/footer/modal components.
+// Do NOT auto-init here — otherwise apply() runs before components exist.
