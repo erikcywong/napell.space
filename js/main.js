@@ -15,7 +15,7 @@ function renderNav(activePage) {
   ];
 
   const linksHtml = pages.map(p =>
-    `<li><a class="nav-link ${activePage === p.id ? 'active' : ''}" href="${p.href}" data-i18n="${p.key}"></a></li>`
+    `<li><a class="nav-link ${activePage === p.id ? 'active' : ''} ${p.id === 'costs' ? 'nav-link-locked' : ''}" href="${p.href}" data-i18n="${p.key}"></a></li>`
   ).join('');
 
   return `
@@ -269,7 +269,9 @@ window.renderDynamicContent = function(lang) {
 
   // Page-specific dynamic content
   const page = document.body.dataset.page;
-  if (page === 'costs' && typeof renderCostsContent === 'function') renderCostsContent(lang);
+  if (page === 'costs' && typeof renderCostsContent === 'function') {
+    if (typeof AUTH === 'undefined' || AUTH.isAuthenticated()) renderCostsContent(lang);
+  }
   if (page === 'efficiency' && typeof renderEfficiencyContent === 'function') renderEfficiencyContent(lang);
   if (page === 'value-chain' && typeof renderValueChainContent === 'function') renderValueChainContent(lang);
   if (page === 'collaboration' && typeof renderCollaborationContent === 'function') renderCollaborationContent(lang);

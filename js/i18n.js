@@ -345,6 +345,15 @@ const I18N = {
       dyn_print: 'Print',
       dyn_share: 'Share',
 
+      // ─── Auth / Login ───
+      auth_login_title: 'Administrator Access',
+      auth_login_desc: 'This section contains confidential business data. Administrator authentication required.',
+      auth_username: 'Username',
+      auth_password: 'Password',
+      auth_login_btn: 'Login',
+      auth_login_error: 'Invalid credentials. Access denied.',
+      auth_logout: 'Logout',
+
       // ─── Units ───
       unit_yuan: '¥',
       unit_per_year: '/year',
@@ -694,6 +703,15 @@ const I18N = {
       dyn_print: '打印',
       dyn_share: '分享',
 
+      // ─── Auth / Login ───
+      auth_login_title: '管理员登录',
+      auth_login_desc: '此部分包含机密商业数据，需要管理员身份验证。',
+      auth_username: '用户名',
+      auth_password: '密码',
+      auth_login_btn: '登录',
+      auth_login_error: '凭据无效，拒绝访问。',
+      auth_logout: '退出登录',
+
       // ─── Units ───
       unit_yuan: '¥',
       unit_per_year: '/年',
@@ -1042,6 +1060,15 @@ const I18N = {
       dyn_download: 'تحميل',
       dyn_print: 'طباعة',
       dyn_share: 'مشاركة',
+
+      // ─── Auth / Login ───
+      auth_login_title: 'وصول المسؤول',
+      auth_login_desc: 'يحتوي هذا القسم على بيانات أعمال سرية. مطلوب مصادقة المسؤول.',
+      auth_username: 'اسم المستخدم',
+      auth_password: 'كلمة المرور',
+      auth_login_btn: 'تسجيل الدخول',
+      auth_login_error: 'بيانات اعتماد غير صالحة. تم رفض الوصول.',
+      auth_logout: 'تسجيل الخروج',
 
       // ─── Units ───
       unit_yuan: '¥',

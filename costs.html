@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Costs — napell.space</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body data-page="costs">
   <div id="nav-container"></div>
 
-  <div class="page-content">
+  <div class="page-content" style="display:none;">
     <div class="page-header">
       <h1 class="page-title" data-i18n="costs_title"></h1>
       <p class="page-intro" data-i18n="costs_intro"></p>
@@ -167,9 +167,10 @@
 
   <div id="footer-container"></div>
 
-  <script src="js/i18n.js?v=5"></script>
-  <script src="js/data.js?v=5"></script>
-  <script src="js/main.js?v=5"></script>
+  <script src="js/i18n.js?v=6"></script>
+  <script src="js/data.js?v=6"></script>
+  <script src="js/auth.js?v=6"></script>
+  <script src="js/main.js?v=6"></script>
   <script>
     function renderCostsContent(lang) {
       // Equipment table
@@ -294,8 +295,14 @@
       if (sumInv) sumInv.setAttribute('data-tooltip', I18N.t('tip_investment'));
     }
 
-    if (document.readyState !== 'loading') renderCostsContent(I18N.getLang());
-    document.addEventListener('DOMContentLoaded', () => renderCostsContent(I18N.getLang()));
+    // Auth gate: only render when authenticated
+    // AUTH.init() handles rendering on successful login
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof AUTH !== 'undefined' && AUTH.isAuthenticated()) {
+        AUTH.revealContent();
+        AUTH._renderCosts();
+      }
+    });
   </script>
 </body>
 </html>
