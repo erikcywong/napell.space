@@ -7,7 +7,9 @@
 const AUTH = {
 
   // SHA-256 hashes (pre-computed — plaintext never appears in source)
+  // Valid admins: Erik (f166...) and James (9345...), same password
   _userHash: 'f166226706d234dbf22ef3eda3a666a9c6a6fb249c193dd38920cc18a953dfb1',
+  _userHash2: '9345a35a6fdf174dff7219282a3ae4879790dbb785c70f6fff91e32fafd66eab',
   _passHash: 'b78a31f0e9654801916a1eda6286b3d4b8756d66803ba1b71151f8fd12d7ed10',
   _sessionKey: 'napell-costs-auth',
 
@@ -36,7 +38,7 @@ const AUTH = {
   async attemptLogin(username, password) {
     const userHash = await this._sha256(username.trim());
     const passHash = await this._sha256(password);
-    if (userHash === this._userHash && passHash === this._passHash) {
+    if ((userHash === this._userHash || userHash === this._userHash2) && passHash === this._passHash) {
       sessionStorage.setItem(this._sessionKey, '1');
       return true;
     }
