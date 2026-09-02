@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riyadh Deployment Cost Estimate — napell.space</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
+  <link rel="stylesheet" href="css/style.css?v=10">
+</head>
+<body data-page="riyadh">
+  <div id="nav-container"></div>
+
+  <!-- Gated content: rendered only after administrator login (same session key as Costs) -->
+  <div class="page-content" style="display:none;">
+    <div id="riyadh-root"></div>
+  </div>
+
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js?v=10"></script>
+  <script src="js/data.js?v=10"></script>
+  <script src="js/auth.js?v=10"></script>
+  <script src="js/main.js?v=10"></script>
+  <script>
+  /* ══════════════════════════════════════════════════════════════════
+     RIYADH DEPLOYMENT — ESTIMATED COSTS (Guangzhou → Riyadh)
+     Forecast model: equipment shipped from Guangzhou (China) to Riyadh
+     (Saudi Arabia) + services & local costs converted to SAR.
+     Scenario: Scale B — 81 systems · 10.8 acres · 615,000 seedlings/yr
+     FX basis (planning, Sep 2026): US$1 = ¥6.80 · SAR peg US$1 = 3.75
+     ══════════════════════════════════════════════════════════════════ */
+
+  const U = 6.8;            // CNY per USD (planning, matches data.js)
+  const S = 3.75;           // SAR per USD (SAMA peg)
+  const FX_NOTE = 'FX: US$1 = ¥6.80 · US$1 = SAR 3.75';
+
+  // ─── Numeric model ───────────────────────────────────────────────
+  const MODEL = {
+    fob: 206237,            // Scale B equipment US$97,844 + materials US$108,393
+    baselineStartupUsd: 414384, // Guangzhou startup (Scale B) in USD
+    annualOutput: 615000,
+    saleUsd: 3.68,
+    containers: 4,
+    vatPct: 0.15, dutyPct: 0.05, insPct: 0.004, packPct: 0.025, contPct: 0.03,
+    oceanPerCtrUsd: 3000,
+    // Table A — landed-cost build-up (rows carry basis & note text via COPY)
+    A: [
+      { key: 'pack' }, { key: 'origin' }, { key: 'ocean' }, { key: 'ins' },
+      { key: 'dest' }, { key: 'inland' }, { key: 'broker' }, { key: 'saber' },
+      { key: 'duty' }, { key: 'contingency' }
+    ],
+    // Table B — one-off services converted to Riyadh (mid estimate)
+    B: [
+      { usd: 32000, lo: 26000, hi: 38000 },
+      { usd: 18000, lo: 14000, hi: 22000 },
+      { usd: 30000, lo: 20000, hi: 40000 },
+      { usd:  6000, lo:  4000, hi:  8000 },
+      { usd:  5000, lo:  3500, hi:  6500 },
+      { usd:  4000, lo:  2500, hi:  6000 },
+      { usd: 12000, lo:  9000, hi: 15000 }
+    ],
+    // Table C — per-seedling conversion (base CNY cost × factor → Riyadh)
+    C: [
+      { base: 1.700, f: 1.05 },   // seeds
+      { base: 0.500, f: 1.10 },   // coir & packaging
+      { base: 1.000, f: 0.60 },   // utilities (KSA power/water cheaper)
+      { base: 1.064, f: 1.21 },   // equipment depreciation (landed uplift)
+      { base: 0.350, f: 1.30 },   // misc & labor (Riyadh premium)
+      { base: 2.000, f: 1.00 }    // last-mile shipping
+    ]
+  };
+
+  // Derived amounts
+  const fob = MODEL.fob;
+  const pack = fob * MODEL.packPct;
+  const cif = fob + MODEL.containers * MODEL.oceanPerCtrUsd;
+  const ins = cif * MODEL.insPct;
+  const ocean = MODEL.containers * MODEL.oceanPerCtrUsd;
+  const duty = (cif + ins) * MODEL.dutyPct;
+  const baseBeforeCont = fob + pack + 1200 + ocean + ins + 1320 + 3200 + 533 + 900;
+  const contingency = baseBeforeCont * MODEL.contPct;
+  const A_LINES = [pack, 1200, ocean, ins, 1320, 3200, 533, 900, duty, contingency];
+  const A_SUB = A_LINES.reduce((a, b) => a + b, 0);              // landed delta
+  const A_VAT = (cif + ins + duty) * MODEL.vatPct;
+  const LANDED = fob + A_SUB;                                     // landed total
+  const B_SUB = MODEL.B.reduce((a, r) => a + r.usd, 0);
+  const C_NEW = MODEL.C.reduce((a, r) => a + r.base * r.f, 0);    // CNY subtotal
+  const AMORT_USD = B_SUB / 5 / MODEL.annualOutput;               // 5-yr amort.
+  const AMORT_CNY = AMORT_USD * U;
+  const TOTAL_CNY = C_NEW + AMORT_CNY;
+  const TOTAL_USD = TOTAL_CNY / U;
+  const TOTAL_SAR = TOTAL_USD * S;
+  const BASE_TOTAL_CNY = MODEL.C.reduce((a, r) => a + r.base, 0);
+  const MARGIN = (MODEL.saleUsd - TOTAL_USD) / MODEL.saleUsd * 100;
+  const STARTUP_RIYADH = MODEL.baselineStartupUsd + (A_SUB) + B_SUB;
+  const UPLIFT = (STARTUP_RIYADH / MODEL.baselineStartupUsd - 1) * 100;
+
+  // ─── Format helpers ──────────────────────────────────────────────
+  const fm2 = n => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const f0  = n => Math.round(n).toLocaleString('en-US');
+  const cp  = n => {
+    const a = Math.abs(n);
+    if (a >= 1e6) return (n / 1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
+    if (a >= 1e3) return (n / 1e3).toFixed(1).replace(/\.?0+$/, '') + 'K';
+    return n.toFixed(2).replace(/\.?0+$/, '');
+  };
+
+  // ─── Tri-lingual copy ─────────────────────────────────────────────
+  const COPY = {
+    en: {
+      back: '← Back to detailed Cost Analysis',
+      title: 'Riyadh Deployment — Cost Estimate',
+      intro: 'Forecast model: equipment shipped from Guangzhou (China) to Riyadh (Saudi Arabia), services & local costs converted to SAR, and unit economics projected at scale.',
+      fxTitle: 'Planning FX & Basis',
+      fx: [
+        { t: 'USD → CNY', v: 'US$1 = ¥6.80', n: 'Planning rate — used site-wide' },
+        { t: 'Saudi Riyal', v: 'US$1 = SAR 3.75', n: 'Fixed by SAMA (currency peg)' },
+        { t: 'Cross rate', v: 'SAR 1 ≈ ¥1.81', n: '¥1 ≈ SAR 0.55' }
+      ],
+      routeTitle: 'Shipping Corridor',
+      route: ['Guangzhou plant · packing & crating', 'Nansha / Shekou port · FOB', 'Sea 22–30 days → Dammam', 'Riyadh Dry Port · rail/truck', 'Site Riyadh · install & run'],
+      secA: 'A · Equipment Landed-Cost Build-up (shipped)',
+      secAdesc: 'Scale B (81 systems): equipment & key materials leave Guangzhou at FOB US$206,237 (equipment US$97,844 + materials US$108,393), shipped as 4 × 40HC via Dammam to the Riyadh Dry Port. Landed value below is duty-inclusive, VAT-excluded.',
+      secB: 'B · Services Converted to Riyadh (one-off)',
+      secBdesc: 'Services originally performed in Guangzhou are re-priced at Riyadh market rates — deployment engineering, local installation crews, site preparation, permits and commissioning.',
+      secC: 'C · Per-Seedling Cost Forecast',
+      secCdesc: 'Each line of the Guangzhou unit-cost model (¥6.614 total) is converted with an export / local-market factor. One-off services are amortized over 5 years (matching the depreciation basis).',
+      sumT: 'Summary — Estimated Riyadh Capital',
+      hItem: 'Item', hUsd: 'Est. (US$ · mid)', hSar: 'SAR equivalent', hNote: 'Basis & note',
+      Arows: [
+        'Export packing & crating', 'Origin trucking, export docs & clearance',
+        'Ocean freight — 4 × 40HC, Guangzhou → Dammam', 'Marine cargo insurance',
+        'Destination THC + D/O fee (4 cntr)', 'Inland — Dammam → Riyadh Dry Port',
+        'Customs brokerage (ZATCA agent)', 'SABER conformity (PCoC + SCoC)',
+        'Customs duty — 5% of CIF', 'Contingency (~3%)'
+      ],
+      Anotes: [
+        '2.5% of FOB — sea-worthy packing, crating, desiccant',
+        '~US$800–1,600; part of FOB terms if supplier arranges',
+        'Base US$2,600–3,400 /40HC (fwd quotes Apr–Sep 2026); Gulf risk premium spiked to US$6.6–8.1K in Jul 2026 — keep buffer',
+        '0.4% of CIF (0.3–0.5% typical)',
+        'THC ≈ US$300/cntr + D/O ≈ US$120',
+        'Rail/truck ≈ US$700–1,000 per 40HC to Riyadh Dry Port',
+        'SAR 1,200–2,500 per shipment',
+        'PCoC US$300–800/category/yr + SCoC US$100–150/shipment',
+        'Typical for machinery & agri HS codes (0–5%; verify)',
+        'Surcharges, seasonality (Ramadan), schedule buffers'
+      ],
+      A_sub: 'Landed subtotal — equipment & materials (duty incl., VAT excl.)',
+      A_vat: 'VAT 15% of CIF + duty — recoverable for VAT-registered importer (cash-flow item, excluded above)',
+      Brows: [
+        'Napell commissioning engineers (2 × 8 wks)', 'Local installation crew (10 × 12 wks)',
+        'Site preparation & utilities connection', 'PLC / IoT commissioning & calibration',
+        'Operator training & handover (2 wks)', 'Licenses & permits (agri, SABER admin)',
+        'Project management & supervision (4 mo)'
+      ],
+      Bnotes: [
+        'Visa, flights, accommodation, per-diem — Riyadh expat rates',
+        'Greenhouse/nursery workers SAR 1,500–2,500/mo + housing & transport',
+        'Electrical, water hook-up, foundation/shell prep — varies by location',
+        'Remote + on-site configuration of climate & nutrient control',
+        'SOP training for local operators',
+        'Municipal / MEWA-type approvals & registrations',
+        'Owner-side PM & QA during mobilization'
+      ],
+      B_sub: 'Subtotal — one-off services (install, commissioning & permits)',
+      CrowLab: ['Seeds (premium coffee)', 'Coir & packaging bag', 'Water, electricity & nutrients', 'Equipment depreciation', 'Miscellaneous & labor', 'Shipping (last-mile to market)'],
+      C_amort: 'One-off services (5-yr amortization)',
+      C_total: 'Total — forecast cost per seedling (Riyadh)',
+      C_base: 'Guangzhou baseline',
+      C_margin: 'Implied gross margin at US$3.68 sale price — ≈72% (Guangzhou 73.5%)',
+      hGz: 'Guangzhou (US$)', hF: 'Factor', hRy: 'Riyadh est. (SAR)',
+      s1t: 'Landed equipment & materials',
+      s1n: 'Duty incl. · VAT excl. · C&F Guangzhou → Riyadh',
+      s2t: 'One-off services (Riyadh)',
+      s2n: 'Engineers · local crew · site prep · permits',
+      s3t: 'Estimated startup capital — Riyadh',
+      s3n: 'Guangzhou baseline + landed delta + one-off services',
+      s4t: 'Forecast cost per seedling',
+      s4n: 'Amortized view · gross margin ≈72% at US$3.68',
+      assT: 'Assumptions & Methodology',
+      ass: [
+        'Planning FX (Sep 2026): US$1 = ¥6.80 (site-wide); Saudi Riyal pegged US$1 = SAR 3.75 (SAMA).',
+        'Freight: Guangzhou → Dammam/Jeddah 40HC base US$2,600–3,400 (forwarder quotes, Apr–Sep 2026); scenario uses US$3,000 × 4 containers. Door-to-door lead 35–45 days incl. clearance.',
+        'Customs duty assumed 5% of CIF (typical machinery/agri codes — verify HS before booking). 15% VAT shown separately; recoverable if VAT-registered.',
+        'SABER: PCoC US$300–800/category/yr + SCoC US$100–150/shipment (included); ZATCA brokerage SAR 1,200–2,500 (included).',
+        'Riyadh market 2026: greenhouse workers SAR 1,500–2,500/month + housing & benefits; technicians SAR 2,000–2,400/month; Riyadh industrial/warehouse rents SAR 239–307/m²/yr (CBRE/JLL Q1-2026) — perimeter agri land is negotiated separately and excluded here, consistent with the Guangzhou capital model.',
+        'KSA utilities: SEC electricity ~SAR 0.18–0.30/kWh and NWC/Marafiq tiered water SAR 0.15–9/m³ (treated effluent for agri is cheaper) — utilities factor ×0.60 vs Guangzhou.',
+        'Scenario: Scale B (81 systems, 10.8 acres, 615,000 seedlings/yr). Selling price held at US$3.68 for like-for-like comparison (Gulf specialty premium not modeled). Estimates carry ±15–25% uncertainty — validate with a licensed forwarder and local PM before commitment.'
+      ],
+      disclaimer: FX_NOTE + ' · Freight, duty & labour figures are indicative market estimates (2026). For inquiries: contact@napell.space',
+      ctaCosts: 'Open the detailed Guangzhou cost model'
+    },
+
+    zh: {
+      back: '← 返回详细成本分析',
+      title: '利雅得部署 — 成本估算',
+      intro: '预测模型：设备自中国广州海运至沙特利雅得，服务与本地成本换算为沙特里亚尔（SAR），并按规模推算单株经济性。',
+      fxTitle: '汇率与测算基准',
+      fx: [
+        { t: '美元 → 人民币', v: 'US$1 = ¥6.80', n: '全站统一规划汇率' },
+        { t: '沙特里亚尔', v: 'US$1 = SAR 3.75', n: '沙特央行固定汇率（SAMA）' },
+        { t: '交叉汇率', v: 'SAR 1 ≈ ¥1.81', n: '¥1 ≈ SAR 0.55' }
+      ],
+      routeTitle: '运输走廊',
+      route: ['广州工厂 · 包装加固', '南沙/蛇口港 · FOB', '海运 22–30 天 → 达曼', '利雅得陆港 · 铁路/卡车', '利雅得现场 · 安装运营'],
+      secA: 'A · 设备到岸成本构成（海运）',
+      secAdesc: '规模B（81套系统）：设备与关键物料自广州以 FOB US$206,237 发运（设备 US$97,844 + 物料 US$108,393），按 4 × 40尺高柜经达曼运至利雅得陆港。下列到岸价值含关税、不含增值税。',
+      secB: 'B · 服务成本换算至利雅得（一次性）',
+      secBdesc: '原在广州执行的服务按利雅得市场价格重新估价 — 部署工程、本地安装队伍、场地准备、许可与调试。',
+      secC: 'C · 单株成本预测',
+      secCdesc: '将广州单株成本模型（合计 ¥6.614）逐项按出口/当地市场系数换算；一次性服务按 5 年摊销（与折旧口径一致）。',
+      sumT: '汇总 — 利雅得部署资本估算',
+      hItem: '项目', hUsd: '估算（US$·中值）', hSar: 'SAR 等值', hNote: '口径与说明',
+      Arows: [
+        '出口包装与加固', '产地内陆运输、出口单证与报关',
+        '海运费 — 4 × 40尺高柜，广州 → 达曼', '海运货物保险',
+        '目的港 THC + D/O（4柜）', '内陆 — 达曼 → 利雅得陆港',
+        '报关代理费（ZATCA）', 'SABER 符合性认证（PCoC + SCoC）',
+        '关税 — CIF 的 5%', '预备金（约3%）'
+      ],
+      Anotes: [
+        'FOB 的 2.5% — 适航包装、木箱、干燥剂',
+        '约 US$800–1,600；若按FOB条款由供应商安排',
+        '基准 US$2,600–3,400/柜（2026年4–9月报价）；2026年7月海湾风险溢价曾冲至 US$6.6–8.1K — 需保留缓冲',
+        'CIF 的 0.4%（通常0.3–0.5%）',
+        'THC ≈ US$300/柜 + D/O ≈ US$120',
+        '铁路/卡车至利雅得陆港约 US$700–1,000/柜',
+        '每票 SAR 1,200–2,500',
+        'PCoC US$300–800/品类/年 + SCoC US$100–150/票',
+        '机械设备与农业HS编码常见（0–5%，需核实）',
+        '附加费、旺季（斋月）、船期波动'
+      ],
+      A_sub: '到岸小计 — 设备与物料（含关税，不含增值税）',
+      A_vat: '增值税 15%（CIF+关税）— 已注册进口商可抵扣（现金流项，未计入上表）',
+      Brows: [
+        '纳培调试工程师（2人 × 8周）', '本地安装队伍（10人 × 12周）',
+        '场地准备与水电接入', 'PLC/物联网调试与标定',
+        '操作员培训与交接（2周）', '证照与许可（农业、SABER 行政）',
+        '项目管理与监理（4个月）'
+      ],
+      Bnotes: [
+        '签证、机票、住宿、差旅津贴 — 利雅得外派标准',
+        '温室/育苗工人 SAR 1,500–2,500/月 + 住宿与交通',
+        '电气、接水、地基/棚体准备 — 依地块差异较大',
+        '远程 + 现场完成气候与营养控制配置',
+        '本地操作员 SOP 培训',
+        '市政 / MEWA 类审批与登记',
+        '业主方项目管理与进场质量保障'
+      ],
+      B_sub: '小计 — 一次性服务（安装、调试与许可）',
+      CrowLab: ['咖啡种子（优质）', '椰糠与包装袋', '水电费与营养液', '设备折旧', '杂费与人工费', '运输（终端到市场）'],
+      C_amort: '一次性服务（按5年摊销）',
+      C_total: '合计 — 利雅得单株成本预测',
+      C_base: '广州基线',
+      C_margin: '按 US$3.68 售价推算毛利率 — 约72%（广州 73.5%）',
+      hGz: '广州（US$）', hF: '系数', hRy: '利雅得预测（SAR）',
+      s1t: '到岸设备与物料',
+      s1n: '含关税 · 不含增值税 · 广州→利雅得 C&F',
+      s2t: '一次性服务（利雅得）',
+      s2n: '工程师 · 本地工人 · 场地 · 许可',
+      s3t: '利雅得启动资本（估算）',
+      s3n: '广州基线 + 到岸差额 + 一次性服务',
+      s4t: '单株成本预测',
+      s4n: '摊销口径 · US$3.68 售价下毛利率约72%',
+      assT: '假设与方法',
+      ass: [
+        '规划汇率（2026年9月）：US$1 = ¥6.80（全站统一）；沙特里亚尔钉住 US$1 = SAR 3.75（SAMA）。',
+        '运费：广州 → 达曼/吉达 40尺高柜基准 US$2,600–3,400（2026年4–9月货代报价）；本测算按 US$3,000 × 4 柜。门到门周期 35–45 天（含清关）。',
+        '关税按 CIF 的 5% 假设（机械设备/农业类常见 — 订舱前请核实 HS 编码）。15% 增值税单列；已注册进口商可抵扣。',
+        'SABER：PCoC US$300–800/品类/年 + SCoC US$100–150/票（已含）；ZATCA 报关代理 SAR 1,200–2,500（已含）。',
+        '利雅得 2026 市场：温室工人 SAR 1,500–2,500/月（含住宿福利）；技工 SAR 2,000–2,400/月；利雅得工业/仓储租金 SAR 239–307/㎡/年（CBRE/JLL 2026Q1）— 城郊农业用地需另行议价，本表未计，与广州资本模型口径一致。',
+        '沙特公用事业：SEC 电价约 SAR 0.18–0.30/kWh；NWC/Marafiq 阶梯水价 SAR 0.15–9/m³（农业再生水更便宜）— 公用事业系数取 ×0.60（对比广州）。',
+        '场景：规模B（81套系统、10.8亩、年产615,000株）。售价按 US$3.68 保持同口径比较（海湾精品溢价未计入）。估算存在 ±15–25% 不确定性 — 落地前请由持牌货代与本地项目经理复核。'
+      ],
+      disclaimer: FX_NOTE + ' · 运费、关税与人工为 2026 年市场指示性估算。垂询：contact@napell.space',
+      ctaCosts: '打开广州详细成本模型'
+    },
+
+    ar: {
+      back: '→ الرجوع إلى تحليل التكاليف المفصّل',
+      title: 'نشر الرياض — تقدير التكاليف',
+      intro: 'نموذج توقّع: شحن المعدّات من قوانغتشو (الصين) إلى الرياض (السعودية)، وتحويل الخدمات والتكاليف المحلية إلى الريال، وتوقّع اقتصاديّات الشتلة على نطاق كامل.',
+      fxTitle: 'أساس سعر الصرف والتقدير',
+      fx: [
+        { t: 'دولار ← يوان', v: 'US$1 = ¥6.80', n: 'سعر تخطيط معتمد في الموقع' },
+        { t: 'الريال السعودي', v: 'US$1 = SAR 3.75', n: 'ربط ثابت من مؤسسة النقد (SAMA)' },
+        { t: 'سعر التقاطع', v: 'SAR 1 ≈ ¥1.81', n: '¥1 ≈ SAR 0.55' }
+      ],
+      routeTitle: 'ممر الشحن',
+      route: ['مصنع قوانغتشو · تغليف وتثبيت', 'ميناء نانشا/شيكو · FOB', 'بحرًا 22–30 يومًا ← الدمام', 'الميناء الجاف بالرياض · سكة/شاحنة', 'الموقع بالرياض · تركيب وتشغيل'],
+      secA: 'أولًا · تكوين التكلفة النهائية للمعدات (مشحونة)',
+      secAdesc: 'السيناريو ب (81 نظامًا): تُشحن المعدات والمواد الرئيسية من قوانغتشو بقيمة FOB قدرها US$206,237 (معدات US$97,844 + مواد US$108,393) عبر 4 حاويات 40 قدم إلى الميناء الجاف بالرياض. القيمة النهائية أدناه تشمل الرسوم الجمركية وتستثني ضريبة القيمة المضافة.',
+      secB: 'ثانيًا · تحويل الخدمات إلى الرياض (لمرة واحدة)',
+      secBdesc: 'الخدمات المنفَّذة أصلًا في قوانغتشو تُقيَّم مجددًا بأسعار سوق الرياض — هندسة النشر، طواقم التركيب المحلية، تجهيز الموقع، التصاريح والتشغيل.',
+      secC: 'ثالثًا · توقّع تكلفة الشتلة الواحدة',
+      secCdesc: 'كل بند من نموذج تكلفة الشتلة في قوانغتشو (إجمالي ¥6.614) يُحوَّل بمعامل تصدير/سوق محلي. تُستهلك الخدمات لمرة واحدة على 5 سنوات (بما يتوافق مع أساس الإهلاك).',
+      sumT: 'الملخص — رأس المال التقديري للرياض',
+      hItem: 'البند', hUsd: 'التقدير (US$·وسط)', hSar: 'المعادل بالريال', hNote: 'الأساس والملاحظة',
+      Arows: [
+        'تغليف وتثبيت التصدير', 'نقل داخلي ووثائق وتخليص تصدير',
+        'الشحن البحري — 4 × 40 قدم، قوانغتشو ← الدمام', 'تأمين البضائع البحرية',
+        'رسوم الميناء الوجهة + D/O (4 حاويات)', 'داخليًا — الدمام ← الميناء الجاف بالرياض',
+        'عمولة وسيط الجمارك (ZATCA)', 'مطابقة SABER (PCoC + SCoC)',
+        'الرسوم الجمركية — 5% من CIF', 'احتياطي (~3%)'
+      ],
+      Anotes: [
+        '2.5% من FOB — تغليف يتحمّل البحر وصناديق ومجفّفات',
+        'نحو US$800–1,600; يدخل ضمن FOB إن تولّاه المورّد',
+        'الأساس US$2,600–3,400/حاوية (عروض أبريل–سبتمبر 2026); قفزت أقساط مخاطر الخليج إلى US$6.6–8.1K في يوليو 2026 — أبقِ احتياطيًا',
+        '0.4% من CIF (0.3–0.5% المعتاد)',
+        'THC ≈ US$300/حاوية + D/O ≈ US$120',
+        'سكة/شاحنة ≈ US$700–1,000 لكل 40 قدم إلى الميناء الجاف بالرياض',
+        'SAR 1,200–2,500 لكل شحنة',
+        'PCoC US$300–800/فئة/سنة + SCoC US$100–150/شحنة',
+        'شائع للآلات والمنتجات الزراعية (0–5%; يُتحقق منه)',
+        'رسوم إضافية، مواسم (رمضان)، تقلّبات الجداول'
+      ],
+      A_sub: 'الإجمالي الفرعي النهائي — المعدات والمواد (شامل الجمارك، دون VAT)',
+      A_vat: 'ضريبة القيمة المضافة 15% (CIF + الجمارك) — قابلة للاسترداد للمستورد المسجّل (بند تدفق نقدي، مستبعد أعلاه)',
+      Brows: [
+        'مهندسو تشغيل نابيل (2 × 8 أسابيع)', 'طاقم التركيب المحلي (10 × 12 أسبوعًا)',
+        'تجهيز الموقع وربط المرافق', 'تهيئة ومعايرة PLC / إنترنت الأشياء',
+        'تدريب المشغّلين والتسليم (أسبوعان)', 'التراخيص والتصاريح (زراعية، إدارة SABER)',
+        'إدارة المشروع والإشراف (4 أشهر)'
+      ],
+      Bnotes: [
+        'تأشيرة، تذاكر، سكن، بدل يومي — أسعار المغتربين بالرياض',
+        'عمال الدفيئة/المشاتل SAR 1,500–2,500/شهر + سكن ومواصلات',
+        'كهرباء، مياه، تجهيز أساس/هيكل — يختلف حسب الموقع',
+        'إعداد عن بُعد وفي الموقع لأنظمة المناخ والتغذية',
+        'تدريب المشغّلين المحليين على إجراءات التشغيل',
+        'موافقات وتسجيلات بلدية / من نوع MEWA',
+        'إدارة المشروع وضمان الجودة من المالك'
+      ],
+      B_sub: 'الإجمالي الفرعي — الخدمات لمرة واحدة (تركيب وتشغيل وتصاريح)',
+      CrowLab: ['البذور (بن ممتاز)', 'جوز الهند وكيس التعبئة', 'المياه والكهرباء والمغذيات', 'إهلاك المعدات', 'متنوعة وعمالة', 'الشحن (الميل الأخير إلى السوق)'],
+      C_amort: 'الخدمات لمرة واحدة (إطفاء على 5 سنوات)',
+      C_total: 'الإجمالي — التكلفة المتوقعة للشتلة (الرياض)',
+      C_base: 'خط الأساس قوانغتشو',
+      C_margin: 'هامش الربح الضمني بسعر US$3.68 — ≈72% (قوانغتشو 73.5%)',
+      hGz: 'قوانغتشو (US$)', hF: 'المعامل', hRy: 'الرياض (SAR)',
+      s1t: 'المعدات والمواد النهائية',
+      s1n: 'شامل الجمارك · دون VAT · C&F قوانغتشو ← الرياض',
+      s2t: 'خدمات لمرة واحدة (الرياض)',
+      s2n: 'مهندسون · عمال محليون · موقع · تصاريح',
+      s3t: 'رأس المال التقديري — الرياض',
+      s3n: 'خط أساس قوانغتشو + فرق التكلفة النهائية + الخدمات',
+      s4t: 'التكلفة المتوقعة للشتلة',
+      s4n: 'بأساس الإطفاء · هامش ≈72% عند US$3.68',
+      assT: 'الافتراضات والمنهجية',
+      ass: [
+        'سعر التخطيط (سبتمبر 2026): US$1 = ¥6.80 (معتمد في الموقع)؛ الريال مربوط بـ US$1 = SAR 3.75 (SAMA).',
+        'الشحن: قوانغتشو ← الدمام/جدة الأساس US$2,600–3,400 لحاوية 40 قدم (عروض أبريل–سبتمبر 2026)؛ السيناريو يستخدم US$3,000 × 4 حاويات. المهلة من الباب إلى الباب 35–45 يومًا شاملة التخليص.',
+        'افتراض الجمارك 5% من CIF (شائع للآلات والمنتجات الزراعية — يُتحقق من رمز HS قبل الحجز). 15% VAT تُعرض منفصلة؛ قابلة للاسترداد للمسجّلين.',
+        'SABER: PCoC US$300–800/فئة/سنة + SCoC US$100–150/شحنة (مشمولة)؛ وسيط ZATCA SAR 1,200–2,500 (مشمول).',
+        'سوق الرياض 2026: عمال الدفيئة SAR 1,500–2,500/شهر + سكن ومزايا؛ فنيون SAR 2,000–2,400/شهر؛ إيجارات الرياض الصناعية/المستودعات SAR 239–307/م²/سنة (CBRE/JLL الربع الأول 2026) — الأراضي الزراعية على الأطراف تُفاوض منفصلة وتُستبعد هنا بما يتسق مع نموذج رأس مال قوانغتشو.',
+        'مرافق السعودية: كهرباء SEC نحو SAR 0.18–0.30/كيلوواط، مياه NWC/Marafiq متدرجة SAR 0.15–9/م³ (المياه المعالجة للزراعة أرخص) — معامل المرافق ×0.60 مقارنة بقوانغتشو.',
+        'السيناريو: ب (81 نظامًا، 10.8 فدان، 615,000 شتلة/سنة). ثبُّت سعر البيع عند US$3.68 للمقارنة المماثلة (لا يشمل علاوة السوق الخليجية). التقديرات تحمل ±15–25% — تحقّق مع وكيل شحن مرخّص ومدير مشروع محلي قبل الالتزام.'
+      ],
+      disclaimer: FX_NOTE + ' · أرقام الشحن والجمارك والعمالة تقديرات سوقية إرشادية (2026). للاستفسار: contact@napell.space',
+      ctaCosts: 'افتح نموذج تكاليف قوانغتشو المفصّل'
+    }
+  };
+
+  /* ─── Render ─────────────────────────────────────────────────── */
+  function renderRiyadhContent(lang) {
+    const root = document.getElementById('riyadh-root');
+    if (!root) return;
+    const L = COPY[lang] || COPY.en;
+
+    const money3 = (usd, dec = 0) => {
+      const s = usd * S, c = usd * U;
+      const ds = dec ? fm2(s) : f0(s);
+      const du = dec ? fm2(usd) : f0(usd);
+      const dc = dec ? fm2(c) : f0(c);
+      return `<span class="ry-main">SAR ${ds}</span><span class="ry-ref">US$${du} · ¥${dc}</span>`;
+    };
+    const cnyCell = (cny) => {
+      const u = cny / U, s = cny / U * S;
+      return `<span class="ry-main">SAR ${fm2(s)}</span><span class="ry-ref">US$${fm2(u)} · ¥${fm2(cny)}</span>`;
+    };
+    const factPill = (f) => {
+      const cls = f < 1 ? 'ry-fac ry-fac-down' : f > 1.001 ? 'ry-fac ry-fac-up' : 'ry-fac ry-fac-eq';
+      return `<span class="${cls}">×${fm2(f)}</span>`;
+    };
+
+    const rowA = (i) => `
+      <tr>
+        <td>${L.Arows[i]}</td>
+        <td class="num">US$${f0(A_LINES[i])}</td>
+        <td class="num">${money3(A_LINES[i])}</td>
+        <td class="note">${L.Anotes[i]}</td>
+      </tr>`;
+
+    const rowB = (r, i) => `
+      <tr>
+        <td>${L.Brows[i]}</td>
+        <td class="num">US$${f0(r.usd)}<span class="ry-ref">${f0(r.lo)}–${f0(r.hi)}</span></td>
+        <td class="num">${money3(r.usd)}</td>
+        <td class="note">${L.Bnotes[i]}</td>
+      </tr>`;
+
+    const rowC = (r, i) => {
+      const newCny = r.base * r.f;
+      const gzUsd = r.base / U, gzSar = r.base / U * S;
+      const ry = cnyCell(newCny);
+      return `
+      <tr>
+        <td>${L.CrowLab[i]}</td>
+        <td class="num">US$${fm2(gzUsd)}<span class="ry-ref">SAR ${fm2(gzSar)} · ¥${fm2(r.base)}</span></td>
+        <td class="num">${factPill(r.f)}</td>
+        <td class="num">${ry}</td>
+      </tr>`;
+    };
+
+    const cTotal = cnyCell(TOTAL_CNY);
+    const baseTotalUsd = BASE_TOTAL_CNY / U;
+    const cBase = cnyCell(BASE_TOTAL_CNY);
+
+    root.innerHTML = `
+      <a class="ry-back" href="costs.html">${L.back}</a>
+
+      <div class="page-header" style="margin-bottom: 28px;">
+        <h1 class="page-title">${L.title}</h1>
+        <p class="page-intro">${L.intro}</p>
+      </div>
+
+      <!-- FX + Corridor -->
+      <div class="section">
+        <h2 class="section-title" style="font-size: 18px;">${L.fxTitle}</h2>
+        <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); margin-bottom: 22px;">
+          ${L.fx.map(f => `
+            <div class="card ry-fx">
+              <div class="ry-fx-t">${f.t}</div>
+              <div class="ry-fx-v">${f.v}</div>
+              <div class="ry-fx-n">${f.n}</div>
+            </div>`).join('')}
+        </div>
+        <h2 class="section-title" style="font-size: 18px;">${L.routeTitle}</h2>
+        <div class="ry-route">
+          ${L.route.map((r, i) => `
+            ${i ? '<span class="ry-route-arr">→</span>' : ''}
+            <span class="ry-route-step">${r}</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- Table A -->
+      <div class="section">
+        <h2 class="section-title">${L.secA}</h2>
+        <p class="section-desc">${L.secAdesc}</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr>
+              <th>${L.hItem}</th><th class="num">${L.hUsd}</th><th class="num">${L.hSar}</th><th>${L.hNote}</th>
+            </tr></thead>
+            <tbody>
+              ${MODEL.A.map((_, i) => rowA(i)).join('')}
+              <tr class="subtotal"><td>${L.A_sub}</td><td class="num">US$${f0(fob + A_SUB)}</td><td class="num">${money3(fob + A_SUB)}</td><td class="note">FOB US$${f0(fob)} + ${f0(A_SUB)}</td></tr>
+              <tr class="ry-vat-row"><td>${L.A_vat}</td><td class="num">US$${f0(A_VAT)}</td><td class="num">${money3(A_VAT)}</td><td class="note"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Table B -->
+      <div class="section">
+        <h2 class="section-title">${L.secB}</h2>
+        <p class="section-desc">${L.secBdesc}</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr>
+              <th>${L.hItem}</th><th class="num">${L.hUsd}</th><th class="num">${L.hSar}</th><th>${L.hNote}</th>
+            </tr></thead>
+            <tbody>
+              ${MODEL.B.map((r, i) => rowB(r, i)).join('')}
+              <tr class="grand-total"><td>${L.B_sub}</td><td class="num">US$${f0(B_SUB)}</td><td class="num">${money3(B_SUB)}</td><td class="note"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Table C -->
+      <div class="section">
+        <h2 class="section-title">${L.secC}</h2>
+        <p class="section-desc">${L.secCdesc}</p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead><tr>
+              <th>${L.hItem}</th><th class="num">${L.hGz}</th><th class="num">${L.hF}</th><th class="num">${L.hRy}</th>
+            </tr></thead>
+            <tbody>
+              ${MODEL.C.map((r, i) => rowC(r, i)).join('')}
+              <tr><td>${L.C_amort}</td><td class="num">US$${fm2(AMORT_USD)}<span class="ry-ref">SAR ${fm2(AMORT_USD * S)} · ¥${fm2(AMORT_CNY)}</span></td><td class="num"></td><td class="num">${cnyCell(AMORT_CNY)}</td></tr>
+              <tr class="grand-total"><td>${L.C_total}</td><td class="num">${cBase}<span class="ry-ref">${L.C_base} ¥${fm2(BASE_TOTAL_CNY)}</span></td><td class="num"></td><td class="num">${cTotal}</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="ry-margin">${L.C_margin}</p>
+      </div>
+
+      <!-- Summary -->
+      <div class="section">
+        <h2 class="section-title">${L.sumT}</h2>
+        <div class="stat-grid">
+          <div class="stat-block stat-block-accent">
+            <div class="stat-block-value">SAR ${cp(LANDED * S)}<span class="ref">US$${cp(LANDED)} · ¥${cp(LANDED * U)}</span></div>
+            <div class="stat-block-label">${L.s1t}</div>
+            <div class="ry-stat-note">${L.s1n}</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-block-value">SAR ${cp(B_SUB * S)}<span class="ref">US$${cp(B_SUB)} · ¥${cp(B_SUB * U)}</span></div>
+            <div class="stat-block-label">${L.s2t}</div>
+            <div class="ry-stat-note">${L.s2n}</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-block-value">SAR ${cp(STARTUP_RIYADH * S)}<span class="ref">US$${cp(STARTUP_RIYADH)} · ¥${cp(STARTUP_RIYADH * U)}</span></div>
+            <div class="stat-block-label">${L.s3t}</div>
+            <div class="ry-stat-note">${L.s3n} · <b style="color:var(--orange)">+${fm2(UPLIFT)}% vs Guangzhou</b></div>
+          </div>
+          <div class="stat-block" style="border-color: var(--green);">
+            <div class="stat-block-value" style="color: var(--green);">SAR ${fm2(TOTAL_SAR)}<span class="ref">US$${fm2(TOTAL_USD)} · ¥${fm2(TOTAL_CNY)}</span></div>
+            <div class="stat-block-label">${L.s4t}</div>
+            <div class="ry-stat-note">${L.s4n}</div>
+          </div>
+        </div>
+        <p class="fx-note">${L.disclaimer}</p>
+      </div>
+
+      <!-- Assumptions -->
+      <div class="section" style="margin-bottom: 0;">
+        <h2 class="section-title">${L.assT}</h2>
+        <ul class="ry-assump">
+          ${L.ass.map(a => `<li>${a}</li>`).join('')}
+        </ul>
+        <p style="margin-top: 26px;"><a class="ry-back" href="costs.html">${L.ctaCosts}</a></p>
+      </div>
+    `;
+  }
+
+  // Auth gate — AUTH.init() reveals content + calls renderRiyadhContent after login
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof AUTH !== 'undefined' && AUTH.isAuthenticated()) {
+      AUTH.revealContent();
+      AUTH._renderCosts();
+    }
+  });
+  </script>
+</body>
+</html>

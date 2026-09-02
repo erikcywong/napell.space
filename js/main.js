@@ -15,8 +15,11 @@ function renderNav(activePage) {
     { id: 'contact', key: 'nav_contact', href: 'contact.html' }
   ];
 
+  // The Riyadh deployment subpage is nested under Costs — highlight Costs as active
+  const act = activePage === 'riyadh' ? 'costs' : activePage;
+
   const linksHtml = pages.map(p =>
-    `<li><a class="nav-link ${activePage === p.id ? 'active' : ''} ${p.id === 'costs' ? 'nav-link-locked' : ''}" href="${p.href}" data-i18n="${p.key}"></a></li>`
+    `<li><a class="nav-link ${act === p.id ? 'active' : ''} ${p.id === 'costs' ? 'nav-link-locked' : ''}" href="${p.href}" data-i18n="${p.key}"></a></li>`
   ).join('');
 
   return `
@@ -272,6 +275,9 @@ window.renderDynamicContent = function(lang) {
   const page = document.body.dataset.page;
   if (page === 'costs' && typeof renderCostsContent === 'function') {
     if (typeof AUTH === 'undefined' || AUTH.isAuthenticated()) renderCostsContent(lang);
+  }
+  if (page === 'riyadh' && typeof renderRiyadhContent === 'function') {
+    if (typeof AUTH === 'undefined' || AUTH.isAuthenticated()) renderRiyadhContent(lang);
   }
   if (page === 'efficiency' && typeof renderEfficiencyContent === 'function') renderEfficiencyContent(lang);
   if (page === 'value-chain' && typeof renderValueChainContent === 'function') renderValueChainContent(lang);

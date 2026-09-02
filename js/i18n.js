@@ -108,6 +108,12 @@ const I18N = {
       costs_section_per_tree: 'Per-Seedling Cost Breakdown',
       costs_section_summary: 'Investment Summary',
 
+      // ─── Riyadh Deployment Subpage (entry card on Costs page) ───
+      riyadh_entry_badge: 'New · Riyadh Deployment',
+      riyadh_entry_title: 'Riyadh Deployment Cost Estimate',
+      riyadh_entry_desc: 'Equipment shipped from Guangzhou + services converted to Riyadh — landed cost & unit-economics forecast for Saudi Arabia (SAR).',
+      riyadh_entry_cta: 'Open Estimate',
+
       tbl_item: 'Item',
       tbl_unit: 'Unit',
       tbl_unit_price: 'Unit Price (US$)',
@@ -484,6 +490,12 @@ const I18N = {
       costs_section_per_tree: '每棵种苗成本分解',
       costs_section_summary: '投资汇总',
 
+      // ─── Riyadh Deployment Subpage (entry card on Costs page) ───
+      riyadh_entry_badge: '新增 · 利雅得部署',
+      riyadh_entry_title: '利雅得部署成本估算',
+      riyadh_entry_desc: '设备自广州发运 + 服务成本换算至利雅得 — 沙特到岸成本与单株经济预测（SAR）。',
+      riyadh_entry_cta: '打开估算',
+
       tbl_item: '项目',
       tbl_unit: '单位',
       tbl_unit_price: '单价（US$）',
@@ -859,6 +871,12 @@ const I18N = {
       costs_section_utilities: 'المرافق',
       costs_section_per_tree: 'تفصيل تكلفة الشتلة',
       costs_section_summary: 'ملخص الاستثمار',
+
+      // ─── Riyadh Deployment Subpage (entry card on Costs page) ───
+      riyadh_entry_badge: 'جديد · نشر الرياض',
+      riyadh_entry_title: 'تقدير تكاليف نشر الرياض',
+      riyadh_entry_desc: 'شحن المعدات من قوانغتشو + تحويل الخدمات إلى الرياض — التكلفة النهائية وتوقّع اقتصاد الشتلة للسعودية (ريال).',
+      riyadh_entry_cta: 'فتح التقدير',
 
       tbl_item: 'البند',
       tbl_unit: 'الوحدة',

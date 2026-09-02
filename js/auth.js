@@ -197,11 +197,14 @@ const AUTH = {
   },
 
   /**
-   * Render costs content (if function available)
+   * Render gated page content (if the matching render function is available)
+   * Page-specific render functions are declared in each page's inline script.
    */
   _renderCosts() {
-    if (typeof renderCostsContent === 'function' && typeof I18N !== 'undefined') {
-      renderCostsContent(I18N.getLang());
+    if (typeof I18N !== 'undefined') {
+      const lang = I18N.getLang();
+      if (typeof renderRiyadhContent === 'function') renderRiyadhContent(lang);
+      else if (typeof renderCostsContent === 'function') renderCostsContent(lang);
     }
     // Add logout button
     this._injectLogoutBtn();
@@ -226,11 +229,12 @@ const AUTH = {
   },
 
   /**
-   * Initialize auth gate on costs page
+   * Initialize auth gate on protected pages (costs & riyadh subpage)
    */
   init() {
-    const isCostsPage = document.body.dataset.page === 'costs';
-    if (!isCostsPage) return;
+    const page = document.body.dataset.page;
+    const isProtected = page === 'costs' || page === 'riyadh';
+    if (!isProtected) return;
 
     if (this.isAuthenticated()) {
       // Already authed — reveal content and render

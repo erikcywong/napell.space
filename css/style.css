@@ -918,3 +918,138 @@ body.rtl .auth-error { text-align: right; }
 .btn-em { background: var(--accent); color: #000; }
 .btn-em:hover { background: var(--accent-hover); color: #000; }
 
+/* ════════════════════════════════════════════════════════════════════
+   Riyadh Deployment subpage (costs-to-innovation / napell.space)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Entry banner on the Costs page */
+.riyadh-entry {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  margin: -12px 0 40px;
+  border: 1px solid rgba(29, 155, 240, 0.4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(29, 155, 240, 0.12), rgba(120, 86, 255, 0.08) 55%, rgba(0, 186, 124, 0.06));
+  text-decoration: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+.riyadh-entry:hover { border-color: var(--accent); background: linear-gradient(135deg, rgba(29, 155, 240, 0.2), rgba(120, 86, 255, 0.12) 55%, rgba(0, 186, 124, 0.1)); }
+.riyadh-entry-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  padding: 5px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.riyadh-entry-body { flex: 1; min-width: 0; }
+.riyadh-entry-title { font-size: 19px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.2px; }
+.riyadh-entry-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; margin-top: 3px; }
+.riyadh-entry-cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+body.rtl .riyadh-entry-cta svg { transform: scaleX(-1); }
+@media (max-width: 640px) {
+  .riyadh-entry { flex-wrap: wrap; }
+  .riyadh-entry-cta { width: 100%; }
+}
+
+/* Riyadh page building blocks */
+.ry-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 22px;
+}
+.ry-back:hover { color: #fff; }
+
+.ry-fx { padding: 18px 20px; }
+.ry-fx-t { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.ry-fx-v { font-size: 24px; font-weight: 800; color: var(--text-primary); font-family: var(--font-mono); margin: 6px 0 2px; }
+.ry-fx-n { font-size: 12.5px; color: var(--text-secondary); }
+
+.ry-route { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+.ry-route-step {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 7px 14px;
+}
+.ry-route-step:first-child { border-color: rgba(29,155,240,0.5); color: var(--accent); }
+.ry-route-step:last-child { border-color: rgba(0,186,124,0.5); color: var(--green); }
+.ry-route-arr { color: var(--text-muted); font-weight: 700; }
+
+/* Amount cells: SAR main + US$/¥ reference */
+.ry-main { display: block; font-family: var(--font-mono); font-weight: 700; }
+.ry-ref {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  margin-top: 1px;
+  white-space: nowrap;
+}
+.data-table .num .ry-ref { font-family: var(--font-sans); font-weight: 400; }
+.ry-fac {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.ry-fac-up { color: var(--accent); border: 1px solid rgba(29,155,240,0.45); background: rgba(29,155,240,0.08); }
+.ry-fac-down { color: var(--green); border: 1px solid rgba(0,186,124,0.45); background: rgba(0,186,124,0.08); }
+.ry-fac-eq { color: var(--text-muted); border: 1px solid var(--border-color); background: var(--bg-card); }
+.ry-vat-row td { font-size: 12.5px; color: var(--text-muted); background: rgba(255, 122, 0, 0.05); }
+.ry-margin { font-size: 14px; font-weight: 700; color: var(--green); margin-top: 10px; }
+.ry-stat-note { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+
+.ry-assump { list-style: none; display: grid; gap: 10px; }
+.ry-assump li {
+  position: relative;
+  padding: 12px 14px 12px 34px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+.ry-assump li::before {
+  content: "◆";
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  font-size: 9px;
+  color: var(--accent);
+}
+body.rtl .ry-assump li { padding: 12px 34px 12px 14px; }
+body.rtl .ry-assump li::before { left: auto; right: 14px; }
+
+@media (max-width: 760px) {
+  .data-table { min-width: 640px; }
+}
+
+

@@ -28,10 +28,14 @@ This project presents a transparent, data-backed commercial model for industrial
 
 1. **Home** — Landing page with KPI dashboard
 2. **Overview** — System architecture & commercial model
-3. **Costs** — Detailed cost breakdown (equipment, materials, consumables, utilities, per-seedling)
-4. **Efficiency** — Cultivation density, cycles, yield projections, traditional vs. aeroponic comparison
-5. **Value Chain** — Value creation across upstream, midstream, downstream coffee supply chain
-6. **Climate Response** — Climate crisis context, partnership framework, implementation roadmap
+3. **Costs** — Detailed cost breakdown (equipment, materials, consumables, utilities, per-seedling). Admin login required.
+4. **Riyadh Deployment** — Cost-estimate subpage under Costs: equipment shipped from Guangzhou to Riyadh (SAR) + converted services & unit-economics forecast. Admin login required. Accessible from the Costs page.
+5. **Efficiency** — Cultivation density, cycles, yield projections, traditional vs. aeroponic comparison
+6. **Value Chain** — Value creation across upstream, midstream, downstream coffee supply chain
+7. **Climate Response** — Climate crisis context, partnership framework, implementation roadmap
+8. **Contact** — WhatsApp / WeChat / Email channels
+
+> Protected pages (`costs.html`, `riyadh.html`) are gated by an administrator login (SHA-256 hashed, session-scoped). Client-side auth on a static site deters casual inspection; server-side auth is required for production-grade protection.
 
 ## Languages
 
