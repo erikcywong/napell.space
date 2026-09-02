@@ -35,6 +35,7 @@ const I18N = {
       nav_efficiency: 'Efficiency',
       nav_value_chain: 'Value Chain',
       nav_collaboration: 'Climate Response',
+      nav_contact: 'Contact',
       nav_brand: 'napell.space',
       nav_tagline: 'Aeroponic Coffee Cultivation System',
 
@@ -304,6 +305,22 @@ const I18N = {
       footer_ico: '',
       footer_made: 'Built with data. Driven by innovation.',
 
+      // ─── Contact Page ───
+      contact_title: 'Contact Us',
+      contact_intro: 'Partner with us, invest in the technology, or order seedlings — the Napell Space team responds to every inquiry.',
+      contact_section_title: 'Direct Channels',
+      contact_section_desc: 'Reach the team instantly through any channel below. We typically respond within 24 hours on business days.',
+      contact_whatsapp_label: 'WhatsApp',
+      contact_whatsapp_note: 'Fastest response — available worldwide.',
+      contact_wechat_label: 'WeChat',
+      contact_wechat_note: 'Preferred for mainland China partners.',
+      contact_email_label: 'Email',
+      contact_email_note: 'For business, investment & media inquiries.',
+      contact_btn_whatsapp: 'Message on WhatsApp',
+      contact_btn_wechat: 'Copy Number',
+      contact_btn_email: 'Send Email',
+      contact_copied: 'Number copied to clipboard!',
+
       // ─── Tooltips ───
       tip_investment: 'Total startup capital including equipment, materials, consumables, and prepaid utilities',
       tip_revenue: 'Based on 615,000 seedlings × US$3.68/unit sale price (¥25)',
@@ -394,6 +411,7 @@ const I18N = {
       nav_efficiency: '生产效率',
       nav_value_chain: '产业链价值',
       nav_collaboration: '气候响应',
+      nav_contact: '联系我们',
       nav_brand: 'napell.space',
       nav_tagline: '气雾栽培咖啡育苗系统',
 
@@ -663,6 +681,22 @@ const I18N = {
       footer_ico: '',
       footer_made: '数据驱动，创新引领。',
 
+      // ─── 联系页面 ───
+      contact_title: '联系我们',
+      contact_intro: '寻求合作、投资本技术或订购种苗 —— Napell Space 团队会回复每一封来信。',
+      contact_section_title: '直连渠道',
+      contact_section_desc: '通过以下任一渠道即时联系团队。工作日通常在 24 小时内回复。',
+      contact_whatsapp_label: 'WhatsApp',
+      contact_whatsapp_note: '回复最快 — 全球可用。',
+      contact_wechat_label: '微信',
+      contact_wechat_note: '中国大陆合作伙伴首选。',
+      contact_email_label: '邮箱',
+      contact_email_note: '商务、投资与媒体咨询。',
+      contact_btn_whatsapp: '通过 WhatsApp 联系',
+      contact_btn_wechat: '复制号码',
+      contact_btn_email: '发送邮件',
+      contact_copied: '号码已复制到剪贴板！',
+
       // ─── Tooltips ───
       tip_investment: '总启动资金，包括设备、物料、耗材和预存水电费',
       tip_revenue: '基于615,000棵种苗 × US$3.68/棵（¥25）销售单价计算',
@@ -753,6 +787,7 @@ const I18N = {
       nav_efficiency: 'الكفاءة',
       nav_value_chain: 'سلسلة القيمة',
       nav_collaboration: 'الاستجابة المناخية',
+      nav_contact: 'اتصل بنا',
       nav_brand: 'napell.space',
       nav_tagline: 'نظام زراعة البن بالرذاذ الهوائي',
 
@@ -1021,6 +1056,22 @@ const I18N = {
       footer_disclaimer: 'البيانات مستمدة من تحليل تكاليف التشغيل. توقعات الإيراد مبنية على تقديرات وفق ظروف السوق الحالية.',
       footer_ico: '',
       footer_made: 'مدفوع بالبيانات. يُقاده بالابتكار.',
+
+      // ─── صفحة التواصل ───
+      contact_title: 'اتصل بنا',
+      contact_intro: 'شارك معنا، استثمر في التقنية، أو اطلب شتلات — فريق نابيل سبيس يرد على كل استفسار.',
+      contact_section_title: 'قنوات مباشرة',
+      contact_section_desc: 'تواصل مع الفريق فورًا عبر أي قناة أدناه. نرد عادة خلال 24 ساعة في أيام العمل.',
+      contact_whatsapp_label: 'واتساب',
+      contact_whatsapp_note: 'أسرع استجابة — متاح حول العالم.',
+      contact_wechat_label: 'وي شات',
+      contact_wechat_note: 'مفضّل لشركاء الصين الرئيسيين.',
+      contact_email_label: 'البريد الإلكتروني',
+      contact_email_note: 'للاستفسارات التجارية والاستثمارية والإعلامية.',
+      contact_btn_whatsapp: 'تواصل عبر واتساب',
+      contact_btn_wechat: 'نسخ الرقم',
+      contact_btn_email: 'إرسال بريد',
+      contact_copied: 'تم نسخ الرقم إلى الحافظة!',
 
       // ─── Tooltips ───
       tip_investment: 'إجمالي رأس المال التأسيسي بما في ذلك المعدات والمواد والمستهلكات والمرافق المدفوعة مسبقًا',

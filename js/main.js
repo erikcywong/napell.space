@@ -11,7 +11,8 @@ function renderNav(activePage) {
     { id: 'costs', key: 'nav_costs', href: 'costs.html' },
     { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
     { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
-    { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' }
+    { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
+    { id: 'contact', key: 'nav_contact', href: 'contact.html' }
   ];
 
   const linksHtml = pages.map(p =>
