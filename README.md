@@ -12,15 +12,17 @@ This project presents a transparent, data-backed commercial model for industrial
 
 | Metric | Value |
 |--------|-------|
-| Initial Investment | ¥2.82M |
+| Initial Investment | US$414K (¥2.82M) |
 | Annual Output | 615,000 seedlings |
-| Projected Revenue | ¥15.4M/year |
+| Projected Revenue | US$2.26M/year (¥15.4M) |
 | Gross Margin | 73.5% |
-| Cost per Seedling | ¥6.61 |
-| Sale Price per Seedling | ¥25 |
+| Cost per Seedling | US$0.97 (¥6.61) |
+| Sale Price per Seedling | US$3.68 (¥25) |
 | Growth Cycle | 4 months |
 | Batches per Year | 3 |
 | Greenhouse Area | 10.8 acres |
+
+> FX reference: US$1 = ¥6.80. RMB figures shown as reference only.
 
 ## Pages
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Costs — napell.space</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body data-page="costs">
   <div id="nav-container"></div>
@@ -138,39 +138,40 @@
       <h2 class="section-title" data-i18n="costs_section_summary"></h2>
       <div class="stat-grid">
         <div class="stat-block stat-block-accent" data-tooltip="" id="sum-investment">
-          <div class="stat-block-value">¥2.82M</div>
+          <div class="stat-block-value">US$414K<span class="ref">¥2.82M</span></div>
           <div class="stat-block-label" data-i18n="kpi_investment"></div>
         </div>
         <div class="stat-block">
-          <div class="stat-block-value">¥665K</div>
+          <div class="stat-block-value">US$98K<span class="ref">¥665K</span></div>
           <div class="stat-block-label" data-i18n="costs_section_equipment"></div>
         </div>
         <div class="stat-block">
-          <div class="stat-block-value">¥737K</div>
+          <div class="stat-block-value">US$108K<span class="ref">¥737K</span></div>
           <div class="stat-block-label" data-i18n="costs_section_materials"></div>
         </div>
         <div class="stat-block">
-          <div class="stat-block-value">¥1.42M</div>
+          <div class="stat-block-value">US$208K<span class="ref">¥1.42M</span></div>
           <div class="stat-block-label" data-i18n="costs_section_consumables"></div>
         </div>
         <div class="stat-block stat-block-warn">
-          <div class="stat-block-value">¥6.61</div>
+          <div class="stat-block-value">US$0.97<span class="ref">¥6.61</span></div>
           <div class="stat-block-label" data-i18n="kpi_per_tree_cost"></div>
         </div>
         <div class="stat-block" style="border-color: var(--green);">
-          <div class="stat-block-value" style="color: var(--green);">¥18.39</div>
+          <div class="stat-block-value" style="color: var(--green);">US$2.70<span class="ref">¥18.39</span></div>
           <div class="stat-block-label">Gross Profit / Seedling</div>
         </div>
       </div>
+      <p class="fx-note" data-i18n="fx_note"></p>
     </div>
   </div>
 
   <div id="footer-container"></div>
 
-  <script src="js/i18n.js?v=7"></script>
-  <script src="js/data.js?v=7"></script>
-  <script src="js/auth.js?v=7"></script>
-  <script src="js/main.js?v=7"></script>
+  <script src="js/i18n.js?v=8"></script>
+  <script src="js/data.js?v=8"></script>
+  <script src="js/auth.js?v=8"></script>
+  <script src="js/main.js?v=8"></script>
   <script>
     function renderCostsContent(lang) {
       // Equipment table
@@ -181,9 +182,9 @@
           return `<tr>
             <td data-i18n="${item.i18n_key}">${I18N.t(item.i18n_key)}</td>
             <td>${unitLabel}</td>
-            <td class="num">¥${item.unit_price.toLocaleString()}</td>
-            <td class="num">¥${item.qty_45.toLocaleString()}</td>
-            <td class="num">¥${item.qty_81.toLocaleString()}</td>
+            <td class="num">${moneyCell(item.unit_price)}</td>
+            <td class="num">${moneyCell(item.qty_45)}</td>
+            <td class="num">${moneyCell(item.qty_81)}</td>
             <td class="note" data-i18n="${item.note_key}">${I18N.t(item.note_key)}</td>
           </tr>`;
         }).join('');
@@ -196,14 +197,14 @@
           const label = lang === 'zh' ? m.label_zh : lang === 'ar' ? m.label_ar : m.label_en;
           return `<tr>
             <td>${label}</td>
-            <td class="num">¥${m.qty_45.toLocaleString()}</td>
-            <td class="num">¥${m.qty_81.toLocaleString()}</td>
+            <td class="num">${moneyCell(m.qty_45)}</td>
+            <td class="num">${moneyCell(m.qty_81)}</td>
           </tr>`;
         }).join('') + `
           <tr class="subtotal">
             <td data-i18n="tbl_subtotal">${I18N.t('tbl_subtotal')}</td>
-            <td class="num">¥${APP_DATA.materials_subtotal_45.toLocaleString()}</td>
-            <td class="num">¥${APP_DATA.materials_subtotal_81.toLocaleString()}</td>
+            <td class="num">${moneyCell(APP_DATA.materials_subtotal_45)}</td>
+            <td class="num">${moneyCell(APP_DATA.materials_subtotal_81)}</td>
           </tr>`;
       }
 
@@ -214,14 +215,14 @@
           return `<tr>
             <td data-i18n="${c.i18n_key}">${I18N.t(c.i18n_key)}</td>
             <td class="num">${c.qty ? c.qty.toLocaleString() : '—'}</td>
-            <td class="num">¥${c.unit_price.toLocaleString()}</td>
-            <td class="num">¥${c.total.toLocaleString()}</td>
+            <td class="num">${moneyCell(c.unit_price)}</td>
+            <td class="num">${moneyCell(c.total)}</td>
           </tr>`;
         }).join('') + `
           <tr class="subtotal">
             <td data-i18n="tbl_subtotal">${I18N.t('tbl_subtotal')}</td>
             <td colspan="2"></td>
-            <td class="num">¥${APP_DATA.consumables_subtotal_1.toLocaleString()}</td>
+            <td class="num">${moneyCell(APP_DATA.consumables_subtotal_1)}</td>
           </tr>`;
       }
 
@@ -232,18 +233,18 @@
           return `<tr>
             <td data-i18n="${g.i18n_key}">${I18N.t(g.i18n_key)}</td>
             <td class="num">${g.qty ? g.qty.toLocaleString() : '—'}</td>
-            <td class="num">¥${g.unit_price.toLocaleString()}</td>
-            <td class="num">¥${g.total.toLocaleString()}</td>
+            <td class="num">${moneyCell(g.unit_price)}</td>
+            <td class="num">${moneyCell(g.total)}</td>
           </tr>`;
         }).join('') + `
           <tr class="subtotal">
             <td data-i18n="tbl_subtotal">${I18N.t('tbl_subtotal')}</td>
             <td colspan="2"></td>
-            <td class="num">¥${APP_DATA.germination_subtotal_2.toLocaleString()}</td>
+            <td class="num">${moneyCell(APP_DATA.germination_subtotal_2)}</td>
           </tr>
           <tr class="grand-total">
             <td colspan="3">Total Dynamic Consumables</td>
-            <td class="num">¥${APP_DATA.consumables_total.toLocaleString()}</td>
+            <td class="num">${moneyCell(APP_DATA.consumables_total)}</td>
           </tr>`;
       }
 
@@ -258,7 +259,7 @@
           <tr><td>Nutrient Pump (Seedling)</td><td class="num">${e.nutrient_pump_seedling_kw} ${I18N.t('unit_kw')}</td></tr>
           <tr><td>Nutrient Pump (Large)</td><td class="num">${e.nutrient_pump_large_kw} ${I18N.t('unit_kw')}</td></tr>
           <tr><td>Fertilizer Machine</td><td class="num">${e.fertilizer_machine_kw} ${I18N.t('unit_kw')}</td></tr>
-          <tr class="subtotal"><td>Total Electricity</td><td class="num">¥${e.total_electricity.toLocaleString()}</td></tr>`;
+          <tr class="subtotal"><td>Total Electricity</td><td class="num">${moneyCell(e.total_electricity)}</td></tr>`;
       }
 
       // Water table
@@ -266,8 +267,8 @@
       if (waterTbody) {
         const w = APP_DATA.utilities.water;
         waterTbody.innerHTML = `
-          <tr><td data-i18n="cost_item_water_rate">${I18N.t('cost_item_water_rate')}</td><td class="num">¥${w.rate_per_m3} ${I18N.t('unit_per_m3')}</td></tr>
-          <tr><td>Annual Budget</td><td class="num">¥${w.annual_budget.toLocaleString()}</td></tr>`;
+          <tr><td data-i18n="cost_item_water_rate">${I18N.t('cost_item_water_rate')}</td><td class="num">${moneyCell(w.rate_per_m3)} ${I18N.t('unit_per_m3')}</td></tr>
+          <tr><td>Annual Budget</td><td class="num">${moneyCell(w.annual_budget)}</td></tr>`;
       }
 
       // Per-seedling table
@@ -279,13 +280,13 @@
           const label = lang === 'zh' ? p.label_zh : lang === 'ar' ? p.label_ar : p.label_en;
           return `<tr>
             <td data-i18n="${p.i18n_key}">${label}</td>
-            <td class="num">¥${p.cost.toFixed(3)}</td>
+            <td class="num">${moneyCell(p.cost)}</td>
             <td class="num">${pct}%</td>
           </tr>`;
         }).join('') + `
           <tr class="grand-total">
             <td data-i18n="pt_total">${I18N.t('pt_total')}</td>
-            <td class="num">¥${total.toFixed(3)}</td>
+            <td class="num">${moneyCell(total)}</td>
             <td class="num">100%</td>
           </tr>`;
       }

@@ -79,7 +79,7 @@ const I18N = {
 
       model_desc: 'The commercial model operates on a batch-rotation principle: seedling greenhouses run 2-month cycles while large-plant systems run 4-month cycles. With 81 systems across 10.8 acres, the facility achieves 3 full batches per year — yielding 615,000 marketable seedlings annually.',
       model_unit_econ: 'Unit Economics',
-      model_unit_econ_desc: 'Each 50cm large seedling sells at ¥25. Total per-tree cost (including amortized equipment, seeds, nutrients, utilities, packaging, and labor) is ¥6.614 — yielding ¥18.386 gross profit per unit.',
+      model_unit_econ_desc: 'Each 50 cm large seedling sells at US$3.68 (¥25). Total per-tree cost (including amortized equipment, seeds, nutrients, utilities, packaging, and labor) is US$0.97 (¥6.61) — yielding US$2.70 (¥18.39) gross profit per unit.',
 
       scale_opt1: 'Scale Option A — 45 Systems',
       scale_opt2: 'Scale Option B — 81 Systems',
@@ -109,9 +109,9 @@ const I18N = {
 
       tbl_item: 'Item',
       tbl_unit: 'Unit',
-      tbl_unit_price: 'Unit Price (¥)',
-      tbl_qty_45: '45 Systems (¥)',
-      tbl_qty_81: '81 Systems (¥)',
+      tbl_unit_price: 'Unit Price (US$)',
+      tbl_qty_45: '45 Systems (US$)',
+      tbl_qty_81: '81 Systems (US$)',
       tbl_note: 'Notes',
       tbl_category: 'Category',
       tbl_subtotal: 'Subtotal',
@@ -133,13 +133,13 @@ const I18N = {
       cost_item_packaging: 'Packaging',
       cost_item_shipping: 'Shipping',
 
-      cost_note_rent: '8.8 acres greenhouse @ ¥6,800/acre + 2.4 acres open @ ¥2,500/acre',
+      cost_note_rent: '8.8 acres greenhouse @ US$1,000/acre (¥6,800) + 2.4 acres open @ US$368/acre (¥2,500)',
       cost_note_deposit: 'Greenhouse & open land lease deposit',
       cost_note_system: 'Quick-connect keel, XPS board, B/W film, nozzles, PE pipes',
       cost_note_compressor: 'Dual main unit, cold dryer, air tank',
       cost_note_pipeline: 'DN80–DN20 ball valves, flanges & accessories',
       cost_note_controller: 'PLC-based climate & nutrient management',
-      cost_note_seeds: 'Premium coffee seeds @ ¥1.7/seed',
+      cost_note_seeds: 'Premium coffee seeds @ US$0.25/seed (¥1.7)',
       cost_note_germination: 'Germination boxes + robotic arm',
       cost_note_nutrient: '3+1+N formula nutrient solution',
       cost_note_prepaid_util: 'New site requires utility prepayment',
@@ -161,7 +161,7 @@ const I18N = {
       cons_note_nutrient: 'Annual supply',
       cons_note_germ_arm: 'Automated seed placement',
       cons_note_germ_box: '4 units',
-      cons_note_seeds: '620,000 seeds @ ¥1.7/seed',
+      cons_note_seeds: '620,000 seeds @ US$0.25/seed (¥1.7)',
 
       // ─── Per-tree breakdown ───
       pt_item_shipping: 'Shipping',
@@ -306,7 +306,8 @@ const I18N = {
 
       // ─── Tooltips ───
       tip_investment: 'Total startup capital including equipment, materials, consumables, and prepaid utilities',
-      tip_revenue: 'Based on 615,000 seedlings × ¥25/unit sale price',
+      tip_revenue: 'Based on 615,000 seedlings × US$3.68/unit sale price (¥25)',
+      fx_note: 'FX reference: US$1 = ¥6.80. RMB figures shown as reference only.',
       tip_margin: 'Gross margin = (Revenue - Per-Tree Cost × Output) / Revenue',
       tip_per_tree: 'All-in cost per seedling: seeds, nutrients, utilities, depreciation, packaging, shipping, labor',
       tip_density: 'Early-stage panels use 6×6cm grid; late-stage expands to 12×12cm for root development',
@@ -437,7 +438,7 @@ const I18N = {
 
       model_desc: '商业模式基于批次轮换原则：幼苗温室运行2个月周期，大苗系统运行4个月周期。81套系统覆盖10.8亩，实现每年3个完整批次 — 年产615,000棵可销售种苗。',
       model_unit_econ: '单位经济模型',
-      model_unit_econ_desc: '每棵50厘米大苗售价25元。每棵总成本（含设备摊销、种子、营养液、水电、包装和人工）为6.614元 — 每棵毛利18.386元。',
+      model_unit_econ_desc: '每棵50厘米大苗售价US$3.68（¥25）。每棵总成本（含设备摊销、种子、营养液、水电、包装和人工）为US$0.97（¥6.61）— 每棵毛利US$2.70（¥18.39）。',
 
       scale_opt1: '方案A — 45套系统',
       scale_opt2: '方案B — 81套系统',
@@ -467,9 +468,9 @@ const I18N = {
 
       tbl_item: '项目',
       tbl_unit: '单位',
-      tbl_unit_price: '单价（¥）',
-      tbl_qty_45: '45套系统（¥）',
-      tbl_qty_81: '81套系统（¥）',
+      tbl_unit_price: '单价（US$）',
+      tbl_qty_45: '45套系统（US$）',
+      tbl_qty_81: '81套系统（US$）',
       tbl_note: '备注',
       tbl_category: '类别',
       tbl_subtotal: '小计',
@@ -491,13 +492,13 @@ const I18N = {
       cost_item_packaging: '包装费',
       cost_item_shipping: '运费',
 
-      cost_note_rent: '大棚8.8亩@6800元/亩 + 空地2.4亩@2500元/亩',
+      cost_note_rent: '大棚8.8亩@US$1,000/亩（¥6,800）+ 空地2.4亩@US$368/亩（¥2,500）',
       cost_note_deposit: '大棚与空地租赁押金',
       cost_note_system: '快接龙骨、XPS板、黑白膜、喷嘴、PE管',
       cost_note_compressor: '双主机、冷干机、储气罐',
       cost_note_pipeline: 'DN80-DN20球阀、法兰及配件',
       cost_note_controller: 'PLC气候与营养管理',
-      cost_note_seeds: '优质咖啡种子@1.7元/粒',
+      cost_note_seeds: '优质咖啡种子@US$0.25/粒（¥1.7）',
       cost_note_germination: '发芽箱+机械臂',
       cost_note_nutrient: '3+1+N配方营养液',
       cost_note_prepaid_util: '新场地需预存水电费',
@@ -519,7 +520,7 @@ const I18N = {
       cons_note_nutrient: '年度供应',
       cons_note_germ_arm: '自动化种子摆盘',
       cons_note_germ_box: '4套',
-      cons_note_seeds: '62万粒@1.7元/粒',
+      cons_note_seeds: '62万粒@US$0.25/粒（¥1.7）',
 
       // ─── Per-tree breakdown ───
       pt_item_shipping: '运费',
@@ -664,7 +665,8 @@ const I18N = {
 
       // ─── Tooltips ───
       tip_investment: '总启动资金，包括设备、物料、耗材和预存水电费',
-      tip_revenue: '基于615,000棵种苗 × 25元/棵销售单价计算',
+      tip_revenue: '基于615,000棵种苗 × US$3.68/棵（¥25）销售单价计算',
+      fx_note: '汇率参考：US$1 = ¥6.80。人民币金额仅供参考。',
       tip_margin: '毛利率 =（收入 - 每棵成本 × 产量）/ 收入',
       tip_per_tree: '每棵种苗全成本：种子、营养液、水电、折旧、包装、运输、人工',
       tip_density: '前期面板使用6×6厘米网格；后期扩展至12×12厘米以促进根系发育',
@@ -795,7 +797,7 @@ const I18N = {
 
       model_desc: 'يعمل النموذج التجاري على مبدأ التناوب الدفعي: تعمل بيوت الشتلات لدورات شهرين بينما تعمل أنظمة النباتات الكبيرة لدورات 4 أشهر. مع 81 نظامًا عبر 10.8 فدان، يحقق المرفق 3 دفعات كاملة سنويًا — بإنتاج 615,000 شتلة قابلة للتسويق سنويًا.',
       model_unit_econ: 'اقتصاديات الوحدة',
-      model_unit_econ_desc: 'كل شتلة كبيرة بطول 50 سم تباع بـ 25 يوان. إجمالي التكلفة لكل شتلة (بما في ذلك إهلاك المعدات والبذور والمغذيات والمرافق والتعبئة والعمالة) هو 6.614 يوان — بإجمالي ربح 18.386 يوان لكل وحدة.',
+      model_unit_econ_desc: 'كل شتلة كبيرة بطول 50 سم تباع بـ US$3.68 (¥25). إجمالي التكلفة لكل شتلة (بما في ذلك إهلاك المعدات والبذور والمغذيات والمرافق والتعبئة والعمالة) هو US$0.97 (¥6.61) — بإجمالي ربح US$2.70 (¥18.39) لكل وحدة.',
 
       scale_opt1: 'الخيار أ — 45 نظامًا',
       scale_opt2: 'الخيار ب — 81 نظامًا',
@@ -825,9 +827,9 @@ const I18N = {
 
       tbl_item: 'البند',
       tbl_unit: 'الوحدة',
-      tbl_unit_price: 'سعر الوحدة (¥)',
-      tbl_qty_45: '45 نظامًا (¥)',
-      tbl_qty_81: '81 نظامًا (¥)',
+      tbl_unit_price: 'سعر الوحدة (US$)',
+      tbl_qty_45: '45 نظامًا (US$)',
+      tbl_qty_81: '81 نظامًا (US$)',
       tbl_note: 'ملاحظات',
       tbl_category: 'الفئة',
       tbl_subtotal: 'المجموع الفرعي',
@@ -849,13 +851,13 @@ const I18N = {
       cost_item_packaging: 'التعبئة',
       cost_item_shipping: 'الشحن',
 
-      cost_note_rent: '8.8 فدان بيت زجاجي @ ¥6,800/فدان + 2.4 فدان مفتوح @ ¥2,500/فدان',
+      cost_note_rent: '8.8 فدان بيت زجاجي @ US$1,000/فدان (¥6,800) + 2.4 فدان مفتوح @ US$368/فدان (¥2,500)',
       cost_note_deposit: 'تأمين إيجار البيت الزجاجي والأرض المفتوحة',
       cost_note_system: 'هيكل توصيل سريع، لوح XPS، فيلم أبيض/أسود، فوهات، أنابيب PE',
       cost_note_compressor: 'وحدة مزدوجة رئيسية، مجفف هواء، خزان هواء',
       cost_note_pipeline: 'صمامات كروية DN80-DN20، فلنجات وملحقات',
       cost_note_controller: 'إدارة المناخ والتغذية بوحدة PLC',
-      cost_note_seeds: 'بذور بن ممتازة @ ¥1.7/بذرة',
+      cost_note_seeds: 'بذور بن ممتازة @ US$0.25/بذرة (¥1.7)',
       cost_note_germination: 'صناديق إنبات + ذراع روبوتي',
       cost_note_nutrient: 'محلول مغذي صيغة 3+1+N',
       cost_note_prepaid_util: 'الموقع الجديد يتطلب دفع مرافق مسبق',
@@ -877,7 +879,7 @@ const I18N = {
       cons_note_nutrient: 'توريد سنوي',
       cons_note_germ_arm: 'وضع بذور آلي',
       cons_note_germ_box: '4 وحدات',
-      cons_note_seeds: '620,000 بذرة @ ¥1.7/بذرة',
+      cons_note_seeds: '620,000 بذرة @ US$0.25/بذرة (¥1.7)',
 
       // ─── Per-tree breakdown ───
       pt_item_shipping: 'الشحن',
@@ -1022,7 +1024,8 @@ const I18N = {
 
       // ─── Tooltips ───
       tip_investment: 'إجمالي رأس المال التأسيسي بما في ذلك المعدات والمواد والمستهلكات والمرافق المدفوعة مسبقًا',
-      tip_revenue: 'بناءً على 615,000 شتلة × ¥25/وحدة سعر بيع',
+      tip_revenue: 'بناءً على 615,000 شتلة × US$3.68/وحدة (¥25) سعر بيع',
+      fx_note: 'مرجع سعر الصرف: US$1 = ¥6.80. المبالغ باليوان للرجوع إليها فقط.',
       tip_margin: 'هامش الربح الإجمالي = (الإيراد - تكلفة الشتلة × الإنتاج) / الإيراد',
       tip_per_tree: 'التكلفة الشاملة لكل شتلة: بذور، مغذيات، مرافق، إهلاك، تعبئة، شحن، عمالة',
       tip_density: 'ألواح المرحلة المبكرة تستخدم شبكة 6×6 سم؛ المرحلة المتأخرة تتوسع إلى 12×12 سم لتطور الجذور',

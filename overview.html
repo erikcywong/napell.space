@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Overview — napell.space</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body data-page="overview">
   <div id="nav-container"></div>
@@ -63,7 +63,7 @@
           <div class="progress-row">
             <div class="progress-label">
               <span data-i18n="pt_total"></span>
-              <span>¥6.614</span>
+              <span>US$0.97<span class="ref">¥6.61</span></span>
             </div>
             <div class="progress-track">
               <div class="progress-fill" style="width: 26.5%; background: var(--red);"></div>
@@ -108,14 +108,15 @@
           <tbody id="scale-tbody"></tbody>
         </table>
       </div>
+      <p class="fx-note" data-i18n="fx_note"></p>
     </div>
   </div>
 
   <div id="footer-container"></div>
 
-  <script src="js/i18n.js?v=7"></script>
-  <script src="js/data.js?v=7"></script>
-  <script src="js/main.js?v=7"></script>
+  <script src="js/i18n.js?v=8"></script>
+  <script src="js/data.js?v=8"></script>
+  <script src="js/main.js?v=8"></script>
   <script>
     function renderOverviewContent(lang) {
       // Infrastructure list
@@ -142,7 +143,7 @@
           { label: I18N.t('cycle_seedling_duration'), val: s.early_cycle_months + ' ' + I18N.t('unit_months') },
           { label: I18N.t('cycle_large_duration'), val: s.late_cycle_months + ' ' + I18N.t('unit_months') },
           { label: I18N.t('kpi_batches_year'), val: s.batches_per_year },
-          { label: I18N.t('kpi_sale_price'), val: '¥' + s.sale_price_per_seedling },
+          { label: I18N.t('kpi_sale_price'), val: moneyCell(s.sale_price_per_seedling) },
           { label: I18N.t('seedling_target_size_cm', 'Target Seedling Size'), val: s.seedling_target_size_cm + ' ' + I18N.t('unit_cm') }
         ];
         specsTbody.innerHTML = rows.map(r => `<tr><td>${r.label}</td><td class="num">${r.val}</td></tr>`).join('');
@@ -156,11 +157,11 @@
           { key: 'scale_row_land', a: APP_DATA.facility.total_acres_scale_a + ' ' + I18N.t('unit_acres'), b: APP_DATA.facility.total_acres_scale_b + ' ' + I18N.t('unit_acres') },
           { key: 'scale_row_seeds', a: a.seeds.toLocaleString(), b: b.seeds.toLocaleString() },
           { key: 'scale_row_output', a: a.annual_output.toLocaleString(), b: b.annual_output.toLocaleString() },
-          { key: 'scale_row_equipment', a: '¥' + a.equipment_cost.toLocaleString(), b: '¥' + b.equipment_cost.toLocaleString() },
-          { key: 'scale_row_materials', a: '¥' + a.materials_cost.toLocaleString(), b: '¥' + b.materials_cost.toLocaleString() },
-          { key: 'scale_row_consumables', a: '¥' + a.consumables_cost.toLocaleString(), b: '¥' + b.consumables_cost.toLocaleString() },
-          { key: 'scale_row_total', a: '¥' + a.total_startup.toLocaleString(), b: '¥' + b.total_startup.toLocaleString(), isTotal: true },
-          { key: 'scale_row_revenue', a: '¥' + a.annual_revenue.toLocaleString(), b: '¥' + b.annual_revenue.toLocaleString() }
+          { key: 'scale_row_equipment', a: moneyCell(a.equipment_cost), b: moneyCell(b.equipment_cost) },
+          { key: 'scale_row_materials', a: moneyCell(a.materials_cost), b: moneyCell(b.materials_cost) },
+          { key: 'scale_row_consumables', a: moneyCell(a.consumables_cost), b: moneyCell(b.consumables_cost) },
+          { key: 'scale_row_total', a: moneyCell(a.total_startup), b: moneyCell(b.total_startup), isTotal: true },
+          { key: 'scale_row_revenue', a: moneyCell(a.annual_revenue), b: moneyCell(b.annual_revenue) }
         ];
         scaleTbody.innerHTML = rows.map(r =>
           `<tr class="${r.isTotal ? 'grand-total' : ''}"><td data-i18n="${r.key}">${I18N.t(r.key)}</td><td class="num">${r.a}</td><td class="num">${r.b}</td></tr>`

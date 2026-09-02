@@ -541,6 +541,33 @@ a:hover { color: var(--accent-hover); }
 .stat-block-warn .stat-block-value { color: var(--orange); }
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
 
+/* ─── Dual-Currency (USD main · RMB reference) ─── */
+.ref {
+  font-family: var(--font-body);
+  font-size: 0.78em;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+.data-table .num .ref { font-family: var(--font-body); font-weight: 400; }
+.kpi-value .ref,
+.stat-block-value .ref {
+  display: block;
+  margin: 2px 0 0;
+  font-size: 0.38em;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.fx-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 16px;
+  letter-spacing: 0.3px;
+  opacity: 0.85;
+}
+
 /* ─── Value Point Card ─── */
 .vp-card {
   display: flex;

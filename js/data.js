@@ -4,6 +4,42 @@
  * Facility: Longgang Greenhouse 5 & 6 (龙岗5号6号棚)
  */
 
+// ─── Currency: USD primary · RMB reference ───
+// Planning FX rate (2026-09): 1 USD = 6.80 CNY.
+// Change FX_CNY_PER_USD to update every converted figure site-wide.
+const FX_CNY_PER_USD = 6.8;
+
+function _moneyStr(n, maxDec) {
+  return n.toLocaleString('en-US', { maximumFractionDigits: maxDec });
+}
+
+// Table cell: US$ main value + small ¥ reference — e.g. US$32,353 ¥220,000
+function moneyCell(cny) {
+  const u = cny / FX_CNY_PER_USD;
+  return 'US$' + _moneyStr(u, 2) + '<span class="ref">¥' + _moneyStr(cny, 2) + '</span>';
+}
+
+// Compact K/M formatter for a single currency — e.g. 2,817,812 → "2.82M"
+function _compact(n) {
+  const a = Math.abs(n);
+  if (a >= 1e6) return (n / 1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
+  if (a >= 1e4) return Math.round(n / 1e3) + 'K';
+  if (a >= 1e3) return (n / 1e3).toFixed(1).replace(/\.?0+$/, '') + 'K';
+  return n.toFixed(2).replace(/\.?0+$/, '');
+}
+
+// Stat card: US$ compact main + ¥ compact reference — e.g. US$414K / ¥2.82M
+function dualCompact(cny) {
+  const u = cny / FX_CNY_PER_USD;
+  return { usd: 'US$' + _compact(u), rmb: '¥' + _compact(cny) };
+}
+
+// Small per-unit dual value — e.g. US$0.97 / ¥6.61
+function dualUnit(cny) {
+  const u = cny / FX_CNY_PER_USD;
+  return { usd: 'US$' + u.toFixed(2).replace(/\.?0+$/, ''), rmb: '¥' + cny.toFixed(2).replace(/\.?0+$/, '') };
+}
+
 const APP_DATA = {
 
   // ─── Facility Constants ───

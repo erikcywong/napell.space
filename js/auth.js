@@ -7,8 +7,8 @@
 const AUTH = {
 
   // SHA-256 hashes (pre-computed — plaintext never appears in source)
-  // Valid admins: Erik (f166...) and James (9345...), same password
-  _userHash: 'f166226706d234dbf22ef3eda3a666a9c6a6fb249c193dd38920cc18a953dfb1',
+  // Valid admins: erik.wong (32c7...) and James (9345...), same password
+  _userHash: '32c71c17cb86286e78764c7f1c6f84f85853deaf9d1f17b03f5e868cd8a1d2a9',
   _userHash2: '9345a35a6fdf174dff7219282a3ae4879790dbb785c70f6fff91e32fafd66eab',
   _passHash: 'b78a31f0e9654801916a1eda6286b3d4b8756d66803ba1b71151f8fd12d7ed10',
   _sessionKey: 'napell-costs-auth',
