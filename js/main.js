@@ -171,20 +171,40 @@ function confirmModalLang() {
   maybeShowSlogan(500);
 }
 
-/* ─── Slogan Splash (front page popup) ─── */
-function renderSloganSplash() {
+/* ─── Slogan Splash (front page popup) — sequenced brand moments ─── */
+const SPLASH_SEQUENCE = [
+  {
+    html: 'A narrative of <span class="slogan-data">2 billion</span> coffee drinkers <span class="slogan-data">EVERYDAY</span>',
+    sub: 'T H E &nbsp;D A I L Y &nbsp;R I T U A L'
+  },
+  {
+    html: 'We empower the coffee with <span class="slogan-data">DATA</span>',
+    sub: 'N A P E L L &nbsp;·&nbsp; S P A C E'
+  }
+];
+
+function renderSloganSplash(step = 0) {
+  const s = SPLASH_SEQUENCE[step];
+  if (!s) return; // sequence finished
   const el = document.createElement('div');
   el.className = 'slogan-splash';
   el.id = 'slogan-splash';
   el.innerHTML = `
     <div class="slogan-splash-inner">
-      <div class="slogan-text">We empower the coffee with <span class="slogan-data">DATA</span></div>
-      <div class="slogan-sub">N A P E L L &nbsp;·&nbsp; S P A C E</div>
+      <div class="slogan-text">${s.html}</div>
+      <div class="slogan-sub">${s.sub}</div>
     </div>`;
-  el.addEventListener('click', hideSloganSplash);
+  let advanced = false;
+  const advance = () => {
+    if (advanced) return; // click + timer may both fire — advance only once
+    advanced = true;
+    hideSloganSplash();
+    setTimeout(() => renderSloganSplash(step + 1), 650);
+  };
+  el.addEventListener('click', advance);
   document.body.appendChild(el);
   requestAnimationFrame(() => el.classList.add('show'));
-  setTimeout(hideSloganSplash, 4500);
+  setTimeout(advance, 4000);
 }
 
 function hideSloganSplash() {
