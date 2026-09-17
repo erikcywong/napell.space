@@ -167,6 +167,37 @@ function confirmModalLang() {
   sessionStorage.setItem('cti-modal-shown', '1');
   I18N.setLang(selectedModalLang);
   I18N.hideModal();
+  maybeShowSlogan(500);
+}
+
+/* ─── Slogan Splash (front page popup) ─── */
+function renderSloganSplash() {
+  const el = document.createElement('div');
+  el.className = 'slogan-splash';
+  el.id = 'slogan-splash';
+  el.innerHTML = `
+    <div class="slogan-splash-inner">
+      <div class="slogan-text">We empower the coffee with <span class="slogan-data">DATA</span></div>
+      <div class="slogan-sub">N A P E L L &nbsp;·&nbsp; S P A C E</div>
+    </div>`;
+  el.addEventListener('click', hideSloganSplash);
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(hideSloganSplash, 4500);
+}
+
+function hideSloganSplash() {
+  const el = document.getElementById('slogan-splash');
+  if (!el) return;
+  el.classList.remove('show');
+  setTimeout(() => el.remove(), 600);
+}
+
+function maybeShowSlogan(delay = 0) {
+  if (document.body.dataset.page !== 'home') return;
+  if (sessionStorage.getItem('napell-slogan-shown')) return;
+  sessionStorage.setItem('napell-slogan-shown', '1');
+  setTimeout(renderSloganSplash, delay);
 }
 
 /* ─── Language Switching ─── */
@@ -315,6 +346,10 @@ function runInit() {
     I18N.init();
   } else {
     console.error('[main] I18N not loaded; translations unavailable.');
+  }
+  // Front page slogan splash — only when the language modal is NOT shown (it chains after modal confirm)
+  if (!document.getElementById('lang-modal')) {
+    maybeShowSlogan(700);
   }
 }
 
