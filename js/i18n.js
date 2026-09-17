@@ -37,6 +37,19 @@ const I18N = {
       nav_collaboration: 'Climate Response',
       nav_vision: 'Vision',
       nav_contact: 'Contact',
+      nav_gallery: 'Gallery',
+
+      // ─── Gallery page ───
+      gallery_title: 'Gallery',
+      gallery_intro: 'Inside the aeroponic coffee nursery — from germination panels to exhibition-ready plants. Real plants, real roots, real data.',
+      gal_cap1: 'Young coffee seedlings emerging on aeroponic net-pot panels inside the greenhouse nursery',
+      gal_cap2: 'Dense rows of thriving coffee seedlings — uniform, vigorous and clonally consistent',
+      gal_cap3: 'Close-up of a fresh leaf flush on a young aeroponic coffee plant',
+      gal_cap4: 'Growth check: a healthy seedling at ~20 cm with visible white roots in its net pot',
+      gal_cap5: 'Coffee plants in transparent hydroponic cups — oxygen-rich mist drives dense white root growth',
+      gal_cap6: 'Napell exhibition display: tabletop aeroponic units, seedling cups and coffee variety vials',
+      gal_cap7: 'The aeroponic advantage — a robust, soil-free white root system held in a raft net pot',
+      gal_cap8: 'A coffee plant established in a vertical aeroponic tower planter inside the greenhouse',
 
       v_title: 'The Full Coffee Chain — Powered by Controlled Cultivation',
       v_intro: 'Most global coffee players avoid owning farms: cultivation is high-risk, long-cycle and low-return, clashing with the asset-light, high-turnover logic of downstream brands. Napell inverts this. Aeroponics plus tissue culture dissolves the natural risk of cultivation — turning coffee from a weather-exposed crop into an industrial product with designed parameters. That certainty becomes the value anchor for the entire chain: roasting, curve IP, carbon assets, coffee banking, REITs and chain brands all pay a premium for it.',
@@ -542,6 +555,19 @@ const I18N = {
       nav_collaboration: '气候响应',
       nav_vision: '愿景',
       nav_contact: '联系我们',
+      nav_gallery: '图库',
+
+      // ─── Gallery page ───
+      gallery_title: '实拍图库',
+      gallery_intro: '走进雾化水培咖啡育苗基地 —— 从催芽板到展会级成品植株。真实植株、真实根系、真实数据。',
+      gal_cap1: '温室育苗棚内，咖啡幼苗在雾培定植板上萌发生长',
+      gal_cap2: '密集排列的咖啡幼苗长势旺盛 —— 整齐、健壮、克隆一致性',
+      gal_cap3: '雾培咖啡幼株新叶特写',
+      gal_cap4: '生长核查：健壮幼苗约 20 厘米，定植篮中白色根系清晰可见',
+      gal_cap5: '透明水培杯中的咖啡植株 —— 富氧雾化环境催生浓密白色根系',
+      gal_cap6: '纳培展会展示：桌面雾培装置、幼苗杯与咖啡品种样品管',
+      gal_cap7: '雾培优势 —— 漂浮定植篮中无土、健壮的白色根系',
+      gal_cap8: '定植于立式雾培种植塔的咖啡植株（温室内）',
 
       v_title: '全咖啡产业链 — 以可控种植端为价值锚点',
       v_intro: '全球咖啡企业大多回避自建农场：种植端高风险、长周期、低回报，与下游品牌商的轻资产、高周转逻辑根本冲突。纳培选择反其道而行——雾化水培加组培技术消解了种植的自然风险，把咖啡从"靠天吃饭的农产品"重新定义为"参数可设计的工业品"。这份确定性随即成为全链条的价值锚点：烘焙、曲线IP、碳资产、豆银行、REITs、连锁品牌，都在为确定性支付溢价。',
@@ -1047,6 +1073,19 @@ const I18N = {
       nav_collaboration: 'الاستجابة المناخية',
       nav_vision: 'الرؤية',
       nav_contact: 'اتصل بنا',
+      nav_gallery: 'معرض الصور',
+
+      // ─── Gallery page ───
+      gallery_title: 'معرض الصور',
+      gallery_intro: 'داخل مشتل القهوة بالزراعة الهوائية — من ألواح الإنبات إلى نباتات جاهزة للمعارض. نباتات حقيقية وجذور حقيقية وبيانات حقيقية.',
+      gal_cap1: 'شتلات قهوة صغيرة تنمو على ألواح الزراعة الهوائية بأواني الشبكة داخل مشتل البيوت المحمية',
+      gal_cap2: 'صفوف كثيفة من شتلات القهوة المزدهرة — متناسقة وقوية ومتطابقة وراثيًا',
+      gal_cap3: 'لقطة مقربة لأوراق جديدة على نبات قهوة شاب في الزراعة الهوائية',
+      gal_cap4: 'فحص النمو: شتلة صحية بطول 20 سم تقريبًا مع جذور بيضاء ظاهرة في وعاء الشبكة',
+      gal_cap5: 'نباتات القهوة في أكواب زراعية مائية شفافة — الضباب الغني بالأكسجين يعزز نمو الجذور البيضاء الكثيفة',
+      gal_cap6: 'عرض معرض Napell: وحدات زراعة هوائية مكتبية وأكواب شتلات وأنابيب أصناف البن',
+      gal_cap7: 'ميزة الزراعة الهوائية — نظام جذور أبيض قوي بلا تربة في وعاء شبكي عائم',
+      gal_cap8: 'نبات قهوة مستقر في برج زراعة هوائي رأسي داخل البيت المحمي',
 
       v_title: 'سلسلة القهوة الكاملة — بقوة زراعة مُتحكَّم بها',
       v_intro: 'معظم شركات القهوة العالمية تتجنب امتلاك المزارع: الزراعة عالية المخاطر وطويلة الدورة ومنخفضة العائد، مما يتعارض مع منطق العلامات التجارية النهائية القائم على الأصول الخفيفة والدورة السريعة. تختار نابيل العكس — الإيكاروبونكس مع زراعة الأنسجة يزيلان المخاطر الطبيعية للزراعة، فيتحول البن من "محصول زراعي يعتمد على الطقس" إلى "منتج صناعي بمعايير قابلة للتصميم". وتصبح هذه اليقينية مرساة القيمة لسلسلة بأكملها: التحميص، وملكية منحنيات التحميص، وأصول الكربون، وبنك البن، و صناديق REITs، والعلامة التجارية للسلاسل — الجميع يدفع علاوة مقابل اليقين.',

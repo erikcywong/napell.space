@@ -8,11 +8,12 @@ function renderNav(activePage) {
   const pages = [
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
-    { id: 'overview', key: 'nav_overview', href: 'overview.html' },
-    { id: 'costs', key: 'nav_costs', href: 'costs.html' },
-    { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
-    { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
     { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
+    { id: 'overview', key: 'nav_overview', href: 'overview.html' },
+    { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
+    { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
+    { id: 'costs', key: 'nav_costs', href: 'costs.html' },
+    { id: 'gallery', key: 'nav_gallery', href: 'gallery.html' },
     { id: 'contact', key: 'nav_contact', href: 'contact.html' }
   ];
 
@@ -60,7 +61,7 @@ function renderNav(activePage) {
             </button>
             <div class="lang-dropdown" id="lang-dropdown">
               <button class="lang-option" data-lang="en" onclick="switchLang('en')">
-                <span class="lang-option-flag">🇬🇧</span>
+                <span class="lang-option-flag">🇺🇸</span>
                 <span class="lang-option-text">
                   <span class="lang-option-name">English</span>
                   <span class="lang-option-desc" data-i18n="modal_en_desc"></span>
@@ -105,7 +106,7 @@ function renderLangModal() {
         <p class="lang-modal-subtitle" data-i18n="modal_subtitle"></p>
         <div class="lang-modal-options">
           <div class="lang-modal-option" data-lang="en" onclick="selectModalLang('en')">
-            <div class="lang-modal-option-flag">🇬🇧</div>
+            <div class="lang-modal-option-flag">🇺🇸</div>
             <div class="lang-modal-option-name" data-i18n="modal_en"></div>
             <div class="lang-modal-option-desc" data-i18n="modal_en_desc"></div>
           </div>
