@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision — The Full Coffee Chain | napell.space</title>
+  <meta name="description" content="Napell's full coffee chain vision: controlled aeroponic cultivation as the value anchor powering roasting, curve IP, carbon assets, coffee banking, REITs and chain brands.">
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <style>
+    /* Vision page specific */
+    .inv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+    .inv-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+    .inv-card h4 { font-size: 14px; color: var(--red); margin-bottom: 8px; }
+    .inv-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .inv-card.np h4 { color: var(--green); }
+
+    .bar-chart { margin-top: 24px; }
+    .bar-row { display: grid; grid-template-columns: 180px 1fr 90px; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .bar-label { font-size: 13px; color: var(--text-secondary); text-align: right; }
+    .bar-track { height: 26px; background: var(--bg-card); border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); }
+    .bar-fill { height: 100%; border-radius: 5px 0 0 5px; }
+    .bar-fill.trad { background: linear-gradient(90deg, #7a1f26, var(--red)); }
+    .bar-fill.np { background: linear-gradient(90deg, #0b5c42, var(--green)); }
+    .bar-val { font-size: 13px; font-weight: 700; font-family: var(--font-mono, monospace); }
+    .bar-val.trad { color: var(--red); }
+    .bar-val.np { color: var(--green); }
+    .bar-caption { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+
+    .fly-wrap { margin-top: 24px; overflow-x: auto; }
+    .fly-wrap svg { min-width: 640px; width: 100%; height: auto; display: block; }
+
+    .seg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 20px; }
+    .seg-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; border-top: 3px solid var(--accent); }
+    .seg-card:nth-child(2) { border-top-color: var(--purple); }
+    .seg-card:nth-child(3) { border-top-color: var(--green); }
+    .seg-card:nth-child(4) { border-top-color: var(--yellow); }
+    .seg-card:nth-child(5) { border-top-color: var(--orange); }
+    .seg-card:nth-child(6) { border-top-color: var(--red); }
+    .seg-num { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+    .seg-card h3 { font-size: 16px; color: var(--text-primary); margin: 8px 0 10px; }
+    .seg-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+    .seg-io { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-color); font-size: 12px; line-height: 1.7; }
+    .seg-io .io-in { color: var(--green); }
+    .seg-io .io-out { color: var(--accent); }
+
+    .bench-table td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+    .bench-table tr.np-row td { background: rgba(29, 155, 240, 0.06); border-left: 3px solid var(--accent); }
+
+    .fin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+    .fin-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; }
+    .fin-card .fin-v { font-size: 26px; font-weight: 800; color: var(--accent); font-family: var(--font-mono, monospace); }
+    .fin-card .fin-v small { font-size: 14px; font-weight: 600; }
+    .fin-card p { font-size: 12px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6; }
+
+    .road { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .phase { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; position: relative; }
+    .phase-num { position: absolute; top: -14px; left: 18px; background: var(--accent); color: #000; font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
+    .phase h3 { font-size: 15px; color: var(--text-primary); margin: 10px 0 8px; }
+    .phase p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+    @media (max-width: 1280px) {
+      .nav-link { padding: 8px 10px; font-size: 12px; }
+      .nav-brand-name { font-size: 30px; }
+    }
+    @media (max-width: 768px) {
+      .bar-row { grid-template-columns: 110px 1fr 70px; }
+      .bar-label { font-size: 11px; }
+    }
+  </style>
+</head>
+<body data-page="vision">
+
+  <div id="nav-container"></div>
+
+  <main class="page-content" style="padding-top: 96px;">
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="page-header">
+        <h1 class="page-title" data-i18n="v_title"></h1>
+        <p class="page-intro" data-i18n="v_intro"></p>
+      </div>
+
+      <!-- Section 1: Why industry avoids cultivation + how we invert -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="d1_title"></h2>
+        <p class="section-desc" data-i18n="d1_desc"></p>
+        <div class="inv-grid">
+          <div class="inv-card"><h4 data-i18n="inv_risk_t"></h4><p data-i18n="inv_risk_d"></p></div>
+          <div class="inv-card"><h4 data-i18n="inv_margin_t"></h4><p data-i18n="inv_margin_d"></p></div>
+          <div class="inv-card"><h4 data-i18n="inv_asset_t"></h4><p data-i18n="inv_asset_d"></p></div>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label" data-i18n="bar_trad"></div>
+            <div class="bar-track"><div class="bar-fill trad" style="width: 100%;"></div></div>
+            <div class="bar-val trad">5–8 yrs</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label" data-i18n="bar_np"></div>
+            <div class="bar-track"><div class="bar-fill np" style="width: 45%;"></div></div>
+            <div class="bar-val np">2–3 yrs</div>
+          </div>
+          <div class="bar-caption" data-i18n="bar_caption"></div>
+        </div>
+      </section>
+
+      <!-- Section 2: Dashboard -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="dash_title"></h2>
+        <p class="section-desc" data-i18n="dash_desc"></p>
+        <div class="stat-grid" style="margin-top: 20px;">
+          <div class="stat-block stat-block-accent"><div class="stat-block-value">73.5%</div><div class="stat-block-label" data-i18n="v_kpi1"></div></div>
+          <div class="stat-block"><div class="stat-block-value">615K</div><div class="stat-block-label" data-i18n="v_kpi2"></div></div>
+          <div class="stat-block"><div class="stat-block-value">4<span style="font-size:16px;"> mo</span></div><div class="stat-block-label" data-i18n="v_kpi3"></div></div>
+          <div class="stat-block"><div class="stat-block-value">100%</div><div class="stat-block-label" data-i18n="v_kpi4"></div></div>
+          <div class="stat-block"><div class="stat-block-value">US$0.97</div><div class="stat-block-label" data-i18n="v_kpi5"></div></div>
+          <div class="stat-block stat-block-warn"><div class="stat-block-value" style="color: var(--green);">EUDR</div><div class="stat-block-label" data-i18n="v_kpi6"></div></div>
+        </div>
+      </section>
+
+      <!-- Section 3: Flywheel chart -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="fly_title"></h2>
+        <p class="section-desc" data-i18n="fly_desc"></p>
+        <div class="fly-wrap">
+          <svg viewBox="0 0 920 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Empowerment flywheel">
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1d9bf0"/>
+              </marker>
+              <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#3d5a75"/>
+              </marker>
+            </defs>
+
+            <!-- spokes: center -> outer -->
+            <g stroke="#1d9bf0" stroke-width="1.6" opacity="0.75">
+              <line x1="460" y1="212" x2="460" y2="126" marker-end="url(#arr)"/>
+              <line x1="541" y1="259" x2="591" y2="229" marker-end="url(#arr)"/>
+              <line x1="541" y1="361" x2="591" y2="391" marker-end="url(#arr)"/>
+              <line x1="460" y1="408" x2="460" y2="494" marker-end="url(#arr)"/>
+              <line x1="379" y1="361" x2="329" y2="391" marker-end="url(#arr)"/>
+              <line x1="379" y1="259" x2="329" y2="229" marker-end="url(#arr)"/>
+            </g>
+
+            <!-- dashed cycle between outer nodes (mutual empowerment) -->
+            <g stroke="#3d5a75" stroke-width="1.2" stroke-dasharray="5 5" fill="none" opacity="0.8">
+              <path d="M 556 128 L 668 208" marker-end="url(#arrG)"/>
+              <path d="M 688 248 L 688 372" marker-end="url(#arrG)"/>
+              <path d="M 668 412 L 556 492" marker-end="url(#arrG)"/>
+              <path d="M 364 492 L 252 412" marker-end="url(#arrG)"/>
+              <path d="M 232 372 L 232 248" marker-end="url(#arrG)"/>
+              <path d="M 252 208 L 364 128" marker-end="url(#arrG)"/>
+            </g>
+
+            <!-- center node -->
+            <circle cx="460" cy="310" r="102" fill="#0d1b29" stroke="#1d9bf0" stroke-width="2.5"/>
+            <circle cx="460" cy="310" r="114" fill="none" stroke="#1d9bf0" stroke-width="1" opacity="0.3" stroke-dasharray="3 6"/>
+            <text x="460" y="296" text-anchor="middle" fill="#ffffff" font-size="19" font-weight="800" data-i18n="n_core"></text>
+            <text x="460" y="322" text-anchor="middle" fill="#1d9bf0" font-size="12" font-weight="600" data-i18n="n_core_sub"></text>
+            <text x="460" y="344" text-anchor="middle" fill="#6a6a6a" font-size="11" data-i18n="n_core_sub2"></text>
+
+            <!-- outer nodes -->
+            <g>
+              <rect x="365" y="72" width="190" height="56" rx="12" fill="#141414" stroke="#7856ff" stroke-width="1.6"/>
+              <text x="460" y="96" text-anchor="middle" fill="#e7e9ea" font-size="14" font-weight="700" data-i18n="n_roast"></text>
+              <text x="460" y="116" text-anchor="middle" fill="#6a6a6a" font-size="10.5" data-i18n="n_roast_sub"></text>
+
+              <rect x="570" y="180" width="190" height="56" rx="12" fill="#141414" stroke="#1d9bf0" stroke-width="1.6"/>
+              <text x="665" y="204" text-anchor="middle" fill="#e7e9ea" font-size="14" font-weight="700" data-i18n="n_ip"></text>
+              <text x="665" y="224" text-anchor="middle" fill="#6a6a6a" font-size="10.5" data-i18n="n_ip_sub"></text>
+
+              <rect x="570" y="384" width="190" height="56" rx="12" fill="#141414" stroke="#00ba7c" stroke-width="1.6"/>
+              <text x="665" y="408" text-anchor="middle" fill="#e7e9ea" font-size="14" font-weight="700" data-i18n="n_carbon"></text>
+              <text x="665" y="428" text-anchor="middle" fill="#6a6a6a" font-size="10.5" data-i18n="n_carbon_sub"></text>
+
+              <rect x="365" y="492" width="190" height="56" rx="12" fill="#141414" stroke="#ffd400" stroke-width="1.6"/>
+              <text x="460" y="516" text-anchor="middle" fill="#e7e9ea" font-size="14" font-weight="700" data-i18n="n_bank"></text>
+              <text x="460" y="536" text-anchor="middle" fill="#6a6a6a" font-size="10.5" data-i18n="n_bank_sub"></text>
+
+              <rect x="160" y="384" width="190" height="56" rx="12" fill="#141414" stroke="#ff7a00" stroke-width="1.6"/>
+              <text x="255" y="408" text-anchor="middle" fill="#e7e9ea" font-size="14" font-weight="700" data-i18n="n_reits"></text>
+              <text x="255" y="428" text-anchor="middle" fill="#6a6a6a" font-size="10.5" data-i18n="n_reits_sub"></text>
+
+              <rect x="160" y="180" width="190" height="56" rx="12" fill="#141414" stroke="#f4212e" stroke-width="1.6"/>
+              <text x="255" y="204" text-anchor="middle" fill="#e7e9ea" font-size="14" font-weight="700" data-i18n="n_brand"></text>
+              <text x="255" y="224" text-anchor="middle" fill="#6a6a6a" font-size="10.5" data-i18n="n_brand_sub"></text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Section 4: Six segments -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="seg_title"></h2>
+        <p class="section-desc" data-i18n="seg_desc"></p>
+        <div class="seg-grid">
+          <div class="seg-card">
+            <div class="seg-num">01</div>
+            <h3 data-i18n="seg1_name"></h3>
+            <p data-i18n="seg1_body"></p>
+            <div class="seg-io"><span class="io-in" data-i18n="seg1_io"></span></div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-num">02</div>
+            <h3 data-i18n="seg2_name"></h3>
+            <p data-i18n="seg2_body"></p>
+            <div class="seg-io"><span class="io-in" data-i18n="seg2_io"></span></div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-num">03</div>
+            <h3 data-i18n="seg3_name"></h3>
+            <p data-i18n="seg3_body"></p>
+            <div class="seg-io"><span class="io-in" data-i18n="seg3_io"></span></div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-num">04</div>
+            <h3 data-i18n="seg4_name"></h3>
+            <p data-i18n="seg4_body"></p>
+            <div class="seg-io"><span class="io-in" data-i18n="seg4_io"></span></div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-num">05</div>
+            <h3 data-i18n="seg5_name"></h3>
+            <p data-i18n="seg5_body"></p>
+            <div class="seg-io"><span class="io-in" data-i18n="seg5_io"></span></div>
+          </div>
+          <div class="seg-card">
+            <div class="seg-num">06</div>
+            <h3 data-i18n="seg6_name"></h3>
+            <p data-i18n="seg6_body"></p>
+            <div class="seg-io"><span class="io-in" data-i18n="seg6_io"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Benchmark table -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="bench_title"></h2>
+        <p class="section-desc" data-i18n="bench_desc"></p>
+        <div class="table-wrap" style="margin-top: 20px;">
+          <table class="data-table bench-table">
+            <thead>
+              <tr>
+                <th data-i18n="bench_col_co"></th>
+                <th data-i18n="bench_col_model"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Starbucks</td><td data-i18n="b_sb"></td></tr>
+              <tr><td>UCC <span style="color:var(--text-muted);">(JP)</span></td><td data-i18n="b_ucc"></td></tr>
+              <tr><td>Kofola <span style="color:var(--text-muted);">(CZ)</span></td><td data-i18n="b_kofola"></td></tr>
+              <tr><td data-i18n="b_yn_co"></td><td data-i18n="b_yn"></td></tr>
+              <tr><td>Lavazza · Tchibo</td><td data-i18n="b_lav"></td></tr>
+              <tr class="np-row"><td>Napell</td><td data-i18n="b_np"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 6: Financial logic -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="fin_title"></h2>
+        <p class="section-desc" data-i18n="fin_desc"></p>
+        <div class="fin-grid">
+          <div class="fin-card"><div class="fin-v">80%</div><p data-i18n="fin1"></p></div>
+          <div class="fin-card"><div class="fin-v">IRR<small>&nbsp;&gt;25%</small></div><p data-i18n="fin2"></p></div>
+          <div class="fin-card"><div class="fin-v"><small style="font-size:18px;">↓</small>&nbsp;Risk premium</div><p data-i18n="fin3"></p></div>
+          <div class="fin-card"><div class="fin-v">≈130<span style="font-size:16px;">&nbsp;Mt CO₂e</span></div><p data-i18n="fin4"></p></div>
+        </div>
+      </section>
+
+      <!-- Section 7: Roadmap -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="road_title"></h2>
+        <p class="section-desc" data-i18n="road_desc"></p>
+        <div class="road">
+          <div class="phase"><div class="phase-num">1</div><h3 data-i18n="ph1_n"></h3><p data-i18n="ph1_d"></p></div>
+          <div class="phase"><div class="phase-num">2</div><h3 data-i18n="ph2_n"></h3><p data-i18n="ph2_d"></p></div>
+          <div class="phase"><div class="phase-num">3</div><h3 data-i18n="ph3_n"></h3><p data-i18n="ph3_d"></p></div>
+        </div>
+      </section>
+
+      <p class="fx-note" data-i18n="v_note"></p>
+
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="js/i18n.js?v=11"></script>
+  <script src="js/data.js?v=11"></script>
+  <script src="js/main.js?v=11"></script>
+</body>
+</html>
