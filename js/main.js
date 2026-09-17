@@ -186,7 +186,11 @@ const SPLASH_SEQUENCE = [
 
 function renderSloganSplash(step = 0) {
   const s = SPLASH_SEQUENCE[step];
-  if (!s) return; // sequence finished
+  if (!s) { // sequence finished — remove the persistent black backdrop
+    removeSplashBackdrop();
+    return;
+  }
+  if (step === 0) ensureSplashBackdrop();
   const el = document.createElement('div');
   el.className = 'slogan-splash';
   el.id = 'slogan-splash';
@@ -213,6 +217,26 @@ function hideSloganSplash() {
   if (!el) return;
   el.classList.remove('show');
   setTimeout(() => el.remove(), 600);
+}
+
+/* Persistent pure-black backdrop covering the WHOLE splash sequence,
+   so page content never shows through between the two splash steps. */
+function ensureSplashBackdrop() {
+  let bd = document.getElementById('splash-backdrop');
+  if (!bd) {
+    bd = document.createElement('div');
+    bd.id = 'splash-backdrop';
+    bd.className = 'splash-backdrop';
+    document.body.appendChild(bd);
+  }
+  requestAnimationFrame(() => bd.classList.add('show'));
+}
+
+function removeSplashBackdrop() {
+  const bd = document.getElementById('splash-backdrop');
+  if (!bd) return;
+  bd.classList.remove('show');
+  setTimeout(() => bd.remove(), 600);
 }
 
 function maybeShowSlogan(delay = 0) {

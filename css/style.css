@@ -1055,6 +1055,12 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 
 
 /* ─── Slogan: splash popup + hero banner ─── */
+.splash-backdrop {
+  position: fixed; inset: 0; z-index: 2900;
+  background: #000000;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.splash-backdrop.show { opacity: 1; }
 .slogan-splash {
   position: fixed; inset: 0; z-index: 3000;
   display: flex; align-items: center; justify-content: center;
