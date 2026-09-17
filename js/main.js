@@ -195,9 +195,9 @@ function hideSloganSplash() {
 }
 
 function maybeShowSlogan(delay = 0) {
+  // Show on EVERY front-page visit — investors should always land on the brand moment.
+  // It auto-dismisses after 4.5s and any click skips it, so it never blocks browsing.
   if (document.body.dataset.page !== 'home') return;
-  if (sessionStorage.getItem('napell-slogan-shown')) return;
-  sessionStorage.setItem('napell-slogan-shown', '1');
   setTimeout(renderSloganSplash, delay);
 }
 
@@ -337,38 +337,51 @@ function injectMusicPlayer() {
   document.body.appendChild(btn);
 }
 
+const MUSIC_VOLUME = 0.08; // near-minimum — subtle ambience, never distracting
+
 function startMusic() {
   if (!musicEnabled()) return;
   if (!musicAudio) {
     musicAudio = new Audio('assets/audio/ambience.mp3');
     musicAudio.loop = true;
-    musicAudio.volume = 0.28;
     musicAudio.preload = 'auto';
   }
+  musicAudio.volume = MUSIC_VOLUME;
+
+  const markPlaying = () => {
+    if (musicAudio) musicAudio._playing = true;
+    document.getElementById('music-toggle')?.classList.add('playing');
+  };
   const p = musicAudio.play();
   if (p && typeof p.then === 'function') {
-    p.then(() => {
-      document.getElementById('music-toggle')?.classList.add('playing');
-    }).catch(() => { /* autoplay blocked — user can start via button */ });
+    p.then(markPlaying).catch(() => {
+      // Large file may not be buffered yet on first attempt — retry once it can play
+      const retry = () => {
+        musicAudio.removeEventListener('canplay', retry);
+        if (!musicEnabled()) return;
+        musicAudio.play().then(markPlaying).catch(() => { /* still blocked — user can use the button */ });
+      };
+      musicAudio.addEventListener('canplay', retry);
+    });
   } else {
-    document.getElementById('music-toggle')?.classList.add('playing');
+    markPlaying();
   }
 }
 
 function pauseMusic() {
-  if (musicAudio) musicAudio.pause();
+  if (musicAudio) { musicAudio.pause(); musicAudio._playing = false; }
   document.getElementById('music-toggle')?.classList.remove('playing');
 }
 
 function toggleMusic() {
-  if (musicAudio && !musicAudio.paused) {
+  if (musicAudio && musicAudio._playing) {
     pauseMusic();
     localStorage.setItem(MUSIC_KEY, 'off');
     showToast('♪ paused', 'info');
   } else {
     localStorage.setItem(MUSIC_KEY, 'on');
     startMusic();
-    if (musicAudio && !musicAudio.paused) showToast('♪ piano ambience', 'success');
+    if (musicAudio && musicAudio._playing) showToast('♪ piano ambience', 'success');
   }
 }
 
@@ -376,12 +389,14 @@ function armMusicAutostart() {
   const start = (e) => {
     document.removeEventListener('pointerdown', start);
     document.removeEventListener('keydown', start);
+    document.removeEventListener('touchstart', start);
     // If the first gesture IS the music button, let its own handler manage state
     if (e && e.target && e.target.closest && e.target.closest('#music-toggle')) return;
     if (musicEnabled()) startMusic();
   };
   document.addEventListener('pointerdown', start, { once: true });
   document.addEventListener('keydown', start, { once: true });
+  document.addEventListener('touchstart', start, { once: true });
 }
 
 /* ─── Init: inject nav, footer, modal ─── */
