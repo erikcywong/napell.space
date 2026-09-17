@@ -6,13 +6,13 @@
 /* ─── Navigation Component ─── */
 function renderNav(activePage) {
   const pages = [
+    { id: 'vision', key: 'nav_vision', href: 'vision.html' },
     { id: 'home', key: 'nav_home', href: 'index.html' },
     { id: 'overview', key: 'nav_overview', href: 'overview.html' },
     { id: 'costs', key: 'nav_costs', href: 'costs.html' },
     { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
     { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
     { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
-    { id: 'vision', key: 'nav_vision', href: 'vision.html' },
     { id: 'contact', key: 'nav_contact', href: 'contact.html' }
   ];
 
