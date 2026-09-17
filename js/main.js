@@ -7,7 +7,7 @@
 function renderNav(activePage) {
   const pages = [
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
-    { id: 'home', key: 'nav_home', href: 'index.html' },
+    { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
     { id: 'overview', key: 'nav_overview', href: 'overview.html' },
     { id: 'costs', key: 'nav_costs', href: 'costs.html' },
     { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
@@ -195,9 +195,10 @@ function hideSloganSplash() {
 }
 
 function maybeShowSlogan(delay = 0) {
-  // Show on EVERY front-page visit — investors should always land on the brand moment.
-  // It auto-dismisses after 4.5s and any click skips it, so it never blocks browsing.
-  if (document.body.dataset.page !== 'home') return;
+  // Show ONCE per browser session, on the landing page (Vision is the site entry)
+  if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
+  if (sessionStorage.getItem('napell-slogan-shown')) return;
+  sessionStorage.setItem('napell-slogan-shown', '1');
   setTimeout(renderSloganSplash, delay);
 }
 
@@ -338,6 +339,7 @@ function injectMusicPlayer() {
 }
 
 const MUSIC_VOLUME = 0.08; // near-minimum — subtle ambience, never distracting
+const MUSIC_POS_KEY = 'napell-music-pos';
 
 function startMusic() {
   if (!musicEnabled()) return;
@@ -345,6 +347,16 @@ function startMusic() {
     musicAudio = new Audio('assets/audio/ambience.mp3');
     musicAudio.loop = true;
     musicAudio.preload = 'auto';
+    // Seamless continuation across page navigation: restore saved position
+    musicAudio.addEventListener('loadedmetadata', () => {
+      const saved = parseFloat(localStorage.getItem(MUSIC_POS_KEY) || '0');
+      if (saved > 0 && isFinite(saved) && (!musicAudio.duration || saved < musicAudio.duration - 1)) {
+        try { musicAudio.currentTime = saved; } catch (e) { /* ignore */ }
+      }
+    });
+    musicAudio.addEventListener('timeupdate', () => {
+      try { localStorage.setItem(MUSIC_POS_KEY, String(musicAudio.currentTime)); } catch (e) { /* ignore */ }
+    });
   }
   musicAudio.volume = MUSIC_VOLUME;
 
@@ -413,7 +425,8 @@ function initPage() {
 
   // Inject ambient music player (all pages)
   injectMusicPlayer();
-  armMusicAutostart();
+  startMusic();        // attempt immediately — works when the browser permits (prior engagement)
+  armMusicAutostart(); // fallback: start on the visitor's first gesture if autoplay was blocked
 
   // Inject modal (only if not already shown)
   if (!sessionStorage.getItem('cti-modal-shown')) {
