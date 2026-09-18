@@ -140,7 +140,6 @@ function renderFooter() {
       <div class="footer-text">© ${year} napell.space. <span data-i18n="footer_rights"></span></div>
       <div class="footer-disclaimer" data-i18n="footer_disclaimer"></div>
       <div class="footer-text" style="margin-top: 16px; color: var(--accent); font-weight: 600;" data-i18n="footer_made"></div>
-      <div class="footer-text" style="margin-top: 8px; font-size: 11px; color: var(--text-muted);">&#9834; "Dreams Become Real" &mdash; Kevin MacLeod (incompetech.com), licensed under CC BY 4.0</div>
     </footer>
   `;
 }
@@ -365,97 +364,6 @@ window.renderDynamicContent = function(lang) {
   if (page === 'home' && typeof renderHomeContent === 'function') renderHomeContent(lang);
 };
 
-/* ─── Ambient Music Player ─── */
-const MUSIC_KEY = 'napell-music';
-let musicAudio = null;
-
-function musicEnabled() { return localStorage.getItem(MUSIC_KEY) !== 'off'; }
-
-function injectMusicPlayer() {
-  const btn = document.createElement('button');
-  btn.className = 'music-toggle';
-  btn.id = 'music-toggle';
-  btn.setAttribute('aria-label', 'Ambient piano music');
-  btn.innerHTML = `
-    <span class="music-eq"><i></i><i></i><i></i><i></i></span>
-    <span class="music-note">&#9834;</span>`;
-  btn.addEventListener('click', toggleMusic);
-  document.body.appendChild(btn);
-}
-
-const MUSIC_VOLUME = 0.08; // near-minimum — subtle ambience, never distracting
-const MUSIC_POS_KEY = 'napell-music-pos';
-
-function startMusic() {
-  if (!musicEnabled()) return;
-  if (!musicAudio) {
-    musicAudio = new Audio('assets/audio/ambience.mp3');
-    musicAudio.loop = true;
-    musicAudio.preload = 'auto';
-    // Seamless continuation across page navigation: restore saved position
-    musicAudio.addEventListener('loadedmetadata', () => {
-      const saved = parseFloat(localStorage.getItem(MUSIC_POS_KEY) || '0');
-      if (saved > 0 && isFinite(saved) && (!musicAudio.duration || saved < musicAudio.duration - 1)) {
-        try { musicAudio.currentTime = saved; } catch (e) { /* ignore */ }
-      }
-    });
-    musicAudio.addEventListener('timeupdate', () => {
-      try { localStorage.setItem(MUSIC_POS_KEY, String(musicAudio.currentTime)); } catch (e) { /* ignore */ }
-    });
-  }
-  musicAudio.volume = MUSIC_VOLUME;
-
-  const markPlaying = () => {
-    if (musicAudio) musicAudio._playing = true;
-    document.getElementById('music-toggle')?.classList.add('playing');
-  };
-  const p = musicAudio.play();
-  if (p && typeof p.then === 'function') {
-    p.then(markPlaying).catch(() => {
-      // Large file may not be buffered yet on first attempt — retry once it can play
-      const retry = () => {
-        musicAudio.removeEventListener('canplay', retry);
-        if (!musicEnabled()) return;
-        musicAudio.play().then(markPlaying).catch(() => { /* still blocked — user can use the button */ });
-      };
-      musicAudio.addEventListener('canplay', retry);
-    });
-  } else {
-    markPlaying();
-  }
-}
-
-function pauseMusic() {
-  if (musicAudio) { musicAudio.pause(); musicAudio._playing = false; }
-  document.getElementById('music-toggle')?.classList.remove('playing');
-}
-
-function toggleMusic() {
-  if (musicAudio && musicAudio._playing) {
-    pauseMusic();
-    localStorage.setItem(MUSIC_KEY, 'off');
-    showToast('♪ paused', 'info');
-  } else {
-    localStorage.setItem(MUSIC_KEY, 'on');
-    startMusic();
-    if (musicAudio && musicAudio._playing) showToast('♪ piano ambience', 'success');
-  }
-}
-
-function armMusicAutostart() {
-  const start = (e) => {
-    document.removeEventListener('pointerdown', start);
-    document.removeEventListener('keydown', start);
-    document.removeEventListener('touchstart', start);
-    // If the first gesture IS the music button, let its own handler manage state
-    if (e && e.target && e.target.closest && e.target.closest('#music-toggle')) return;
-    if (musicEnabled()) startMusic();
-  };
-  document.addEventListener('pointerdown', start, { once: true });
-  document.addEventListener('keydown', start, { once: true });
-  document.addEventListener('touchstart', start, { once: true });
-}
-
 /* ─── Init: inject nav, footer, modal ─── */
 function initPage() {
   const activePage = document.body.dataset.page || 'home';
@@ -467,11 +375,6 @@ function initPage() {
   // Inject footer
   const footerContainer = document.getElementById('footer-container');
   if (footerContainer) footerContainer.innerHTML = renderFooter();
-
-  // Inject ambient music player (all pages)
-  injectMusicPlayer();
-  startMusic();        // attempt immediately — works when the browser permits (prior engagement)
-  armMusicAutostart(); // fallback: start on the visitor's first gesture if autoplay was blocked
 
   // Inject modal (only if not already shown)
   if (!sessionStorage.getItem('cti-modal-shown')) {

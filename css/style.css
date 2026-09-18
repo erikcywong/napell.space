@@ -1093,48 +1093,6 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
   .slogan-text { font-size: clamp(26px, 8vw, 40px); }
 }
 
-/* ─── Ambient Music Toggle ─── */
-.music-toggle {
-  position: fixed;
-  bottom: 22px;
-  right: 22px;
-  z-index: 1500;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-.music-toggle:hover { border-color: var(--accent); background: var(--bg-card-hover); transform: scale(1.08); }
-.music-toggle .music-note { font-size: 20px; color: var(--text-muted); transition: color var(--transition); }
-.music-toggle:hover .music-note { color: var(--text-primary); }
-.music-toggle .music-eq { display: none; align-items: flex-end; gap: 2.5px; height: 18px; }
-.music-toggle .music-eq i {
-  width: 3px; background: var(--accent); border-radius: 2px;
-  height: 30%;
-  animation: musicBounce 1s ease-in-out infinite;
-}
-.music-toggle .music-eq i:nth-child(2) { animation-delay: 0.18s; }
-.music-toggle .music-eq i:nth-child(3) { animation-delay: 0.36s; }
-.music-toggle .music-eq i:nth-child(4) { animation-delay: 0.54s; }
-.music-toggle.playing .music-note { display: none; }
-.music-toggle.playing .music-eq { display: flex; }
-.music-toggle.playing .music-note { color: var(--accent); }
-@keyframes musicBounce {
-  0%, 100% { height: 30%; }
-  50% { height: 100%; }
-}
-body.rtl .music-toggle { right: auto; left: 22px; }
-@media (max-width: 768px) {
-  .music-toggle { width: 40px; height: 40px; bottom: 16px; }
-}
-
 /* ─── Gallery ─── */
 .gallery-grid {
   display: grid;
