@@ -1589,8 +1589,10 @@ const I18N = {
     // Apply translations first (nav/footer/modal must already be injected)
     this.apply();
 
-    // Show language modal on first visit
-    if (!sessionStorage.getItem('cti-modal-shown')) {
+    // Show language modal on first visit — EXCEPT on landing pages, where it
+    // chains after the slogan splash sequence (see main.js showLangModalIfNeeded)
+    const page = document.body.dataset.page;
+    if (!sessionStorage.getItem('cti-modal-shown') && page !== 'vision' && page !== 'home') {
       this.showModal();
     }
   },

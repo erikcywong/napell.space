@@ -168,7 +168,6 @@ function confirmModalLang() {
   sessionStorage.setItem('cti-modal-shown', '1');
   I18N.setLang(selectedModalLang);
   I18N.hideModal();
-  maybeShowSlogan(500);
 }
 
 /* ─── Slogan Splash (front page popup) — sequenced brand moments ─── */
@@ -185,8 +184,9 @@ const SPLASH_SEQUENCE = [
 
 function renderSloganSplash(step = 0) {
   const s = SPLASH_SEQUENCE[step];
-  if (!s) { // sequence finished — remove the persistent black backdrop
+  if (!s) { // sequence finished — remove backdrop, then chain to the language modal
     removeSplashBackdrop();
+    showLangModalIfNeeded(400);
     return;
   }
   if (step === 0) ensureSplashBackdrop();
@@ -238,9 +238,31 @@ function removeSplashBackdrop() {
   setTimeout(() => bd.remove(), 600);
 }
 
+/* Chain: after the splash sequence ends, show the language modal (once per session). */
+function showLangModalIfNeeded(delay = 0) {
+  if (sessionStorage.getItem('cti-modal-shown')) return;
+  setTimeout(() => {
+    // Splash still on screen (playing or backdrop fading out) — check again shortly
+    if (document.getElementById('slogan-splash') || document.getElementById('splash-backdrop')) {
+      showLangModalIfNeeded(300);
+      return;
+    }
+    if (!document.getElementById('lang-modal')) {
+      const c = document.getElementById('modal-container');
+      if (c) c.innerHTML = renderLangModal();
+    }
+    if (typeof I18N !== 'undefined' && typeof I18N.showModal === 'function') I18N.showModal();
+  }, delay);
+}
+
 function maybeShowSlogan(delay = 0) {
   // Show ONCE per browser session, on the landing page (Vision is the site entry)
   if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
+  if (sessionStorage.getItem('napell-slogan-shown')) {
+    // Splash already played this session — go straight to the language modal if pending
+    showLangModalIfNeeded(400);
+    return;
+  }
   if (sessionStorage.getItem('napell-slogan-shown')) return;
   sessionStorage.setItem('napell-slogan-shown', '1');
   setTimeout(renderSloganSplash, delay);
@@ -393,10 +415,8 @@ function runInit() {
   } else {
     console.error('[main] I18N not loaded; translations unavailable.');
   }
-  // Front page slogan splash — only when the language modal is NOT shown (it chains after modal confirm)
-  if (!document.getElementById('lang-modal')) {
-    maybeShowSlogan(700);
-  }
+  // Front page: splash sequence first, language modal chains right after it
+  maybeShowSlogan(700);
 }
 
 if (document.readyState === 'loading') {
