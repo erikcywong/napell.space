@@ -180,6 +180,10 @@ const SPLASH_SEQUENCE = [
   {
     html: 'We empower the coffee with <span class="slogan-data">DATA</span>',
     sub: 'N A P E L L &nbsp;·&nbsp; S P A C E'
+  },
+  {
+    html: 'We\'re <span class="slogan-data">NAPELL.SPACE</span>',
+    sub: 'G R O W &nbsp;·&nbsp; T H E &nbsp;·&nbsp; F U T U R E'
   }
 ];
 
