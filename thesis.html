@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investor Thesis — napell.space</title>
+  <meta name="description" content="napell.space investor thesis: high-frequency first, heavy assets last. AI Agent hub, zero-carbon marketplace, coffee savings bank, curve IP, trade cash flow, franchising scale — crowdfunding and REITs for capitalisation. With our four corrections to the standard play.">
+  <link rel="stylesheet" href="css/style.css?v=23">
+  <style>
+    /* Thesis page specific */
+    .thesis-statement {
+      background: linear-gradient(135deg, rgba(29,155,240,0.10), rgba(124,92,255,0.10), rgba(0,186,124,0.10));
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 26px 28px;
+      margin: 22px 0 8px;
+    }
+    .thesis-statement p { font-size: 16px; line-height: 1.75; color: var(--text-primary); font-weight: 600; }
+    .thesis-statement p .hl { color: #1d9bf0; }
+    .th-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 20px; }
+    .th-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+    .th-card h4 { font-size: 14px; margin-bottom: 8px; color: #1d9bf0; }
+    .th-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+    .th-card.gold h4 { color: #d4a017; }
+    .th-card.green h4 { color: var(--green); }
+    .th-card.purple h4 { color: #7c5cff; }
+
+    .th-layer { display: grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--border-color); }
+    .th-layer:last-child { border-bottom: none; }
+    .th-layer-tag { font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 20px; display: inline-block; }
+    .th-layer-tag.hi { background: rgba(29,155,240,0.15); color: #1d9bf0; }
+    .th-layer-tag.mid { background: rgba(212,160,23,0.15); color: #d4a017; }
+    .th-layer-tag.lo { background: rgba(124,92,255,0.15); color: #a48bff; }
+    .th-layer h4 { font-size: 14px; color: var(--text-primary); margin-bottom: 5px; }
+    .th-layer p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+    .th-fly { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 20px; }
+    .th-fly span { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 14px; font-size: 12.5px; color: var(--text-primary); }
+    .th-fly i { color: #1d9bf0; font-style: normal; font-weight: 700; }
+    .th-fly .loop { color: #00ba7c; }
+
+    .th-num { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border-color); }
+    .th-num:last-child { border-bottom: none; }
+    .th-num-badge { width: 40px; height: 40px; border-radius: 50%; background: rgba(29,155,240,0.12); border: 1.5px solid #1d9bf0; color: #1d9bf0; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+    .th-num h4 { font-size: 14.5px; color: var(--text-primary); margin-bottom: 6px; }
+    .th-num p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+    .th-risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 20px; }
+    .th-risk { background: var(--bg-card); border: 1px solid rgba(244,33,46,0.25); border-radius: var(--radius-md); padding: 16px; }
+    .th-risk h4 { font-size: 13.5px; color: var(--red); margin-bottom: 7px; }
+    .th-risk p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+
+    .th-road { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+    .th-phase { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; position: relative; }
+    .th-phase .ph-tag { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #00ba7c; margin-bottom: 8px; }
+    .th-phase h4 { font-size: 14px; color: var(--text-primary); margin-bottom: 7px; }
+    .th-phase p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; }
+
+    @media (max-width: 640px) {
+      .th-layer { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body data-page="thesis">
+
+  <div id="nav-container"></div>
+
+  <main class="page-content" style="padding-top: 96px;">
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="page-header">
+        <h1 class="page-title" data-i18n="th_title"></h1>
+        <p class="page-intro" data-i18n="th_intro"></p>
+      </div>
+
+      <div class="thesis-statement">
+        <p><span data-i18n="th_oneliner"></span></p>
+      </div>
+
+      <!-- Operating principles -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_pr_t"></h2>
+        <div class="th-grid">
+          <div class="th-card"><h4 data-i18n="th_p1_t"></h4><p data-i18n="th_p1_d"></p></div>
+          <div class="th-card gold"><h4 data-i18n="th_p2_t"></h4><p data-i18n="th_p2_d"></p></div>
+          <div class="th-card purple"><h4 data-i18n="th_p3_t"></h4><p data-i18n="th_p3_d"></p></div>
+          <div class="th-card green"><h4 data-i18n="th_p4_t"></h4><p data-i18n="th_p4_d"></p></div>
+        </div>
+      </section>
+
+      <!-- Three layers -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_layers_t"></h2>
+        <div class="th-card" style="margin-top: 20px;">
+          <div class="th-layer">
+            <div><span class="th-layer-tag hi" data-i18n="th_l1_t"></span></div>
+            <div><p data-i18n="th_l1_d"></p></div>
+          </div>
+          <div class="th-layer">
+            <div><span class="th-layer-tag mid" data-i18n="th_l2_t"></span></div>
+            <div><p data-i18n="th_l2_d"></p></div>
+          </div>
+          <div class="th-layer">
+            <div><span class="th-layer-tag lo" data-i18n="th_l3_t"></span></div>
+            <div><p data-i18n="th_l3_d"></p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 60-month roadmap -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_phase_t"></h2>
+        <div class="th-road">
+          <div class="th-phase"><div class="ph-tag">P0</div><h4 data-i18n="th_ph1_n"></h4><p data-i18n="th_ph1_d"></p></div>
+          <div class="th-phase"><div class="ph-tag">P1</div><h4 data-i18n="th_ph2_n"></h4><p data-i18n="th_ph2_d"></p></div>
+          <div class="th-phase"><div class="ph-tag">P2</div><h4 data-i18n="th_ph3_n"></h4><p data-i18n="th_ph3_d"></p></div>
+        </div>
+      </section>
+
+      <!-- Flywheel -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_fly_t"></h2>
+        <div class="th-fly">
+          <span>AI Agent</span><i>→</i>
+          <span>Zero-Carbon Marketplace</span><i>→</i>
+          <span>Savings Bank · Subscriptions</span><i>→</i>
+          <span>Trade · Roasting</span><i>→</i>
+          <span>Franchising</span><i>→</i>
+          <span>Crowdfunding</span><i>→</i>
+          <span>REITs</span><i class="loop">↺</i>
+        </div>
+        <p class="section-desc" style="margin-top: 16px;" data-i18n="th_fly_d"></p>
+      </section>
+
+      <!-- SOTP -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_sotp_t"></h2>
+        <table class="data-table" style="margin-top: 20px;">
+          <tbody>
+            <tr><td data-i18n="th_s1"></td><td data-i18n="th_s1d"></td></tr>
+            <tr><td data-i18n="th_s2"></td><td data-i18n="th_s2d"></td></tr>
+            <tr><td data-i18n="th_s3"></td><td data-i18n="th_s3d"></td></tr>
+            <tr><td data-i18n="th_s4"></td><td data-i18n="th_s4d"></td></tr>
+            <tr><td data-i18n="th_s5"></td><td data-i18n="th_s5d"></td></tr>
+            <tr><td data-i18n="th_s6"></td><td data-i18n="th_s6d"></td></tr>
+          </tbody>
+        </table>
+        <p class="section-desc" style="margin-top: 16px;" data-i18n="th_synergy"></p>
+      </section>
+
+      <!-- Our position -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_myview_t"></h2>
+        <div class="th-card" style="margin-top: 20px;">
+          <div class="th-num"><div class="th-num-badge">1</div><div><h4 data-i18n="th_mv1_t"></h4><p data-i18n="th_mv1_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">2</div><div><h4 data-i18n="th_mv2_t"></h4><p data-i18n="th_mv2_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">3</div><div><h4 data-i18n="th_mv3_t"></h4><p data-i18n="th_mv3_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">4</div><div><h4 data-i18n="th_mv4_t"></h4><p data-i18n="th_mv4_d"></p></div></div>
+        </div>
+      </section>
+
+      <!-- Risks -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_risk_t"></h2>
+        <div class="th-risks">
+          <div class="th-risk"><h4 data-i18n="th_r1"></h4><p data-i18n="th_r1d"></p></div>
+          <div class="th-risk"><h4 data-i18n="th_r2"></h4><p data-i18n="th_r2d"></p></div>
+          <div class="th-risk"><h4 data-i18n="th_r3"></h4><p data-i18n="th_r3d"></p></div>
+          <div class="th-risk"><h4 data-i18n="th_r4"></h4><p data-i18n="th_r4d"></p></div>
+        </div>
+      </section>
+
+      <!-- Capital path -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="th_cap_t"></h2>
+        <p class="section-desc" style="margin-top: 16px;" data-i18n="th_cap_d"></p>
+      </section>
+
+      <p class="fx-note" data-i18n="th_note"></p>
+
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+  <div id="modal-container"></div>
+
+  <script src="js/i18n.js?v=23"></script>
+  <script src="js/data.js?v=23"></script>
+  <script src="js/main.js?v=23"></script>
+</body>
+</html>

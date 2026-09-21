@@ -7,6 +7,7 @@
 function renderNav(activePage) {
   const pages = [
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
+    { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
     { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
     { id: 'overview', key: 'nav_overview', href: 'overview.html' },
