@@ -238,18 +238,20 @@ const SplashMusic = (() => {
   }
 
   function start() {
-    if (playing) return;
     try {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
-      if (!ctx) ctx = new AC();
-      if (ctx.state === 'suspended') ctx.resume();
-      master = ctx.createGain();
-      master.gain.setValueAtTime(0.0001, ctx.currentTime);
-      master.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime + 1.2); // soft fade-in
-      master.connect(ctx.destination);
-      bar = 0; nextBarTime = ctx.currentTime + 0.15;
-      tick(); timer = setInterval(tick, 200); playing = true;
+      if (!ctx) {
+        ctx = new AC();
+        master = ctx.createGain();
+        master.gain.setValueAtTime(0.0001, ctx.currentTime);
+        master.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime + 1.2); // soft fade-in
+        master.connect(ctx.destination);
+        bar = 0; nextBarTime = ctx.currentTime + 0.15;
+        tick(); timer = setInterval(tick, 200);
+      }
+      if (ctx.state === 'suspended') ctx.resume(); // retry after an autoplay block
+      playing = true;
     } catch (e) { ctx = null; }
   }
 
@@ -267,6 +269,23 @@ const SplashMusic = (() => {
 
   return { start, stop };
 })();
+
+/* Continue the splash piano across pages — once started it keeps playing
+   until the browser closes the tab (no in-page stop). If a new page load
+   hits an autoplay block, the first user gesture retries the resume. */
+function resumeSplashMusic() {
+  if (!sessionStorage.getItem('napell-music-on')) return;
+  SplashMusic.start();
+  const kick = () => {
+    SplashMusic.start();
+    document.removeEventListener('pointerdown', kick);
+    document.removeEventListener('keydown', kick);
+    document.removeEventListener('touchstart', kick);
+  };
+  document.addEventListener('pointerdown', kick);
+  document.addEventListener('keydown', kick);
+  document.addEventListener('touchstart', kick);
+}
 
 /* Step two — brand card splash (dark glass card on black).
    Click-to-start: the slogan sequence begins only when [ Enter the Space → ] is clicked. */
@@ -289,7 +308,8 @@ function renderBrandSplash() {
     if (advanced) return; // click + keyboard may both fire — advance only once
     advanced = true;
     hideBrandSplash();
-    SplashMusic.start(); // piano begins on the enter click — runs through the three slogans
+    SplashMusic.start(); // piano begins on the enter click — keeps playing until the browser closes the tab
+    sessionStorage.setItem('napell-music-on', '1'); // resume on every later page
     // enter pressed — the three slogans play next, still on the black backdrop
     startSloganSequence(500);
   };
@@ -317,8 +337,7 @@ function startSloganSequence(delay = 0) {
 
 function renderSloganSplash(step = 0) {
   const s = SPLASH_SEQUENCE[step];
-  if (!s) { // sequence finished — fade the piano out and reveal the page
-    SplashMusic.stop();
+  if (!s) { // sequence finished — reveal the page; the piano keeps playing
     removeSplashBackdrop();
     return;
   }
@@ -389,14 +408,18 @@ function showLangModalIfNeeded(delay = 0) {
 function maybeShowSlogan(delay = 0) {
   // Show ONCE per browser session, on the landing page (Vision is the site entry)
   if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
-  if (sessionStorage.getItem('napell-slogan-shown')) {
-    // Splash already played this session — go straight to the language modal if pending
+  const splashDone = !!sessionStorage.getItem('napell-slogan-shown');
+  const modalDone = !!sessionStorage.getItem('cti-modal-shown');
+  if (splashDone && modalDone) return; // returning visitor — nothing pending, page shows normally
+  // Pure black from the very first paint: nothing shows behind or before the language toggle
+  ensureSplashBackdrop();
+  if (splashDone) {
     showLangModalIfNeeded(400);
     return;
   }
   sessionStorage.setItem('napell-slogan-shown', '1');
   // Sequence entry: language modal first → brand card (Enter the Space) → three slogans → reveal
-  if (!sessionStorage.getItem('cti-modal-shown')) {
+  if (!modalDone) {
     showLangModalIfNeeded(delay || 700); // the modal opens itself; the card chains after confirm
   } else {
     setTimeout(renderBrandSplash, delay); // modal already answered this session
@@ -552,6 +575,8 @@ function runInit() {
   }
   // Front page: splash sequence first, language modal chains right after it
   maybeShowSlogan(700);
+  // Keep the splash piano playing on every page until the browser closes the tab
+  resumeSplashMusic();
 }
 
 if (document.readyState === 'loading') {
