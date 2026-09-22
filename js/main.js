@@ -189,32 +189,37 @@ const SPLASH_SEQUENCE = [
   }
 ];
 
-/* Step zero — brand card splash (white mono card on black). Stays 6 seconds. */
+/* Step zero — brand card splash (white mono card on black).
+   Click-to-start: the presentation begins only when [ Enter the Space → ] is clicked. */
 function renderBrandSplash() {
   ensureSplashBackdrop();
   const el = document.createElement('div');
   el.className = 'brand-splash';
   el.id = 'brand-splash';
   el.innerHTML = `
-    <div class="brand-card" role="button" aria-label="Enter the Space">
+    <div class="brand-card">
       <div class="brand-name">N A P E L L</div>
       <div class="brand-line">Coffee, Redefined.</div>
       <div class="brand-line">Technology &ndash; Climate &ndash; Finance.</div>
       <div class="brand-line">One ecosystem.</div>
-      <div class="brand-enter">[ Enter the Space &rarr; ]</div>
+      <div class="brand-enter" role="button" tabindex="0" aria-label="Enter the Space">[ Enter the Space &rarr; ]</div>
     </div>`;
   let advanced = false;
   const advance = () => {
-    if (advanced) return; // click + timer may both fire — advance only once
+    if (advanced) return; // click + keyboard may both fire — advance only once
     advanced = true;
     hideBrandSplash();
     // keep the black backdrop up: language modal and slogans both play on black
     showLangModalIfNeeded(500);
   };
-  el.addEventListener('click', advance);
+  const enter = el.querySelector('.brand-enter');
+  enter.addEventListener('click', advance);
+  enter.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); advance(); }
+  });
   document.body.appendChild(el);
   requestAnimationFrame(() => el.classList.add('show'));
-  setTimeout(advance, 6000);
+  // No auto-advance timer — waits for the visitor to click Enter the Space
 }
 
 function hideBrandSplash() {
