@@ -169,6 +169,8 @@ function confirmModalLang() {
   sessionStorage.setItem('cti-modal-shown', '1');
   I18N.setLang(selectedModalLang);
   I18N.hideModal();
+  // Language chosen — now play the three brand slogans on the black backdrop
+  startSloganSequence(500);
 }
 
 /* ─── Slogan Splash (front page popup) — sequenced brand moments ─── */
@@ -186,6 +188,46 @@ const SPLASH_SEQUENCE = [
     sub: 'G R O W &nbsp;·&nbsp; T H E &nbsp;·&nbsp; F U T U R E'
   }
 ];
+
+/* Step zero — brand card splash (white mono card on black). Stays 6 seconds. */
+function renderBrandSplash() {
+  ensureSplashBackdrop();
+  const el = document.createElement('div');
+  el.className = 'brand-splash';
+  el.id = 'brand-splash';
+  el.innerHTML = `
+    <div class="brand-card" role="button" aria-label="Enter the Space">
+      <div class="brand-name">N A P E L L</div>
+      <div class="brand-line">Coffee, Redefined.</div>
+      <div class="brand-line">Technology &ndash; Climate &ndash; Finance.</div>
+      <div class="brand-line">One ecosystem.</div>
+      <div class="brand-enter">[ Enter the Space &rarr; ]</div>
+    </div>`;
+  let advanced = false;
+  const advance = () => {
+    if (advanced) return; // click + timer may both fire — advance only once
+    advanced = true;
+    hideBrandSplash();
+    // keep the black backdrop up: language modal and slogans both play on black
+    showLangModalIfNeeded(500);
+  };
+  el.addEventListener('click', advance);
+  document.body.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(advance, 6000);
+}
+
+function hideBrandSplash() {
+  const el = document.getElementById('brand-splash');
+  if (!el) return;
+  el.classList.remove('show');
+  setTimeout(() => el.remove(), 600);
+}
+
+/* The three brand slogans — played AFTER the language has been chosen. */
+function startSloganSequence(delay = 0) {
+  setTimeout(() => renderSloganSplash(0), delay);
+}
 
 function renderSloganSplash(step = 0) {
   const s = SPLASH_SEQUENCE[step];
@@ -247,8 +289,9 @@ function removeSplashBackdrop() {
 function showLangModalIfNeeded(delay = 0) {
   if (sessionStorage.getItem('cti-modal-shown')) return;
   setTimeout(() => {
-    // Splash still on screen (playing or backdrop fading out) — check again shortly
-    if (document.getElementById('slogan-splash') || document.getElementById('splash-backdrop')) {
+    // A splash card still on screen (or fading out) — check again shortly.
+    // The black backdrop is allowed to stay: the modal (z 9999) sits above it.
+    if (document.getElementById('slogan-splash') || document.getElementById('brand-splash')) {
       showLangModalIfNeeded(300);
       return;
     }
@@ -268,9 +311,9 @@ function maybeShowSlogan(delay = 0) {
     showLangModalIfNeeded(400);
     return;
   }
-  if (sessionStorage.getItem('napell-slogan-shown')) return;
   sessionStorage.setItem('napell-slogan-shown', '1');
-  setTimeout(renderSloganSplash, delay);
+  // Sequence entry: brand card first → language modal → three slogans → reveal page
+  setTimeout(renderBrandSplash, delay);
 }
 
 /* ─── Language Switching ─── */

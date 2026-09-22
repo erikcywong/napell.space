@@ -1080,6 +1080,38 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
   -webkit-text-fill-color: transparent; color: transparent;
 }
 .slogan-sub { margin-top: 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; }
+/* ─── Brand card splash — step zero (white mono card on black, 6 s) ─── */
+.brand-splash {
+  position: fixed; inset: 0; z-index: 3000;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; /* black backdrop (2900) shows through */
+  opacity: 0; transition: opacity 0.5s ease; cursor: pointer;
+}
+.brand-splash.show { opacity: 1; }
+.brand-card {
+  direction: ltr;
+  background: #ffffff; color: #0a0a0a;
+  border-radius: 24px; padding: 56px 64px;
+  text-align: center;
+  font-family: 'JetBrains Mono', 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.65);
+  animation: sloganPop 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.18) both;
+}
+.brand-name { font-size: 26px; font-weight: 700; letter-spacing: 10px; margin-bottom: 36px; }
+.brand-line { font-size: 19px; font-weight: 500; line-height: 2; letter-spacing: 0.5px; }
+.brand-enter {
+  margin-top: 40px; font-size: 19px; font-weight: 600;
+  animation: brandEnterPulse 2.2s ease-in-out infinite;
+}
+@keyframes brandEnterPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@media (max-width: 560px) {
+  .brand-card { padding: 40px 28px; border-radius: 18px; }
+  .brand-name { font-size: 20px; letter-spacing: 7px; margin-bottom: 26px; }
+  .brand-line, .brand-enter { font-size: 15px; }
+}
 @keyframes sloganPop {
   0% { transform: scale(0.85) translateY(16px); opacity: 0; }
   100% { transform: scale(1) translateY(0); opacity: 1; }
