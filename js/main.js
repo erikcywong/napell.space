@@ -274,6 +274,7 @@ const SplashMusic = (() => {
    until the browser closes the tab (no in-page stop). If a new page load
    hits an autoplay block, the first user gesture retries the resume. */
 function resumeSplashMusic() {
+  if (sessionStorage.getItem('napell-music-muted') === '1') return; // visitor stopped the music
   if (!sessionStorage.getItem('napell-music-on')) return;
   SplashMusic.start();
   const kick = () => {
@@ -285,6 +286,42 @@ function resumeSplashMusic() {
   document.addEventListener('pointerdown', kick);
   document.addEventListener('keydown', kick);
   document.addEventListener('touchstart', kick);
+}
+
+/* ─── Music toggle — floating icon so the visitor can stop / restart the piano ─── */
+const MUSIC_ON_SVG = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+const MUSIC_OFF_SVG = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>';
+
+function ensureMusicToggle() {
+  if (!sessionStorage.getItem('napell-music-on') && !sessionStorage.getItem('napell-music-muted')) return;
+  if (document.getElementById('music-toggle')) return;
+  const btn = document.createElement('div');
+  btn.id = 'music-toggle';
+  btn.className = 'music-toggle';
+  btn.setAttribute('role', 'button');
+  btn.setAttribute('tabindex', '0');
+  const render = () => {
+    const muted = sessionStorage.getItem('napell-music-muted') === '1';
+    btn.innerHTML = muted ? MUSIC_OFF_SVG : MUSIC_ON_SVG;
+    btn.setAttribute('aria-label', muted ? 'Play the music' : 'Stop the music');
+    btn.classList.toggle('muted', muted);
+  };
+  const toggle = () => {
+    if (sessionStorage.getItem('napell-music-muted') === '1') {
+      sessionStorage.removeItem('napell-music-muted');
+      SplashMusic.start();
+    } else {
+      sessionStorage.setItem('napell-music-muted', '1');
+      SplashMusic.stop();
+    }
+    render();
+  };
+  btn.addEventListener('click', toggle);
+  btn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+  });
+  render();
+  document.body.appendChild(btn);
 }
 
 /* Step two — brand card splash (dark glass card on black).
@@ -310,6 +347,7 @@ function renderBrandSplash() {
     hideBrandSplash();
     SplashMusic.start(); // piano begins on the enter click — keeps playing until the browser closes the tab
     sessionStorage.setItem('napell-music-on', '1'); // resume on every later page
+    ensureMusicToggle(); // floating stop/start icon appears as soon as the music exists
     // enter pressed — the three slogans play next, still on the black backdrop
     startSloganSequence(500);
   };
@@ -581,6 +619,7 @@ function runInit() {
   maybeShowSlogan(700);
   // Keep the splash piano playing on every page until the browser closes the tab
   resumeSplashMusic();
+  ensureMusicToggle();
 }
 
 if (document.readyState === 'loading') {
