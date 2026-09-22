@@ -1116,7 +1116,7 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
   border: 1px solid rgba(29, 155, 240, 0.30);
   border-radius: 28px; padding: 60px 76px;
   text-align: center;
-  font-family: 'JetBrains Mono', 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  font-family: var(--font-sans); /* OS native: SF Pro / Segoe UI / Roboto */
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85), 0 0 90px rgba(29, 155, 240, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   animation: sloganPop 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.18) both;
