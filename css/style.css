@@ -1080,7 +1080,7 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
   -webkit-text-fill-color: transparent; color: transparent;
 }
 .slogan-sub { margin-top: 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; }
-/* ─── Brand card splash — step zero (white mono card on black, 6 s) ─── */
+/* ─── Brand card splash — step zero (dark glass card on black, click to start) ─── */
 .brand-splash {
   position: fixed; inset: 0; z-index: 3000;
   display: flex; align-items: center; justify-content: center;
@@ -1088,38 +1088,69 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
   opacity: 0; transition: opacity 0.5s ease;
 }
 .brand-splash.show { opacity: 1; }
+.brand-splash::before {
+  content: ''; position: absolute; width: 720px; height: 720px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(29, 155, 240, 0.14) 0%, rgba(124, 92, 255, 0.06) 45%, transparent 70%);
+  pointer-events: none;
+}
 .brand-card {
   direction: ltr;
-  background: #ffffff; color: #0a0a0a;
-  border-radius: 24px; padding: 56px 64px;
+  position: relative;
+  background: linear-gradient(165deg, rgba(22, 28, 36, 0.92) 0%, rgba(10, 12, 16, 0.96) 100%);
+  border: 1px solid rgba(29, 155, 240, 0.30);
+  border-radius: 28px; padding: 60px 76px;
   text-align: center;
   font-family: 'JetBrains Mono', 'Cascadia Mono', Consolas, 'Courier New', monospace;
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.85), 0 0 90px rgba(29, 155, 240, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   animation: sloganPop 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.18) both;
 }
-.brand-name { font-size: 26px; font-weight: 700; letter-spacing: 10px; margin-bottom: 36px; }
-.brand-line { font-size: 19px; font-weight: 500; line-height: 2; letter-spacing: 0.5px; }
+.brand-card::before {
+  content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(29, 155, 240, 0.65), transparent);
+}
+.brand-name {
+  font-size: 28px; font-weight: 700; letter-spacing: 12px; margin-bottom: 14px;
+  background: linear-gradient(90deg, #1d9bf0 0%, #7c5cff 55%, #00ba7c 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.brand-divider {
+  width: 72px; height: 1px; margin: 0 auto 30px;
+  background: linear-gradient(90deg, transparent, rgba(29, 155, 240, 0.55), transparent);
+}
+.brand-line { font-size: 19px; font-weight: 500; line-height: 2; letter-spacing: 0.5px; color: #e7e9ea; }
+.brand-line.brand-dim { color: #8b98a5; font-size: 17px; }
+.brand-line.brand-strong {
+  font-weight: 700; color: #ffffff;
+  text-shadow: 0 0 30px rgba(29, 155, 240, 0.35);
+}
 .brand-enter {
-  display: inline-block; margin-top: 40px; font-size: 19px; font-weight: 600;
+  display: inline-block; margin-top: 42px; font-size: 18px; font-weight: 600;
+  color: #1d9bf0; letter-spacing: 1px;
+  border: 1px solid rgba(29, 155, 240, 0.5); border-radius: 999px;
+  padding: 13px 28px;
   cursor: pointer; user-select: none; -webkit-user-select: none;
-  padding: 6px 10px; border-radius: 8px;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   animation: brandEnterPulse 2.2s ease-in-out infinite;
 }
 .brand-enter:hover, .brand-enter:focus-visible {
   animation: none; opacity: 1;
-  background: #0a0a0a; color: #ffffff; transform: scale(1.04);
-  outline: none;
+  background: #1d9bf0; color: #000000;
+  box-shadow: 0 0 40px rgba(29, 155, 240, 0.45);
+  transform: scale(1.04); outline: none;
 }
 .brand-enter:active { transform: scale(0.97); }
 @keyframes brandEnterPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.45; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 rgba(29, 155, 240, 0); }
+  50% { opacity: 0.6; box-shadow: 0 0 26px rgba(29, 155, 240, 0.25); }
 }
 @media (max-width: 560px) {
-  .brand-card { padding: 40px 28px; border-radius: 18px; }
-  .brand-name { font-size: 20px; letter-spacing: 7px; margin-bottom: 26px; }
-  .brand-line, .brand-enter { font-size: 15px; }
+  .brand-card { padding: 42px 30px; border-radius: 20px; }
+  .brand-name { font-size: 21px; letter-spacing: 8px; }
+  .brand-line { font-size: 15px; }
+  .brand-line.brand-dim { font-size: 14px; }
+  .brand-enter { font-size: 15px; padding: 11px 22px; }
 }
 @keyframes sloganPop {
   0% { transform: scale(0.85) translateY(16px); opacity: 0; }

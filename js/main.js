@@ -199,9 +199,10 @@ function renderBrandSplash() {
   el.innerHTML = `
     <div class="brand-card">
       <div class="brand-name">N A P E L L</div>
+      <div class="brand-divider"></div>
       <div class="brand-line">Coffee, Redefined.</div>
-      <div class="brand-line">Technology &ndash; Climate &ndash; Finance.</div>
-      <div class="brand-line">One ecosystem.</div>
+      <div class="brand-line brand-dim">Technology &ndash; Climate &ndash; Finance.</div>
+      <div class="brand-line brand-strong">One ecosystem.</div>
       <div class="brand-enter" role="button" tabindex="0" aria-label="Enter the Space">[ Enter the Space &rarr; ]</div>
     </div>`;
   let advanced = false;
