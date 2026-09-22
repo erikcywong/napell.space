@@ -1834,7 +1834,11 @@ const I18N = {
     const modal = document.getElementById('lang-modal');
     if (modal) {
       modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      // Note: the page behind is already covered by the splash backdrop.
+      // We deliberately do NOT lock body overflow — on phones the modal card can be
+      // taller than the viewport and .lang-modal scrolls internally (overflow-y: auto),
+      // which a locked body would prevent.
+      document.body.style.overflow = '';
     }
   },
 
