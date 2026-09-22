@@ -245,7 +245,7 @@ const SplashMusic = (() => {
         ctx = new AC();
         master = ctx.createGain();
         master.gain.setValueAtTime(0.0001, ctx.currentTime);
-        master.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime + 1.2); // soft fade-in
+        master.gain.exponentialRampToValueAtTime(0.04, ctx.currentTime + 1.2); // minimum sound level
         master.connect(ctx.destination);
         bar = 0; nextBarTime = ctx.currentTime + 0.15;
         tick(); timer = setInterval(tick, 200);
@@ -410,7 +410,11 @@ function maybeShowSlogan(delay = 0) {
   if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
   const splashDone = !!sessionStorage.getItem('napell-slogan-shown');
   const modalDone = !!sessionStorage.getItem('cti-modal-shown');
-  if (splashDone && modalDone) return; // returning visitor — nothing pending, page shows normally
+  if (splashDone && modalDone) {
+    // returning visitor — lift the static black cover, page shows normally
+    removeSplashBackdrop();
+    return;
+  }
   // Pure black from the very first paint: nothing shows behind or before the language toggle
   ensureSplashBackdrop();
   if (splashDone) {
