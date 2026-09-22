@@ -189,6 +189,85 @@ const SPLASH_SEQUENCE = [
   }
 ];
 
+/* ─── Splash piano — calm & encouraging, plays only across the splash sequence ───
+   Synthesized with Web Audio (no audio file, no licensing). Starts on the
+   [Enter the Space] click (a user gesture, so autoplay policies are satisfied),
+   loops softly through the three slogans, fades out when the sequence ends. */
+const SplashMusic = (() => {
+  let ctx = null, master = null, timer = null, playing = false, bar = 0, nextBarTime = 0;
+  const BPM = 66, BAR = (60 / BPM) * 4; // ~3.64s per bar
+  // I–V–vi–IV in C major — one chord per bar, 8-bar loop
+  const PROG = [
+    ['C3', 'G3', 'E4'], ['G2', 'D3', 'B3'], ['A2', 'E3', 'C4'], ['F2', 'C3', 'A3'],
+    ['C3', 'G3', 'E4'], ['G2', 'D3', 'B3'], ['F2', 'C3', 'A3'], ['G2', 'D3', 'G3']
+  ];
+  // melody: [note, startBeat, durBeats] — soft, resolving line on top
+  const MELODY = [
+    [['E5', 0, 2], ['G5', 2, 2]], [['D5', 0, 4]], [['C5', 0, 2], ['E5', 2, 2]], [['A4', 0, 4]],
+    [['G5', 0, 2], ['E5', 2, 2]], [['D5', 0, 4]], [['A4', 0, 2], ['C5', 2, 2]], [['B4', 0, 4]]
+  ];
+
+  function freq(n) {
+    const m = /^([A-G])(#?)(\d)$/.exec(n);
+    const semi = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]] + (m[2] ? 1 : 0);
+    return 440 * Math.pow(2, (12 * (parseInt(m[3], 10) + 1) + semi - 69) / 12);
+  }
+
+  function pluck(t, f, vel, dur) { // piano-ish voice: triangle + soft octave partial
+    const o1 = ctx.createOscillator(); o1.type = 'triangle'; o1.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = f * 2;
+    const g = ctx.createGain(); const g2 = ctx.createGain(); g2.gain.value = 0.35;
+    const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 2400;
+    o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(flt); flt.connect(master);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(vel, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o1.start(t); o2.start(t); o1.stop(t + dur + 0.1); o2.stop(t + dur + 0.1);
+  }
+
+  function scheduleBar(t, i) {
+    const ch = PROG[i % 8];
+    [0, 1, 2, 1, 0, 1, 2, 1].forEach((idx, k) => // gentle broken-chord arpeggio
+      pluck(t + k * BAR / 8, freq(ch[idx]), 0.10 - k * 0.004, BAR / 4 + 1.2));
+    MELODY[i % 8].forEach(([n, beat, dur]) =>
+      pluck(t + beat * (BAR / 4), freq(n), 0.075, dur * (BAR / 4) + 1.4));
+  }
+
+  function tick() {
+    while (nextBarTime < ctx.currentTime + 0.8) { scheduleBar(nextBarTime, bar); bar++; nextBarTime += BAR; }
+  }
+
+  function start() {
+    if (playing) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!ctx) ctx = new AC();
+      if (ctx.state === 'suspended') ctx.resume();
+      master = ctx.createGain();
+      master.gain.setValueAtTime(0.0001, ctx.currentTime);
+      master.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime + 1.2); // soft fade-in
+      master.connect(ctx.destination);
+      bar = 0; nextBarTime = ctx.currentTime + 0.15;
+      tick(); timer = setInterval(tick, 200); playing = true;
+    } catch (e) { ctx = null; }
+  }
+
+  function stop() {
+    if (!playing) return;
+    playing = false;
+    clearInterval(timer);
+    try {
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
+      master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.6); // fade out
+      setTimeout(() => { try { if (ctx) ctx.close(); } catch (e) {} ctx = null; master = null; }, 1900);
+    } catch (e) { ctx = null; }
+  }
+
+  return { start, stop };
+})();
+
 /* Step two — brand card splash (dark glass card on black).
    Click-to-start: the slogan sequence begins only when [ Enter the Space → ] is clicked. */
 function renderBrandSplash() {
@@ -210,6 +289,7 @@ function renderBrandSplash() {
     if (advanced) return; // click + keyboard may both fire — advance only once
     advanced = true;
     hideBrandSplash();
+    SplashMusic.start(); // piano begins on the enter click — runs through the three slogans
     // enter pressed — the three slogans play next, still on the black backdrop
     startSloganSequence(500);
   };
@@ -237,7 +317,8 @@ function startSloganSequence(delay = 0) {
 
 function renderSloganSplash(step = 0) {
   const s = SPLASH_SEQUENCE[step];
-  if (!s) { // sequence finished — remove the backdrop and reveal the page
+  if (!s) { // sequence finished — fade the piano out and reveal the page
+    SplashMusic.stop();
     removeSplashBackdrop();
     return;
   }
