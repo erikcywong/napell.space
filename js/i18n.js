@@ -39,6 +39,9 @@ const I18N = {
       nav_vision: 'The Case',
       nav_contact: 'Contact',
       nav_gallery: 'Gallery',
+      nav_g_tech: 'Technology',
+      nav_g_evidence: 'Evidence',
+      splash_skip: 'Skip intro →',
 
       // ─── Gallery page ───
       gallery_title: 'Gallery',
@@ -726,6 +729,9 @@ const I18N = {
       nav_vision: '投资论证',
       nav_contact: '联系我们',
       nav_gallery: '图库',
+      nav_g_tech: '技术',
+      nav_g_evidence: '实证',
+      splash_skip: '跳过片头 →',
 
       // ─── Gallery page ───
       gallery_title: '实拍图库',
@@ -1413,6 +1419,9 @@ const I18N = {
       nav_vision: 'الحجّة الاستثمارية',
       nav_contact: 'اتصل بنا',
       nav_gallery: 'معرض الصور',
+      nav_g_tech: 'التقنية',
+      nav_g_evidence: 'الأدلة',
+      splash_skip: 'تخطّي المقدّمة',
 
       // ─── Gallery page ───
       gallery_title: 'معرض الصور',

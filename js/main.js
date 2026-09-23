@@ -5,27 +5,46 @@
 
 /* ─── Navigation Component ─── */
 function renderNav(activePage) {
-  // Order follows the investor decision path: decide (case → numbers → capital),
-  // prove (system → efficiency → costs → value chain), then context and contact.
+  // Two tiers, mapped to how an investor reads the site:
+  //   decide (case → numbers → capital) is always visible,
+  //   the supporting detail sits one hover away, Contact is the standing action.
   const pages = [
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
     { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
-    { id: 'overview', key: 'nav_overview', href: 'overview.html' },
-    { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
-    { id: 'costs', key: 'nav_costs', href: 'costs.html' },
-    { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
-    { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
-    { id: 'gallery', key: 'nav_gallery', href: 'gallery.html' },
-    { id: 'contact', key: 'nav_contact', href: 'contact.html' }
+    { key: 'nav_g_tech', children: [
+      { id: 'overview', key: 'nav_overview', href: 'overview.html' },
+      { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
+      { id: 'costs', key: 'nav_costs', href: 'costs.html' }
+    ]},
+    { key: 'nav_g_evidence', children: [
+      { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
+      { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
+      { id: 'gallery', key: 'nav_gallery', href: 'gallery.html' }
+    ]},
+    { id: 'contact', key: 'nav_contact', href: 'contact.html', cta: true }
   ];
 
   // The Riyadh deployment subpage is nested under Costs — highlight Costs as active
   const act = activePage === 'riyadh' ? 'costs' : activePage;
 
-  const linksHtml = pages.map(p =>
-    `<li><a class="nav-link ${act === p.id ? 'active' : ''} ${p.id === 'costs' ? 'nav-link-locked' : ''}" href="${p.href}" data-i18n="${p.key}"></a></li>`
-  ).join('');
+  const linksHtml = pages.map(p => {
+    if (!p.children) {
+      const cls = [p.cta ? 'nav-link-cta' : '', act === p.id ? 'active' : ''].filter(Boolean).join(' ');
+      return `<li><a class="nav-link ${cls}" href="${p.href}" data-i18n="${p.key}"></a></li>`;
+    }
+    const inGroup = p.children.some(c => c.id === act);
+    const items = p.children.map(c =>
+      `<a class="nav-menu-link ${act === c.id ? 'active' : ''} ${c.id === 'costs' ? 'nav-link-locked' : ''}" href="${c.href}" data-i18n="${c.key}"></a>`
+    ).join('');
+    return `<li class="nav-group">
+      <button type="button" class="nav-link nav-group-label ${inGroup ? 'active' : ''}" aria-haspopup="true" aria-expanded="false" onclick="toggleNavGroup(event, this)">
+        <span data-i18n="${p.key}"></span>
+        <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="nav-menu">${items}</div>
+    </li>`;
+  }).join('');
 
   return `
     <nav class="navbar">
@@ -329,6 +348,7 @@ function ensureMusicToggle() {
 /* Step two — brand card splash (dark glass card on black).
    Click-to-start: the slogan sequence begins only when [ Enter the Space → ] is clicked. */
 function renderBrandSplash() {
+  if (splashSkipped) return;
   ensureSplashBackdrop();
   const el = document.createElement('div');
   el.className = 'brand-splash';
@@ -372,10 +392,12 @@ function hideBrandSplash() {
 
 /* The three brand slogans — played AFTER [ Enter the Space ] is clicked. */
 function startSloganSequence(delay = 0) {
+  if (splashSkipped) return;
   setTimeout(() => renderSloganSplash(0), delay);
 }
 
 function renderSloganSplash(step = 0) {
+  if (splashSkipped) return;
   const s = SPLASH_SEQUENCE[step];
   if (!s) { // sequence finished — reveal the page; the piano keeps playing
     removeSplashBackdrop();
@@ -412,7 +434,10 @@ function hideSloganSplash() {
 
 /* Persistent pure-black backdrop covering the WHOLE splash sequence,
    so page content never shows through between the two splash steps. */
+let splashSkipped = false;
+
 function ensureSplashBackdrop() {
+  if (splashSkipped) return;
   let bd = document.getElementById('splash-backdrop');
   if (!bd) {
     bd = document.createElement('div');
@@ -421,13 +446,53 @@ function ensureSplashBackdrop() {
     document.body.appendChild(bd);
   }
   requestAnimationFrame(() => bd.classList.add('show'));
+  ensureSkipIntro();
+}
+
+/* [ Skip intro ] — lets a returning reader (or an investor following a link)
+   drop the whole entry sequence in one click. */
+function ensureSkipIntro() {
+  if (splashSkipped || document.getElementById('skip-intro')) return;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.id = 'skip-intro';
+  btn.className = 'skip-intro';
+  btn.setAttribute('data-i18n', 'splash_skip');
+  btn.textContent = (typeof I18N !== 'undefined' && I18N.t) ? I18N.t('splash_skip') : 'Skip intro →';
+  btn.addEventListener('click', skipIntro);
+  document.body.appendChild(btn);
+  requestAnimationFrame(() => btn.classList.add('show'));
+}
+
+function removeSkipIntro() {
+  const btn = document.getElementById('skip-intro');
+  if (!btn) return;
+  btn.classList.remove('show');
+  setTimeout(() => btn.remove(), 300);
+}
+
+/* Ends the entry sequence immediately. The visitor's music choice is untouched:
+   if they already pressed [ Enter the Space ] the piano keeps playing. */
+function skipIntro() {
+  splashSkipped = true;
+  sessionStorage.setItem('napell-slogan-shown', '1');
+  sessionStorage.setItem('cti-modal-shown', '1');
+  if (typeof I18N !== 'undefined' && typeof I18N.hideModal === 'function') I18N.hideModal();
+  const modal = document.getElementById('lang-modal');
+  if (modal) setTimeout(() => modal.remove(), 400);
+  hideBrandSplash();
+  hideSloganSplash();
+  removeSkipIntro();
+  removeSplashBackdrop();
 }
 
 function removeSplashBackdrop() {
   const bd = document.getElementById('splash-backdrop');
-  if (!bd) return;
-  bd.classList.remove('show');
-  setTimeout(() => bd.remove(), 600);
+  if (bd) {
+    bd.classList.remove('show');
+    setTimeout(() => bd.remove(), 600);
+  }
+  removeSkipIntro();
 }
 
 /* Language modal — the first step of the entry sequence (once per session).
@@ -436,6 +501,7 @@ function showLangModalIfNeeded(delay = 0) {
   if (sessionStorage.getItem('cti-modal-shown')) return;
   if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
   setTimeout(() => {
+    if (splashSkipped || sessionStorage.getItem('cti-modal-shown')) return;
     if (!document.getElementById('lang-modal')) {
       const c = document.getElementById('modal-container');
       if (c) c.innerHTML = renderLangModal();
@@ -448,6 +514,25 @@ function showLangModalIfNeeded(delay = 0) {
 function maybeShowSlogan(delay = 0) {
   // Show ONCE per browser session, on the landing page (Vision is the site entry)
   if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
+
+  // Deep-link options for links we hand out (mail, deck, chat):
+  //   ?lang=zh|en|ar  force the reading language
+  //   ?skip=1         straight to the content: no splash, no language modal, no music
+  const params = new URLSearchParams(location.search);
+  const forced = params.get('lang');
+  if (forced && typeof I18N !== 'undefined' && I18N.translations && I18N.translations[forced]) {
+    I18N.setLang(forced);
+  }
+  if (params.get('skip') === '1') {
+    splashSkipped = true;
+    sessionStorage.setItem('napell-slogan-shown', '1');
+    sessionStorage.setItem('cti-modal-shown', '1');
+    const mc = document.getElementById('modal-container');
+    if (mc) mc.innerHTML = ''; // initPage pre-rendered the modal — drop it with the rest
+    removeSplashBackdrop();
+    return;
+  }
+
   const splashDone = !!sessionStorage.getItem('napell-slogan-shown');
   const modalDone = !!sessionStorage.getItem('cti-modal-shown');
   if (splashDone && modalDone) {
@@ -508,10 +593,36 @@ function closeMobileNav() {
   if (btn) btn.setAttribute('aria-expanded', 'false');
 }
 
-// Close mobile nav when a nav link is clicked
+function toggleNavGroup(e, btn) {
+  e.preventDefault();
+  e.stopPropagation();
+  const group = btn.closest('.nav-group');
+  if (!group) return;
+  const wasOpen = group.classList.contains('open');
+  closeNavGroups();
+  if (!wasOpen) {
+    group.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function closeNavGroups() {
+  document.querySelectorAll('.nav-group.open').forEach(g => {
+    g.classList.remove('open');
+    const b = g.querySelector('.nav-group-label');
+    if (b) b.setAttribute('aria-expanded', 'false');
+  });
+}
+
+// Close mobile nav when a nav link is clicked (group labels only open their menu)
 document.addEventListener('click', (e) => {
-  const link = e.target.closest('.nav-link');
+  const link = e.target.closest('.nav-link:not(.nav-group-label), .nav-menu-link');
   if (link) closeMobileNav();
+  if (!e.target.closest('.nav-group')) closeNavGroups();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNavGroups();
 });
 
 /* ─── Toast Notification ─── */
