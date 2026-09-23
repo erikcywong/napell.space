@@ -1307,13 +1307,17 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 }
 
 /* ─── Gallery ─── */
+/* Masonry columns — every photo keeps its native aspect ratio, none are cropped.
+   (A fixed 4/3 grid used to slice portrait shots down to a middle strip.) */
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  columns: 3;
+  column-gap: 20px;
 }
 .gallery-item {
-  margin: 0;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  margin: 0 0 20px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -1329,8 +1333,7 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 .gallery-item img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  height: auto;
 }
 .gallery-item figcaption {
   padding: 12px 14px;
@@ -1338,6 +1341,8 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
   line-height: 1.5;
   color: var(--text-secondary);
 }
+@media (max-width: 1100px) { .gallery-grid { columns: 2; } }
+@media (max-width: 640px) { .gallery-grid { columns: 1; } }
 
 /* ─── Lightbox ─── */
 .lightbox {
@@ -1350,10 +1355,27 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 }
 .lightbox.show { opacity: 1; }
 .lightbox img {
-  max-width: 88vw; max-height: 84vh;
+  width: auto; height: auto;
+  max-width: 90vw; max-height: 80vh;
   border-radius: var(--radius-md);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8);
   cursor: default;
+}
+.lightbox-cap {
+  position: absolute; left: 0; right: 0; bottom: 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 0 72px;
+  text-align: center;
+  pointer-events: none;
+}
+.lb-cap-text {
+  font-size: 14px; line-height: 1.5; color: #e7e9ea;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+  max-width: 720px;
+}
+.lb-count {
+  font-size: 11.5px; letter-spacing: 0.08em; color: #71767b;
+  font-variant-numeric: tabular-nums;
 }
 .lightbox-close {
   position: absolute; top: 18px; right: 22px;
