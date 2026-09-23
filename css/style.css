@@ -1283,3 +1283,8 @@ body.rtl .lightbox-nav { flex-direction: row-reverse; }
   .nav-brand-name { font-size: 21px; }
   .nav-brand-tag { display: none; }
 }
+/* longer nav labels ("The Case", "Economics") — keep 10 items on one line */
+@media (max-width: 1080px) {
+  .nav-link { padding: 8px 4px; font-size: 10.5px; }
+  .nav-brand-name { font-size: 19px; }
+}

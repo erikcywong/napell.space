@@ -5,15 +5,17 @@
 
 /* ─── Navigation Component ─── */
 function renderNav(activePage) {
+  // Order follows the investor decision path: decide (case → numbers → capital),
+  // prove (system → efficiency → costs → value chain), then context and contact.
   const pages = [
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
-    { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
-    { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
+    { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
     { id: 'overview', key: 'nav_overview', href: 'overview.html' },
-    { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
     { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
     { id: 'costs', key: 'nav_costs', href: 'costs.html' },
+    { id: 'value-chain', key: 'nav_value_chain', href: 'value-chain.html' },
+    { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
     { id: 'gallery', key: 'nav_gallery', href: 'gallery.html' },
     { id: 'contact', key: 'nav_contact', href: 'contact.html' }
   ];

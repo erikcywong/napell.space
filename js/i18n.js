@@ -29,13 +29,14 @@ const I18N = {
       modal_remember: 'Remember my choice',
 
       // ─── Nav ───
-      nav_home: 'Home',
+      // "The Case" = former Vision page (the strategic argument); "Economics" = former Home page (KPI dashboard)
+      nav_home: 'Economics',
       nav_overview: 'Overview',
       nav_costs: 'Costs',
       nav_efficiency: 'Efficiency',
       nav_value_chain: 'Value Chain',
       nav_collaboration: 'Climate Response',
-      nav_vision: 'Vision',
+      nav_vision: 'The Case',
       nav_contact: 'Contact',
       nav_gallery: 'Gallery',
 
@@ -716,13 +717,13 @@ const I18N = {
       modal_remember: '记住我的选择',
 
       // ─── Nav ───
-      nav_home: '首页',
+      nav_home: '经济模型',
       nav_overview: '系统概览',
       nav_costs: '成本分析',
       nav_efficiency: '生产效率',
       nav_value_chain: '产业链价值',
       nav_collaboration: '气候响应',
-      nav_vision: '愿景',
+      nav_vision: '投资论证',
       nav_contact: '联系我们',
       nav_gallery: '图库',
 
@@ -1403,13 +1404,13 @@ const I18N = {
       modal_remember: 'تذكر اختياري',
 
       // ─── Nav ───
-      nav_home: 'الرئيسية',
+      nav_home: 'الاقتصاديات',
       nav_overview: 'نظرة عامة',
       nav_costs: 'التكاليف',
       nav_efficiency: 'الكفاءة',
       nav_value_chain: 'سلسلة القيمة',
       nav_collaboration: 'الاستجابة المناخية',
-      nav_vision: 'الرؤية',
+      nav_vision: 'الحجّة الاستثمارية',
       nav_contact: 'اتصل بنا',
       nav_gallery: 'معرض الصور',
 
