@@ -1307,17 +1307,17 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 }
 
 /* ─── Gallery ─── */
-/* Masonry columns — every photo keeps its native aspect ratio, none are cropped.
-   (A fixed 4/3 grid used to slice portrait shots down to a middle strip.) */
+/* One uniform tile size for every photo. `contain` (not `cover`) means nothing is
+   cropped — the letterbox area falls on the card background, so on this dark theme
+   the bars are invisible and the grid still reads perfectly regular. */
 .gallery-grid {
-  columns: 3;
-  column-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  align-items: start;
 }
 .gallery-item {
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  margin: 0 0 20px;
+  margin: 0;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -1333,16 +1333,17 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 .gallery-item img {
   display: block;
   width: 100%;
-  height: auto;
+  aspect-ratio: 4 / 3;      /* identical box for every photo */
+  object-fit: contain;      /* complete photo, never sliced */
 }
 .gallery-item figcaption {
   padding: 12px 14px;
   font-size: 13px;
   line-height: 1.5;
   color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  min-height: 62px;
 }
-@media (max-width: 1100px) { .gallery-grid { columns: 2; } }
-@media (max-width: 640px) { .gallery-grid { columns: 1; } }
 
 /* ─── Lightbox ─── */
 .lightbox {
@@ -1404,10 +1405,14 @@ body.rtl .ry-assump li::before { left: auto; right: 14px; }
 .lightbox-btn:hover { border-color: var(--accent); background: var(--bg-card-hover); }
 body.rtl .lightbox-nav { flex-direction: row-reverse; }
 
-/* ─── Nav compaction — 6 top-level entries, so labels stay readable ─── */
+/* ─── Nav compaction — 7 top-level entries, so labels stay readable ─── */
+@media (max-width: 1680px) {
+  .nav-link { padding: 8px 9px; font-size: 12.5px; }
+  .nav-links { gap: 1px; }
+}
 @media (max-width: 1560px) {
-  .nav-link { padding: 8px 10px; font-size: 12.5px; }
-  .nav-links { gap: 2px; }
+  .nav-link { padding: 8px 7px; font-size: 12px; }
+  .nav-links { gap: 1px; }
   .nav-brand-name { font-size: 26px; }
 }
 @media (max-width: 1280px) {

@@ -12,6 +12,7 @@ function renderNav(activePage) {
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
     { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
+    { id: 'ask', key: 'nav_ask', href: 'ask.html' },
     { key: 'nav_g_tech', children: [
       { id: 'overview', key: 'nav_overview', href: 'overview.html' },
       { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },

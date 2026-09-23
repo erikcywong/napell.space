@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ask — napell.space</title>
+  <meta name="description" content="napell.space investment ask: how much capital the tissue-culture and coffee-seedling vertical needs to reach 50% of Yunnan's annual replanting market within five years, where every yuan goes, and what the investor gets back.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
+  <link rel="stylesheet" href="css/style.css?v=41">
+  <style>
+    .ak-stmt { background: linear-gradient(135deg, rgba(29,155,240,0.12), rgba(0,186,124,0.10), rgba(212,160,23,0.08)); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px 26px; margin: 22px 0 6px; }
+    .ak-stmt p { font-size: 16.5px; line-height: 1.72; color: var(--text-primary); font-weight: 600; }
+    .ak-stmt .hl { color: #1d9bf0; }
+    .ak-stmt .gold { color: #d4a017; }
+
+    .ak-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(178px, 1fr)); gap: 14px; margin-top: 20px; }
+    .ak-k { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 17px; }
+    .ak-k.accent { border-color: rgba(29,155,240,0.42); }
+    .ak-k.gold { border-color: rgba(212,160,23,0.38); }
+    .ak-k-l { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+    .ak-k-v { font-size: 24px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; line-height: 1.15; }
+    .ak-k.gold .ak-k-v { color: #d4a017; }
+    .ak-k.accent .ak-k-v { color: #1d9bf0; }
+    .ak-k-r { font-size: 11.5px; color: var(--text-muted); margin-top: 5px; font-variant-numeric: tabular-nums; }
+
+    .ak-funnel { display: grid; gap: 12px; margin-top: 18px; }
+    .ak-tier { border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 15px 17px; background: var(--bg-card); }
+    .ak-tier.t1 { border-left: 3px solid #71767b; }
+    .ak-tier.t2 { border-left: 3px solid #7c5cff; }
+    .ak-tier.t3 { border-left: 3px solid #1d9bf0; background: linear-gradient(90deg, rgba(29,155,240,0.10), var(--bg-card) 60%); }
+    .ak-tier-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .ak-tier-tag { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #1d9bf0; }
+    .ak-tier.t1 .ak-tier-tag { color: #71767b; }
+    .ak-tier.t2 .ak-tier-tag { color: #a48bff; }
+    .ak-tier-n { font-size: 17px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+    .ak-tier-d { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px; }
+    .ak-tier-share { font-size: 12px; color: #00ba7c; margin-top: 8px; font-weight: 600; }
+
+    .ak-alloc { display: grid; gap: 10px; margin-top: 16px; }
+    .ak-alloc-row { display: grid; grid-template-columns: minmax(180px, 1.05fr) 2fr 76px 56px; gap: 12px; align-items: center; }
+    .ak-alloc-l { font-size: 13px; color: var(--text-primary); }
+    .ak-alloc-bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .ak-alloc-bar i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #1d9bf0, #7c5cff); }
+    .ak-alloc-bar i.capex { background: linear-gradient(90deg, #1d9bf0, #00ba7c); }
+    .ak-alloc-bar i.opex { background: linear-gradient(90deg, #d4a017, #f4212e); }
+    .ak-alloc-v { font-size: 12.5px; color: var(--text-secondary); text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
+    .ak-alloc-pct { font-size: 12.5px; font-weight: 700; color: #1d9bf0; text-align: right; font-family: var(--font-mono); }
+
+    .ak-tranches { display: grid; grid-template-columns: repeat(auto-fit, minmax(252px, 1fr)); gap: 16px; margin-top: 18px; }
+    .ak-tr { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+    .ak-tr.now { border-color: rgba(29,155,240,0.5); box-shadow: 0 0 0 1px rgba(29,155,240,0.12); }
+    .ak-tr-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .ak-tr-tag { font-size: 10.5px; font-weight: 800; letter-spacing: 1px; color: #0a0a0a; background: #1d9bf0; border-radius: 6px; padding: 3px 7px; }
+    .ak-tr.b .ak-tr-tag { background: #d4a017; }
+    .ak-tr.c .ak-tr-tag { background: #a48bff; }
+    .ak-tr-amt { font-size: 22px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+    .ak-tr-ref { font-size: 11.5px; color: var(--text-muted); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+    .ak-tr-row { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--border-color); font-size: 12.5px; }
+    .ak-tr-row:last-child { border-bottom: none; }
+    .ak-tr-row span:first-child { color: var(--text-muted); flex: 0 0 auto; }
+    .ak-tr-row span:last-child { color: var(--text-primary); text-align: right; }
+    .ak-tr-m { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); font-size: 12px; color: #00ba7c; line-height: 1.55; }
+
+    .ak-cta { margin-top: 22px; background: linear-gradient(135deg, rgba(29,155,240,0.14), rgba(124,92,255,0.10)); border: 1px solid rgba(29,155,240,0.35); border-radius: var(--radius-md); padding: 26px 28px; }
+    .ak-cta h3 { font-size: 19px; color: var(--text-primary); margin-bottom: 10px; }
+    .ak-cta p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; }
+    .ak-cta-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .ak-cta-actions a { display: inline-block; padding: 11px 18px; border-radius: 24px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all var(--transition); }
+    .ak-cta-actions a.pri { background: #1d9bf0; color: #0a0a0a; }
+    .ak-cta-actions a.pri:hover { background: #4fb3f5; }
+    .ak-cta-actions a.sec { border: 1px solid var(--border-color); color: var(--text-primary); background: var(--bg-card); }
+    .ak-cta-actions a.sec:hover { border-color: #1d9bf0; color: #1d9bf0; }
+
+    .ak-note { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: 14px; }
+    .ak-src { font-size: 11.5px; color: var(--text-muted); }
+    .ak-src a { color: var(--text-muted); text-decoration: underline; }
+
+    @media (max-width: 700px) {
+      .ak-alloc-row { grid-template-columns: 1fr auto; }
+      .ak-alloc-l { grid-column: 1 / 2; }
+      .ak-alloc-pct { grid-column: 2 / 3; }
+      .ak-alloc-bar { grid-column: 1 / -1; grid-row: 2; }
+      .ak-alloc-v { grid-column: 1 / -1; grid-row: 3; text-align: left; }
+      .ak-k-v { font-size: 21px; }
+    }
+  </style>
+</head>
+<body data-page="ask">
+
+  <div id="nav-container"></div>
+
+  <main class="page-content" style="padding-top: 96px;">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title" data-i18n="ak_title"></h1>
+        <p class="page-intro" data-i18n="ak_intro"></p>
+      </div>
+
+      <div class="ak-stmt">
+        <p data-i18n-html="ak_head"></p>
+      </div>
+
+      <!-- Headline numbers -->
+      <section class="section">
+        <div class="ak-kpi">
+          <div class="ak-k accent"><div class="ak-k-l" data-i18n="ak_k1_l"></div><div class="ak-k-v">US$25M</div><div class="ak-k-r">¥1.7亿</div></div>
+          <div class="ak-k accent"><div class="ak-k-l" data-i18n="ak_k2_l"></div><div class="ak-k-v">US$14M</div><div class="ak-k-r">¥9,500万</div></div>
+          <div class="ak-k"><div class="ak-k-l" data-i18n="ak_k3_l"></div><div class="ak-k-v">US$11M</div><div class="ak-k-r" data-i18n="ak_k3_r"></div></div>
+          <div class="ak-k gold"><div class="ak-k-l" data-i18n="ak_k4_l"></div><div class="ak-k-v">50%</div><div class="ak-k-r" data-i18n="ak_k4_r"></div></div>
+          <div class="ak-k"><div class="ak-k-l" data-i18n="ak_k5_l"></div><div class="ak-k-v">13.75M</div><div class="ak-k-r" data-i18n="ak_k5_r"></div></div>
+          <div class="ak-k"><div class="ak-k-l" data-i18n="ak_k6_l"></div><div class="ak-k-v">¥1.32亿</div><div class="ak-k-r">US$19.3M</div></div>
+          <div class="ak-k"><div class="ak-k-l" data-i18n="ak_k7_l"></div><div class="ak-k-v">38%</div><div class="ak-k-r" data-i18n="ak_k7_r"></div></div>
+          <div class="ak-k gold"><div class="ak-k-l" data-i18n="ak_k8_l"></div><div class="ak-k-v">4.5×</div><div class="ak-k-r" data-i18n="ak_k8_r"></div></div>
+        </div>
+        <p class="ak-note" data-i18n="ak_kpi_note"></p>
+      </section>
+
+      <!-- ══ Market ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_mkt_t"></h2>
+        <p class="section-desc" data-i18n="ak_mkt_d"></p>
+
+        <h3 class="th-sub" data-i18n="ak_mkt_base_t"></h3>
+        <table class="data-table" style="margin-top: 14px;">
+          <tbody>
+            <tr><td data-i18n="ak_mb1"></td><td>151.88<span class="ak-src" data-i18n="ak_mb1u"></span></td></tr>
+            <tr><td data-i18n="ak_mb2"></td><td>17.07<span class="ak-src" data-i18n="ak_mb2u"></span></td></tr>
+            <tr><td data-i18n="ak_mb3"></td><td>¥995<span class="ak-src" data-i18n="ak_mb3u"></span></td></tr>
+            <tr><td data-i18n="ak_mb4"></td><td>31.8<span class="ak-src" data-i18n="ak_mb4u"></span></td></tr>
+            <tr><td data-i18n="ak_mb5"></td><td>200<span class="ak-src" data-i18n="ak_mb5u"></span></td></tr>
+            <tr><td data-i18n="ak_mb6"></td><td>¥1.85<span class="ak-src" data-i18n="ak_mb6u"></span></td></tr>
+            <tr><td data-i18n="ak_mb7"></td><td>¥1.4–2.4<span class="ak-src" data-i18n="ak_mb7u"></span></td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="th-sub" data-i18n="ak_mkt_calc_t"></h3>
+        <table class="data-table" style="margin-top: 14px;">
+          <tbody>
+            <tr><td data-i18n="ak_mc1"></td><td>3.04<span class="ak-src" data-i18n="ak_mc1u"></span></td></tr>
+            <tr><td data-i18n="ak_mc2"></td><td>9.87<span class="ak-src" data-i18n="ak_mc2u"></span></td></tr>
+            <tr><td data-i18n="ak_mc3"></td><td>4.00<span class="ak-src" data-i18n="ak_mc3u"></span></td></tr>
+            <tr class="anchor"><td data-i18n="ak_mc4"></td><td>27.74<span class="ak-src" data-i18n="ak_mc4u"></span></td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="th-sub" data-i18n="ak_mkt_funnel_t"></h3>
+        <div class="ak-funnel">
+          <div class="ak-tier t1">
+            <div class="ak-tier-head"><span class="ak-tier-tag">TAM</span><span class="ak-tier-n">27.74M<span class="ak-src" data-i18n="ak_f1u"></span></span></div>
+            <div class="ak-tier-d" data-i18n="ak_f1d"></div>
+          </div>
+          <div class="ak-tier t2">
+            <div class="ak-tier-head"><span class="ak-tier-tag">SAM</span><span class="ak-tier-n">16.65M<span class="ak-src" data-i18n="ak_f2u"></span></span></div>
+            <div class="ak-tier-d" data-i18n="ak_f2d"></div>
+          </div>
+          <div class="ak-tier t3">
+            <div class="ak-tier-head"><span class="ak-tier-tag">SOM · Y5</span><span class="ak-tier-n">13.75M<span class="ak-src" data-i18n="ak_f3u"></span></span></div>
+            <div class="ak-tier-d" data-i18n="ak_f3d"></div>
+            <div class="ak-tier-share" data-i18n="ak_f3s"></div>
+          </div>
+        </div>
+
+        <h3 class="th-sub" data-i18n="ak_mkt_share_t"></h3>
+        <table class="data-table" style="margin-top: 14px;">
+          <thead><tr><th data-i18n="ak_sh_h1"></th><th data-i18n="ak_sh_h2"></th><th data-i18n="ak_sh_h3"></th><th data-i18n="ak_sh_h4"></th></tr></thead>
+          <tbody>
+            <tr class="anchor"><td data-i18n="ak_sh_r1a"></td><td>13.75M / 27.74M</td><td>50%</td><td data-i18n="ak_sh_r1d"></td></tr>
+            <tr><td data-i18n="ak_sh_r2a"></td><td>8.32M / 16.65M</td><td>50%</td><td data-i18n="ak_sh_r2d"></td></tr>
+            <tr><td data-i18n="ak_sh_r3a"></td><td>¥1.32亿 / ¥2.64亿</td><td>50%</td><td data-i18n="ak_sh_r3d"></td></tr>
+          </tbody>
+        </table>
+        <p class="ak-note" data-i18n="ak_mkt_note"></p>
+      </section>
+
+      <!-- ══ Why 50% is achievable ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_w_t"></h2>
+        <p class="section-desc" data-i18n="ak_w_d"></p>
+        <div class="th-card" style="margin-top: 20px;">
+          <div class="th-num"><div class="th-num-badge">1</div><div><h4 data-i18n="ak_w1_t"></h4><p data-i18n="ak_w1_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">2</div><div><h4 data-i18n="ak_w2_t"></h4><p data-i18n="ak_w2_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">3</div><div><h4 data-i18n="ak_w3_t"></h4><p data-i18n="ak_w3_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">4</div><div><h4 data-i18n="ak_w4_t"></h4><p data-i18n="ak_w4_d"></p></div></div>
+          <div class="th-num"><div class="th-num-badge">5</div><div><h4 data-i18n="ak_w5_t"></h4><p data-i18n="ak_w5_d"></p></div></div>
+        </div>
+      </section>
+
+      <!-- ══ Grower payback ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_pb_t"></h2>
+        <p class="section-desc" data-i18n="ak_pb_d"></p>
+        <table class="data-table" style="margin-top: 18px;">
+          <thead><tr><th data-i18n="ak_pb_h1"></th><th data-i18n="ak_pb_h2"></th><th data-i18n="ak_pb_h3"></th></tr></thead>
+          <tbody>
+            <tr><td data-i18n="ak_pb_r1"></td><td>¥370</td><td data-i18n="ak_pb_r1d"></td></tr>
+            <tr><td data-i18n="ak_pb_r2"></td><td>¥3,600</td><td data-i18n="ak_pb_r2d"></td></tr>
+            <tr class="anchor"><td data-i18n="ak_pb_r3"></td><td>¥3,230</td><td data-i18n="ak_pb_r3d"></td></tr>
+            <tr><td data-i18n="ak_pb_r4"></td><td data-i18n="ak_pb_r4v"></td><td data-i18n="ak_pb_r4d"></td></tr>
+            <tr><td data-i18n="ak_pb_r5"></td><td data-i18n="ak_pb_r5v"></td><td data-i18n="ak_pb_r5d"></td></tr>
+            <tr><td data-i18n="ak_pb_r6"></td><td data-i18n="ak_pb_r6v"></td><td data-i18n="ak_pb_r6d"></td></tr>
+          </tbody>
+        </table>
+        <div class="th-callout">
+          <h4 data-i18n="ak_pb_co_t"></h4>
+          <p data-i18n="ak_pb_co_d"></p>
+        </div>
+      </section>
+
+      <!-- ══ Five-year plan ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_plan_t"></h2>
+        <p class="section-desc" data-i18n="ak_plan_d"></p>
+        <table class="data-table" style="margin-top: 18px;">
+          <thead><tr><th data-i18n="ak_pl_h0"></th><th>Y1</th><th>Y2</th><th>Y3</th><th>Y4</th><th>Y5</th></tr></thead>
+          <tbody>
+            <tr class="anchor"><td data-i18n="ak_pl_r1"></td><td>1.20M</td><td>3.80M</td><td>7.60M</td><td>11.00M</td><td>13.75M</td></tr>
+            <tr><td data-i18n="ak_pl_r2"></td><td>0.24M</td><td>0.95M</td><td>2.43M</td><td>3.85M</td><td>4.95M</td></tr>
+            <tr><td data-i18n="ak_pl_r3"></td><td>0.96M</td><td>2.85M</td><td>5.17M</td><td>7.15M</td><td>8.80M</td></tr>
+            <tr><td data-i18n="ak_pl_r4"></td><td>¥8.6M</td><td>¥29.4M</td><td>¥67.3M</td><td>¥103.2M</td><td>¥131.5M</td></tr>
+            <tr><td data-i18n="ak_pl_r5"></td><td>¥36.0M</td><td>¥42.0M</td><td>¥38.0M</td><td>¥24.0M</td><td>¥16.0M</td></tr>
+            <tr><td data-i18n="ak_pl_r6"></td><td>-40%</td><td>5%</td><td>24%</td><td>33%</td><td>38%</td></tr>
+            <tr><td data-i18n="ak_pl_r7"></td><td>-¥3.4M</td><td>¥1.5M</td><td>¥16.2M</td><td>¥34.1M</td><td>¥50.0M</td></tr>
+          </tbody>
+        </table>
+        <p class="ak-note" data-i18n="ak_plan_note"></p>
+      </section>
+
+      <!-- ══ Use of funds ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_use_t"></h2>
+        <p class="section-desc" data-i18n="ak_use_d"></p>
+        <div class="ak-alloc">
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u1"></span><span class="ak-alloc-bar"><i class="capex" style="width:100%"></i></span><span class="ak-alloc-v">¥40.0M</span><span class="ak-alloc-pct">23.7%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u2"></span><span class="ak-alloc-bar"><i class="capex" style="width:67.5%"></i></span><span class="ak-alloc-v">¥27.0M</span><span class="ak-alloc-pct">16.0%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u3"></span><span class="ak-alloc-bar"><i class="capex" style="width:37.5%"></i></span><span class="ak-alloc-v">¥15.0M</span><span class="ak-alloc-pct">8.9%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u4"></span><span class="ak-alloc-bar"><i class="capex" style="width:20%"></i></span><span class="ak-alloc-v">¥8.0M</span><span class="ak-alloc-pct">4.7%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u5"></span><span class="ak-alloc-bar"><i class="capex" style="width:15%"></i></span><span class="ak-alloc-v">¥6.0M</span><span class="ak-alloc-pct">3.6%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u6"></span><span class="ak-alloc-bar"><i class="opex" style="width:80%"></i></span><span class="ak-alloc-v">¥32.0M</span><span class="ak-alloc-pct">18.9%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u7"></span><span class="ak-alloc-bar"><i class="opex" style="width:22.5%"></i></span><span class="ak-alloc-v">¥9.0M</span><span class="ak-alloc-pct">5.3%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u8"></span><span class="ak-alloc-bar"><i class="opex" style="width:50%"></i></span><span class="ak-alloc-v">¥20.0M</span><span class="ak-alloc-pct">11.8%</span></div>
+          <div class="ak-alloc-row"><span class="ak-alloc-l" data-i18n="ak_u9"></span><span class="ak-alloc-bar"><i class="opex" style="width:30%"></i></span><span class="ak-alloc-v">¥12.0M</span><span class="ak-alloc-pct">7.1%</span></div>
+        </div>
+        <p class="ak-note" data-i18n="ak_use_note"></p>
+      </section>
+
+      <!-- ══ Funding structure ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_fund_t"></h2>
+        <p class="section-desc" data-i18n="ak_fund_d"></p>
+        <table class="data-table" style="margin-top: 18px;">
+          <thead><tr><th data-i18n="ak_fd_h1"></th><th data-i18n="ak_fd_h2"></th><th data-i18n="ak_fd_h3"></th><th data-i18n="ak_fd_h4"></th></tr></thead>
+          <tbody>
+            <tr class="anchor"><td data-i18n="ak_fd_r1"></td><td>¥95.0M</td><td>56%</td><td data-i18n="ak_fd_r1d"></td></tr>
+            <tr><td data-i18n="ak_fd_r2"></td><td>¥45.0M</td><td>26%</td><td data-i18n="ak_fd_r2d"></td></tr>
+            <tr><td data-i18n="ak_fd_r3"></td><td>¥20.0M</td><td>12%</td><td data-i18n="ak_fd_r3d"></td></tr>
+            <tr><td data-i18n="ak_fd_r4"></td><td>¥10.0M</td><td>6%</td><td data-i18n="ak_fd_r4d"></td></tr>
+            <tr><td data-i18n="ak_fd_r5"></td><td>¥170.0M</td><td>100%</td><td data-i18n="ak_fd_r5d"></td></tr>
+          </tbody>
+        </table>
+        <p class="ak-note" data-i18n="ak_fund_note"></p>
+      </section>
+
+      <!-- ══ Tranches ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_tr_t"></h2>
+        <p class="section-desc" data-i18n="ak_tr_d"></p>
+        <div class="ak-tranches">
+          <div class="ak-tr now">
+            <div class="ak-tr-head"><span class="ak-tr-tag" data-i18n="ak_tr1_tag"></span><span class="ak-src" data-i18n="ak_tr1_when"></span></div>
+            <div class="ak-tr-amt">US$2.2M</div>
+            <div class="ak-tr-ref">¥15.0M</div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_use"></span><span data-i18n="ak_tr1_use"></span></div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_run"></span><span>18–24 <span data-i18n="ak_tr_months"></span></span></div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_eq"></span><span>12–15%</span></div>
+            <div class="ak-tr-m" data-i18n="ak_tr1_m"></div>
+          </div>
+          <div class="ak-tr b">
+            <div class="ak-tr-head"><span class="ak-tr-tag" data-i18n="ak_tr2_tag"></span><span class="ak-src" data-i18n="ak_tr2_when"></span></div>
+            <div class="ak-tr-amt">US$4.4M</div>
+            <div class="ak-tr-ref">¥30.0M</div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_use"></span><span data-i18n="ak_tr2_use"></span></div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_run"></span><span>24–30 <span data-i18n="ak_tr_months"></span></span></div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_eq"></span><span>10–13%</span></div>
+            <div class="ak-tr-m" data-i18n="ak_tr2_m"></div>
+          </div>
+          <div class="ak-tr c">
+            <div class="ak-tr-head"><span class="ak-tr-tag" data-i18n="ak_tr3_tag"></span><span class="ak-src" data-i18n="ak_tr3_when"></span></div>
+            <div class="ak-tr-amt">US$7.4M</div>
+            <div class="ak-tr-ref">¥50.0M</div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_use"></span><span data-i18n="ak_tr3_use"></span></div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_run"></span><span>30–36 <span data-i18n="ak_tr_months"></span></span></div>
+            <div class="ak-tr-row"><span data-i18n="ak_tr_eq"></span><span>8–10%</span></div>
+            <div class="ak-tr-m" data-i18n="ak_tr3_m"></div>
+          </div>
+        </div>
+        <p class="ak-note" data-i18n="ak_tr_note"></p>
+      </section>
+
+      <!-- ══ Returns ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_ret_t"></h2>
+        <p class="section-desc" data-i18n="ak_ret_d"></p>
+        <table class="data-table" style="margin-top: 18px;">
+          <thead><tr><th data-i18n="ak_rt_h1"></th><th data-i18n="ak_rt_h2"></th><th data-i18n="ak_rt_h3"></th><th data-i18n="ak_rt_h4"></th><th data-i18n="ak_rt_h5"></th><th data-i18n="ak_rt_h6"></th></tr></thead>
+          <tbody>
+            <tr><td data-i18n="ak_rt_r1"></td><td>¥50.0M</td><td>8×</td><td>¥400M</td><td>¥380M</td><td>4.0× / 32%</td></tr>
+            <tr class="anchor"><td data-i18n="ak_rt_r2"></td><td>¥50.0M</td><td>9×</td><td>¥450M</td><td>¥430M</td><td>4.5× / 35%</td></tr>
+            <tr><td data-i18n="ak_rt_r3"></td><td>¥50.0M</td><td>11×</td><td>¥550M</td><td>¥530M</td><td>5.6× / 41%</td></tr>
+          </tbody>
+        </table>
+        <p class="ak-note" data-i18n="ak_ret_note"></p>
+      </section>
+
+      <!-- ══ Unit economics ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_ue_t"></h2>
+        <table class="data-table" style="margin-top: 18px;">
+          <thead><tr><th data-i18n="ak_ue_h1"></th><th data-i18n="ak_ue_h2"></th><th data-i18n="ak_ue_h3"></th><th data-i18n="ak_ue_h4"></th><th data-i18n="ak_ue_h5"></th></tr></thead>
+          <tbody>
+            <tr class="anchor"><td data-i18n="ak_ue_r1"></td><td>¥18.00</td><td>¥7.60</td><td>¥10.40</td><td>57.8%</td></tr>
+            <tr><td data-i18n="ak_ue_r2"></td><td>¥3.20</td><td>¥1.80</td><td>¥1.40</td><td>43.8%</td></tr>
+            <tr><td data-i18n="ak_ue_r3"></td><td>¥9.57</td><td>¥3.89</td><td>¥5.68</td><td>59.4%</td></tr>
+          </tbody>
+        </table>
+        <p class="ak-note" data-i18n="ak_ue_note"></p>
+      </section>
+
+      <!-- ══ Risks ══ -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ak_rk_t"></h2>
+        <div class="th-risks">
+          <div class="th-risk"><h4 data-i18n="ak_rk1_t"></h4><p data-i18n="ak_rk1_d"></p></div>
+          <div class="th-risk"><h4 data-i18n="ak_rk2_t"></h4><p data-i18n="ak_rk2_d"></p></div>
+          <div class="th-risk"><h4 data-i18n="ak_rk3_t"></h4><p data-i18n="ak_rk3_d"></p></div>
+          <div class="th-risk"><h4 data-i18n="ak_rk4_t"></h4><p data-i18n="ak_rk4_d"></p></div>
+        </div>
+      </section>
+
+      <!-- ══ CTA ══ -->
+      <section class="section">
+        <div class="ak-cta">
+          <h3 data-i18n="ak_cta_t"></h3>
+          <p data-i18n="ak_cta_d"></p>
+          <div class="ak-cta-actions">
+            <a class="pri" href="mailto:erik.wong@napell.bio?subject=Investment%20enquiry%20—%20tissue%20culture%20%26%20seedlings" data-i18n="ak_cta_b1"></a>
+            <a class="sec" href="https://wa.me/85293188252" target="_blank" rel="noopener" data-i18n="ak_cta_b2"></a>
+            <a class="sec" href="contact.html" data-i18n="ak_cta_b3"></a>
+          </div>
+          <p class="ak-note" data-i18n="ak_cta_note"></p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+  <div id="modal-container"></div>
+
+  <script src="js/i18n.js?v=41"></script>
+  <script src="js/data.js?v=41"></script>
+  <script src="js/main.js?v=41"></script>
+</body>
+</html>
