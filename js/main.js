@@ -700,6 +700,31 @@ window.renderDynamicContent = function(lang) {
   if (page === 'home' && typeof renderHomeContent === 'function') renderHomeContent(lang);
 };
 
+/* ─── GUARD — content capture deterrents ───
+   No client-side measure is absolute, but this blocks casual capture:
+   right-click menus, copy/cut, image dragging, save/print/view-source
+   shortcuts and common devtools shortcuts. Inputs stay usable. */
+const GUARD = window.GUARD = (function () {
+  const editable = (t) => t && t.closest && t.closest('input, textarea, select, [contenteditable="true"], .allow-copy');
+  function install() {
+    try {
+      document.addEventListener('contextmenu', (e) => { if (!editable(e.target)) e.preventDefault(); }, { capture: true });
+      document.addEventListener('copy', (e) => { if (!editable(e.target)) e.preventDefault(); }, { capture: true });
+      document.addEventListener('cut', (e) => { if (!editable(e.target)) e.preventDefault(); }, { capture: true });
+      document.addEventListener('dragstart', (e) => {
+        if (!editable(e.target) && (e.target.tagName === 'IMG' || e.target.tagName === 'A')) e.preventDefault();
+      }, { capture: true });
+      document.addEventListener('keydown', (e) => {
+        const k = (e.key || '').toLowerCase();
+        const combo = e.ctrlKey || e.metaKey;
+        if (combo && !editable(e.target) && (k === 's' || k === 'p' || k === 'u')) { e.preventDefault(); return; }
+        if (k === 'f12' || (combo && e.shiftKey && (k === 'i' || k === 'j' || k === 'c'))) e.preventDefault();
+      }, { capture: true });
+    } catch (err) { /* protection must never break the page */ }
+  }
+  return { install };
+})();
+
 /* ─── Telemetry beacon → Cloudflare Worker (/api/track) ───
    The worker enriches each beacon with the visitor's real IP, city/country
    and ASN (client JS cannot see those) and emails daily digests + instant
@@ -777,6 +802,8 @@ function runInit() {
   ensureMusicToggle();
   // Visitor telemetry (one beacon per page load — see TRACK above)
   TRACK.pageview();
+  // Content capture deterrents (right-click / copy / drag / shortcuts)
+  GUARD.install();
 }
 
 if (document.readyState === 'loading') {
