@@ -12,6 +12,7 @@ const AUTH = {
   _userHash2: '9345a35a6fdf174dff7219282a3ae4879790dbb785c70f6fff91e32fafd66eab',
   _passHash: 'b78a31f0e9654801916a1eda6286b3d4b8756d66803ba1b71151f8fd12d7ed10',
   _sessionKey: 'napell-costs-auth',
+  _sessionTTL: 30 * 24 * 3600 * 1000,  // auto-login remembered for 30 days
 
   /**
    * Hash a string with SHA-256 using Web Crypto API
@@ -25,10 +26,30 @@ const AUTH = {
   },
 
   /**
-   * Check if current session is authenticated
+   * Persist a successful login (localStorage — survives new tabs, sessions
+   * and browser restarts until logout or 30-day expiry).
+   */
+  _setSession() {
+    try { localStorage.setItem(this._sessionKey, String(Date.now())); } catch (e) { /* private mode */ }
+  },
+
+  /**
+   * Check if the current browser is authenticated
    */
   isAuthenticated() {
-    return sessionStorage.getItem(this._sessionKey) === '1';
+    try {
+      const raw = localStorage.getItem(this._sessionKey);
+      if (!raw) return false;
+      const ts = parseInt(raw, 10);
+      if (!ts) return false;
+      if (Date.now() - ts > this._sessionTTL) {
+        localStorage.removeItem(this._sessionKey);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
   },
 
   /**
@@ -39,7 +60,7 @@ const AUTH = {
     const userHash = await this._sha256(username.trim());
     const passHash = await this._sha256(password);
     if ((userHash === this._userHash || userHash === this._userHash2) && passHash === this._passHash) {
-      sessionStorage.setItem(this._sessionKey, '1');
+      this._setSession();
       return true;
     }
     return false;
@@ -49,7 +70,7 @@ const AUTH = {
    * Logout and reload page
    */
   logout() {
-    sessionStorage.removeItem(this._sessionKey);
+    try { localStorage.removeItem(this._sessionKey); } catch (e) { /* ignore */ }
     location.reload();
   },
 
@@ -241,7 +262,7 @@ const AUTH = {
       });
       const j = await r.json();
       if (j && j.ok) {
-        sessionStorage.setItem(this._sessionKey, '1');
+        this._setSession();
         // Owner gets an instant registration email; log the sign-in too.
         if (window.TRACK) TRACK.login(id, true);
         this.hideLoginModal();
