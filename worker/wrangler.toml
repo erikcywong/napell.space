@@ -10,8 +10,7 @@ crons = ["0 0 * * *"]
 
 [[kv_namespaces]]
 binding = "TRACK"
-# Create with: npx wrangler kv namespace create TRACK — then paste the id here
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "ce64e985f1114ed0ab5206f9070af9a7"
 
 [vars]
 MAIL_TO = "erik.wong@napell.bio"

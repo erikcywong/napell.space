@@ -205,13 +205,18 @@ async function sendMail(env, subject, text) {
     }
     // FormSubmit: free, no signup. First-ever send makes FormSubmit email an
     // activation link to `to` — click it once and all later sends go through.
+    // FormSubmit requires a Referer header (it must look like a web-page form),
+    // so we present ourselves as the site.
     const r = await fetch(`https://formsubmit.co/ajax/${to}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Referer': 'https://www.napell.space/' },
       body: JSON.stringify({ _subject: subject, _template: 'box', Report: text })
     });
+    sendMail.lastStatus = r.status;
+    sendMail.lastBody = await r.text().catch(() => '');
     return r.ok;
   } catch (e) {
+    sendMail.lastStatus = 'exception: ' + (e && e.message);
     return false;
   }
 }
@@ -253,7 +258,7 @@ export default {
     if ((path === '/api/stats' || path === '/api/test') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
       if (path === '/api/test') {
         const ok = await sendMail(env, '[napell.space] telemetry test', 'Telemetry worker is live. If you can read this, the mail channel works — the daily report will arrive at 08:00 HKT.');
-        return json({ sent: ok });
+        return json({ sent: ok, status: sendMail.lastStatus, body: (sendMail.lastBody || '').slice(0, 300) });
       }
       const day = url.searchParams.get('day') || hktDate(Date.now());
       const rec = await loadDay(env, day);

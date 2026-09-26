@@ -719,9 +719,9 @@ const TRACK = window.TRACK = (function () {
       payload.lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : '';
       const body = JSON.stringify(payload);
       if (navigator.sendBeacon && typeof navigator.sendBeacon === 'function') {
-        navigator.sendBeacon('/api/track', body);
+        navigator.sendBeacon('https://api.napell.space/api/track', body);
       } else if (typeof fetch === 'function') {
-        fetch('/api/track', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
+        fetch('https://api.napell.space/api/track', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
       }
     } catch (e) { /* telemetry must never break the page */ }
   }
