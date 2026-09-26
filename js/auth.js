@@ -156,6 +156,10 @@ const AUTH = {
 
     const valid = await this.attemptLogin(username, password);
 
+    // Telemetry: report every attempt (username only — never the password).
+    // The worker emails the owner instantly on both success and failure.
+    if (window.TRACK) TRACK.login(username.trim(), valid);
+
     if (valid) {
       this.hideLoginModal();
       this.revealContent();

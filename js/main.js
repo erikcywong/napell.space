@@ -700,6 +700,47 @@ window.renderDynamicContent = function(lang) {
   if (page === 'home' && typeof renderHomeContent === 'function') renderHomeContent(lang);
 };
 
+/* ─── Telemetry beacon → Cloudflare Worker (/api/track) ───
+   The worker enriches each beacon with the visitor's real IP, city/country
+   and ASN (client JS cannot see those) and emails daily digests + instant
+   login alerts to the site owner. Fails absolutely silently if absent. */
+const TRACK = window.TRACK = (function () {
+  function session() {
+    let sid = sessionStorage.getItem('napell-sid');
+    if (!sid) {
+      sid = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      sessionStorage.setItem('napell-sid', sid);
+    }
+    return sid;
+  }
+  function beacon(payload) {
+    try {
+      payload.sid = session();
+      payload.lang = (typeof I18N !== 'undefined' && I18N.getLang) ? I18N.getLang() : '';
+      const body = JSON.stringify(payload);
+      if (navigator.sendBeacon && typeof navigator.sendBeacon === 'function') {
+        navigator.sendBeacon('/api/track', body);
+      } else if (typeof fetch === 'function') {
+        fetch('/api/track', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'application/json' } }).catch(() => {});
+      }
+    } catch (e) { /* telemetry must never break the page */ }
+  }
+  // Outbound / contact links: where traffic leaves the site
+  document.addEventListener('click', (e) => {
+    const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (/^(https?:|mailto:|tel:)/i.test(href) && href.indexOf('napell.space') === -1) {
+      beacon({ t: 'out', u: href });
+    }
+  }, true);
+  return {
+    pageview() { beacon({ t: 'pv', p: location.pathname + location.search, r: document.referrer || '(direct)' }); },
+    outbound(url) { beacon({ t: 'out', u: url }); },
+    login(user, ok) { beacon({ t: 'login', user: String(user || '').slice(0, 60), ok: !!ok }); }
+  };
+})();
+
 /* ─── Init: inject nav, footer, modal ─── */
 function initPage() {
   const activePage = document.body.dataset.page || 'home';
@@ -734,6 +775,8 @@ function runInit() {
   // Keep the splash piano playing on every page until the browser closes the tab
   resumeSplashMusic();
   ensureMusicToggle();
+  // Visitor telemetry (one beacon per page load — see TRACK above)
+  TRACK.pageview();
 }
 
 if (document.readyState === 'loading') {

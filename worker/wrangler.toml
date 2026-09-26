@@ -1,0 +1,18 @@
+# wrangler.toml — optional: only needed for CLI deploys (npx wrangler deploy).
+# Dashboard deploys don't use this file.
+name = "napell-track"
+main = "track-worker.js"
+compatibility_date = "2026-09-01"
+
+# Daily digest at 08:00 Hong Kong time (00:00 UTC)
+[triggers]
+crons = ["0 0 * * *"]
+
+[[kv_namespaces]]
+binding = "TRACK"
+# Create with: npx wrangler kv namespace create TRACK — then paste the id here
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+[vars]
+MAIL_TO = "erik.wong@napell.bio"
+# STATS_KEY = set this as a *secret*, not here: npx wrangler secret put STATS_KEY
