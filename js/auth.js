@@ -72,8 +72,12 @@ const AUTH = {
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <h2 class="auth-modal-title" data-i18n="auth_login_title"></h2>
-        <p class="auth-modal-desc" data-i18n="auth_login_desc"></p>
+        <h2 class="auth-modal-title" id="auth-title" data-i18n="auth_login_title"></h2>
+        <p class="auth-modal-desc" id="auth-desc" data-i18n="auth_login_desc"></p>
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" id="auth-tab-login" data-i18n="auth_tab_login"></button>
+          <button type="button" class="auth-tab" id="auth-tab-reg" data-i18n="auth_tab_reg"></button>
+        </div>
         <form id="auth-form" autocomplete="off" onsubmit="return false;">
           <div class="auth-field">
             <label for="auth-user" data-i18n="auth_username"></label>
@@ -85,6 +89,31 @@ const AUTH = {
           </div>
           <div class="auth-error" id="auth-error"></div>
           <button type="submit" class="auth-login-btn" id="auth-submit" data-i18n="auth_login_btn"></button>
+        </form>
+        <form id="reg-form" autocomplete="off" onsubmit="return false;" style="display:none;">
+          <div class="auth-field">
+            <label for="reg-type" data-i18n="auth_reg_type"></label>
+            <select id="reg-type">
+              <option value="email" data-i18n="auth_type_email"></option>
+              <option value="mobile" data-i18n="auth_type_mobile"></option>
+              <option value="wechat" data-i18n="auth_type_wechat"></option>
+            </select>
+          </div>
+          <div class="auth-field">
+            <label for="reg-name" data-i18n="auth_reg_name"></label>
+            <input type="text" id="reg-name" autocomplete="name">
+          </div>
+          <div class="auth-field">
+            <label for="reg-id" id="reg-id-label"></label>
+            <input type="text" id="reg-id" autocomplete="off" autocapitalize="none" spellcheck="false">
+          </div>
+          <div class="auth-field">
+            <label for="reg-pass" data-i18n="auth_reg_pass"></label>
+            <input type="password" id="reg-pass" autocomplete="new-password">
+            <div class="auth-hint" data-i18n="auth_reg_pass_hint"></div>
+          </div>
+          <div class="auth-error" id="reg-error"></div>
+          <button type="submit" class="auth-login-btn" id="reg-submit" data-i18n="auth_reg_btn"></button>
         </form>
       </div>
     `;
@@ -111,10 +140,119 @@ const AUTH = {
     const inputs = modal.querySelectorAll('input');
     inputs.forEach(input => {
       input.addEventListener('input', () => {
-        const errorEl = document.getElementById('auth-error');
-        if (errorEl) { errorEl.textContent = ''; errorEl.style.display = 'none'; }
+        const err1 = document.getElementById('auth-error');
+        const err2 = document.getElementById('reg-error');
+        for (const el of [err1, err2]) { if (el) { el.textContent = ''; el.style.display = 'none'; } }
       });
     });
+
+    // Tab switching between Sign in and Register
+    document.getElementById('auth-tab-login').addEventListener('click', () => this._switchTab('login'));
+    document.getElementById('auth-tab-reg').addEventListener('click', () => this._switchTab('reg'));
+
+    // Registration id label follows the selected method
+    const regType = document.getElementById('reg-type');
+    regType.addEventListener('change', () => this._updateRegIdLabel());
+    this._updateRegIdLabel();
+
+    document.getElementById('reg-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this._handleRegister();
+    });
+  },
+
+  _switchTab(tab) {
+    const loginForm = document.getElementById('auth-form');
+    const regForm = document.getElementById('reg-form');
+    const tabLogin = document.getElementById('auth-tab-login');
+    const tabReg = document.getElementById('auth-tab-reg');
+    const title = document.getElementById('auth-title');
+    const desc = document.getElementById('auth-desc');
+    const isReg = tab === 'reg';
+    if (loginForm) loginForm.style.display = isReg ? 'none' : '';
+    if (regForm) regForm.style.display = isReg ? '' : 'none';
+    if (tabLogin) tabLogin.classList.toggle('active', !isReg);
+    if (tabReg) tabReg.classList.toggle('active', isReg);
+    if (title) title.textContent = I18N.t(isReg ? 'auth_reg_title' : 'auth_login_title');
+    if (desc) desc.textContent = I18N.t(isReg ? 'auth_reg_desc' : 'auth_login_desc');
+  },
+
+  _updateRegIdLabel() {
+    const sel = document.getElementById('reg-type');
+    const label = document.getElementById('reg-id-label');
+    if (sel && label && typeof I18N !== 'undefined') {
+      const key = sel.value === 'email' ? 'auth_id_email' : sel.value === 'mobile' ? 'auth_id_mobile' : 'auth_id_wechat';
+      label.textContent = I18N.t(key);
+    }
+  },
+
+  /**
+   * Server-side login (registered accounts). Legacy admin accounts fall back
+   * to the local hash check in attemptLogin().
+   */
+  async _serverLogin(id, pass) {
+    try {
+      const r = await fetch('https://api.napell.space/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id.toLowerCase(), pass })
+      });
+      return await r.json();
+    } catch (e) {
+      return { ok: false };
+    }
+  },
+
+  /**
+   * Handle registration form submission — creates the account on the worker,
+   * which emails the owner instantly, then signs the visitor in.
+   */
+  async _handleRegister() {
+    const typeEl = document.getElementById('reg-type');
+    const nameEl = document.getElementById('reg-name');
+    const idEl = document.getElementById('reg-id');
+    const passEl = document.getElementById('reg-pass');
+    const errorEl = document.getElementById('reg-error');
+    const btn = document.getElementById('reg-submit');
+
+    const type = typeEl ? typeEl.value : 'email';
+    const name = nameEl ? nameEl.value.trim() : '';
+    const id = idEl ? idEl.value.trim() : '';
+    const pass = passEl ? passEl.value : '';
+
+    const fail = (msgKey) => {
+      if (errorEl) {
+        errorEl.textContent = I18N.t(msgKey);
+        errorEl.style.display = 'block';
+      }
+      if (btn) { btn.disabled = false; btn.textContent = I18N.t('auth_reg_btn'); }
+    };
+
+    if (!id || !pass) return fail('auth_reg_fill');
+    if (pass.length < 6) return fail('auth_reg_pass_hint');
+
+    if (btn) { btn.disabled = true; btn.textContent = '...'; }
+
+    try {
+      const r = await fetch('https://api.napell.space/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, id, name, pass })
+      });
+      const j = await r.json();
+      if (j && j.ok) {
+        sessionStorage.setItem(this._sessionKey, '1');
+        // Owner gets an instant registration email; log the sign-in too.
+        if (window.TRACK) TRACK.login(id, true);
+        this.hideLoginModal();
+        this.revealContent();
+        this._renderCosts();
+        return;
+      }
+      return fail(j && j.error === 'exists' ? 'auth_reg_dup' : 'auth_reg_error');
+    } catch (e) {
+      return fail('auth_reg_error');
+    }
   },
 
   /**
@@ -154,7 +292,12 @@ const AUTH = {
     // Disable button during verification
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
 
-    const valid = await this.attemptLogin(username, password);
+    // Legacy admin accounts verify locally; registered accounts verify on the server.
+    let valid = await this.attemptLogin(username, password);
+    if (!valid) {
+      const server = await this._serverLogin(username.trim(), password);
+      valid = !!(server && server.ok);
+    }
 
     // Telemetry: report every attempt (username only — never the password).
     // The worker emails the owner instantly on both success and failure.

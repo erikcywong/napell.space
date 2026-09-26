@@ -95,8 +95,8 @@ async function handleTrack(req, env, ctx) {
 /* ─── Aggregation ─── */
 
 async function loadDay(env, date) {
-  const rec = { date, pv: 0, out: 0, ips: {}, paths: {}, refs: {}, outUrls: {}, sessions: {}, logins: [] };
-  for (const prefix of ['e', 'l']) {
+  const rec = { date, pv: 0, out: 0, ips: {}, paths: {}, refs: {}, outUrls: {}, sessions: {}, logins: [], regs: [] };
+  for (const prefix of ['e', 'l', 'r']) {
     let cursor;
     do {
       const page = await env.TRACK.list({ prefix: `${prefix}:${date}:`, cursor });
@@ -106,6 +106,7 @@ async function loadDay(env, date) {
         try { ev = JSON.parse(await env.TRACK.get(k.name)); } catch (e) { continue; }
         if (!ev) continue;
         if (prefix === 'l') { rec.logins.push(ev); continue; }
+        if (prefix === 'r') { rec.regs.push(ev); continue; }
         if (ev.t === 'out') {
           rec.out += 1;
           rec.outUrls[ev.u || '?'] = (rec.outUrls[ev.u || '?'] || 0) + 1;
@@ -151,7 +152,7 @@ function locationLabel(v) {
 function buildReportText(rec) {
   const lines = [];
   lines.push(`napell.space daily report — ${rec.date} (HKT)`);
-  lines.push(`Page views: ${rec.pv} · Unique IPs: ${Object.keys(rec.ips).length} · Sessions: ${Object.keys(rec.sessions).length} · Outbound clicks: ${rec.out} · Login events: ${rec.logins.length}`);
+  lines.push(`Page views: ${rec.pv} · Unique IPs: ${Object.keys(rec.ips).length} · Sessions: ${Object.keys(rec.sessions).length} · Outbound clicks: ${rec.out} · Login events: ${rec.logins.length} · New registrations: ${rec.regs.length}`);
   lines.push('');
 
   lines.push('== VISITORS ==');
@@ -182,6 +183,15 @@ function buildReportText(rec) {
   if (rec.logins.length) {
     for (const l of rec.logins) {
       lines.push(`${hhmm(l.ts)}  ${l.user || '?'}  ${l.ok ? 'SUCCESS' : 'FAILED'}  ${l.ip} (${locationLabel(l)})`);
+    }
+  } else {
+    lines.push('(none)');
+  }
+
+  lines.push('', '== NEW REGISTRATIONS ==');
+  if (rec.regs.length) {
+    for (const r of rec.regs) {
+      lines.push(`${hhmm(r.ts)}  ${r.type}: ${r.id}  ${r.name || ''}  ${r.ip} (${locationLabel(r)})`);
     }
   } else {
     lines.push('(none)');
@@ -235,6 +245,167 @@ function loginAlertText(ev) {
   ].join('\n');
 }
 
+/* ─── Auth: registration & login for the Costs section ───
+   Registers visitors by email / mobile / WeChat ID + password.
+   Records live in KV (no TTL) as u:<type>:<id>; every registration
+   triggers an instant email to the owner and is included in the daily
+   digest. Legacy admin accounts (erik.wong / James) stay client-side. */
+
+const AUTH_TYPES = ['email', 'mobile', 'wechat'];
+
+function corsHeaders(req) {
+  const origin = req.headers.get('origin') || '';
+  const allow = /(^|\.)napell\.space$/.test((origin || '').replace(/^https?:\/\//, '').split('/')[0]) ? origin : '*';
+  return {
+    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Max-Age': '86400'
+  };
+}
+
+async function sha256hex(s) {
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join('');
+}
+
+function jsonCORS(obj, req, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders(req) }
+  });
+}
+
+function normId(type, id) {
+  const v = (id || '').trim();
+  if (!v) return '';
+  return type === 'email' ? v.toLowerCase() : v.replace(/\s+/g, '');
+}
+
+function enrich(req) {
+  const cf = req.cf || {};
+  return {
+    ip: req.headers.get('cf-connecting-ip') || 'unknown',
+    ua: clamp(req.headers.get('user-agent'), 180) || '',
+    city: clamp(cf.city, 60) || '',
+    region: clamp(cf.region, 60) || '',
+    country: clamp(cf.country, 8) || '',
+    asn: cf.asn ? String(cf.asn) + (cf.asOrganization ? ' ' + clamp(cf.asOrganization, 60) : '') : ''
+  };
+}
+
+async function handleRegister(req, env, ctx) {
+  let body;
+  try { body = await req.json(); } catch (e) { return jsonCORS({ ok: false, error: 'bad json' }, req, 400); }
+  const type = AUTH_TYPES.includes(body.type) ? body.type : '';
+  const id = normId(type, body.id);
+  const name = clamp(body.name, 60) || '';
+  const pass = typeof body.pass === 'string' ? body.pass : '';
+  if (!type || !id || !pass) return jsonCORS({ ok: false, error: 'missing fields' }, req, 400);
+  if (pass.length < 6 || pass.length > 72) return jsonCORS({ ok: false, error: 'bad password length' }, req, 400);
+
+  // Rough per-IP daily rate limit: max 20 registrations / logins per day per IP
+  const now = Date.now();
+  const date = hktDate(now);
+  const rlKey = `rl:${date}:${req.headers.get('cf-connecting-ip') || 'unknown'}`;
+  const count = parseInt((await env.TRACK.get(rlKey)) || '0', 10);
+  if (count >= 20) return jsonCORS({ ok: false, error: 'rate limited' }, req, 429);
+  ctx.waitUntil(env.TRACK.put(rlKey, String(count + 1), { expirationTtl: 2 * 86400 }));
+
+  const key = `u:${type}:${id}`;
+  const existing = await env.TRACK.get(key);
+  if (existing) return jsonCORS({ ok: false, error: 'exists' }, req, 200);
+
+  const salt = rand() + rand();
+  const rec = {
+    type, id, name,
+    salt,
+    hash: await sha256hex(salt + ':' + pass),
+    created: now,
+    lastLogin: null,
+    ips: [],
+    ...enrich(req)
+  };
+  await env.TRACK.put(key, JSON.stringify(rec));
+  // Registration event for the daily digest (30-day TTL)
+  const regEv = { ts: now, t: 'reg', type, id, name, ...enrich(req) };
+  await env.TRACK.put(`r:${date}:${now}-${rand()}`, JSON.stringify(regEv), { expirationTtl: 30 * 86400 });
+
+  // Instant email to the owner
+  ctx.waitUntil(sendMail(env,
+    `[napell.space] New registration — ${type}: ${id}`,
+    [
+      `New Costs registration`,
+      ``,
+      `method   : ${type}`,
+      `account  : ${id}`,
+      `name     : ${name || '(not given)'}`,
+      `time     : ${new Date(now + HKT).toISOString().replace('T', ' ').slice(0, 19)} HKT`,
+      `ip       : ${regEv.ip}`,
+      `location : ${locationLabel(regEv)}`,
+      `network  : ${regEv.asn || 'n/a'}`,
+      `agent    : ${regEv.ua || 'n/a'}`,
+      ``
+    ].join('\n')));
+
+  return jsonCORS({ ok: true, type, name }, req);
+}
+
+async function handleLogin(req, env, ctx) {
+  let body;
+  try { body = await req.json(); } catch (e) { return jsonCORS({ ok: false, error: 'bad json' }, req, 400); }
+  const pass = typeof body.pass === 'string' ? body.pass : '';
+  const id = (body.id || '').trim().toLowerCase();
+  if (!id || !pass) return jsonCORS({ ok: false }, req);
+
+  const now = Date.now();
+  const date = hktDate(now);
+  const rlKey = `rl:${date}:${req.headers.get('cf-connecting-ip') || 'unknown'}`;
+  const count = parseInt((await env.TRACK.get(rlKey)) || '0', 10);
+  if (count >= 20) return jsonCORS({ ok: false, error: 'rate limited' }, req, 429);
+  ctx.waitUntil(env.TRACK.put(rlKey, String(count + 1), { expirationTtl: 2 * 86400 }));
+
+  let hit = null, hitType = '';
+  for (const t of AUTH_TYPES) {
+    const raw = await env.TRACK.get(`u:${t}:${id}`);
+    if (raw) { hit = JSON.parse(raw); hitType = t; break; }
+  }
+  if (!hit) return jsonCORS({ ok: false }, req);
+  const ok = (await sha256hex(hit.salt + ':' + pass)) === hit.hash;
+  if (ok) {
+    hit.lastLogin = now;
+    const e = enrich(req);
+    hit.ips = [...new Set([...(hit.ips || []), e.ip])].slice(-10);
+    hit.lastCity = e.city; hit.lastCountry = e.country;
+    await env.TRACK.put(`u:${hitType}:${id}`, JSON.stringify(hit));
+    // Login event — joins the daily report and the instant TRACK alert
+    await env.TRACK.put(`l:${date}:${now}-${rand()}`,
+      JSON.stringify({ ts: now, t: 'login', user: id, ok: true, ...e }), { expirationTtl: 8 * 86400 });
+  }
+  return jsonCORS({ ok, name: ok ? hit.name || '' : '' }, req);
+}
+
+async function handleUsers(env, url) {
+  const users = [];
+  let cursor;
+  do {
+    const page = await env.TRACK.list({ prefix: 'u:', cursor });
+    cursor = page.list_complete ? undefined : page.cursor;
+    for (const k of page.keys) {
+      try {
+        const rec = JSON.parse(await env.TRACK.get(k.name));
+        users.push({ type: rec.type, id: rec.id, name: rec.name, created: rec.created, lastLogin: rec.lastLogin, ips: rec.ips, lastCity: rec.lastCity, lastCountry: rec.lastCountry });
+      } catch (e) { /* skip */ }
+    }
+  } while (cursor);
+  if (url.searchParams.get('format') === 'text') {
+    const lines = users.map((u) =>
+      `${u.type.padEnd(7)} ${u.id}  ${u.name || ''}  created ${new Date(u.created + HKT).toISOString().slice(0, 10)}  lastLogin ${u.lastLogin ? new Date(u.lastLogin + HKT).toISOString().replace('T', ' ').slice(0, 16) : 'never'}  ${[u.lastCity, u.lastCountry].filter(Boolean).join(', ')}`);
+    return new Response(lines.join('\n') || '(no users yet)', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+  }
+  return json(users);
+}
+
 /* ─── Router ─── */
 
 async function aggregateAndMail(env, date) {
@@ -251,14 +422,29 @@ export default {
     const url = new URL(req.url);
     const path = url.pathname;
 
+    // CORS preflight for the auth endpoints
+    if (req.method === 'OPTIONS' && (path === '/api/auth/register' || path === '/api/auth/login')) {
+      return new Response(null, { status: 204, headers: corsHeaders(req) });
+    }
+
+    if (path === '/api/auth/register' && req.method === 'POST') {
+      return handleRegister(req, env, ctx);
+    }
+    if (path === '/api/auth/login' && req.method === 'POST') {
+      return handleLogin(req, env, ctx);
+    }
+
     if (path === '/api/track' && req.method === 'POST') {
       return handleTrack(req, env, ctx);
     }
 
-    if ((path === '/api/stats' || path === '/api/test') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
+    if ((path === '/api/stats' || path === '/api/test' || path === '/api/users') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
       if (path === '/api/test') {
         const ok = await sendMail(env, '[napell.space] telemetry test', 'Telemetry worker is live. If you can read this, the mail channel works — the daily report will arrive at 08:00 HKT.');
         return json({ sent: ok, status: sendMail.lastStatus, body: (sendMail.lastBody || '').slice(0, 300) });
+      }
+      if (path === '/api/users') {
+        return handleUsers(env, url);
       }
       const day = url.searchParams.get('day') || hktDate(Date.now());
       const rec = await loadDay(env, day);
