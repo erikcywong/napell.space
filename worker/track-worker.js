@@ -385,6 +385,46 @@ async function handleLogin(req, env, ctx) {
   return jsonCORS({ ok, name: ok ? hit.name || '' : '' }, req);
 }
 
+/* Member door — registered Costs users (u:<type>:<id> in TRACK) get site
+   access with their existing ID + password. Success mints the same signed
+   session cookie as a QR scan, so no token is consumed. */
+async function handleDoorLogin(req, env, ctx) {
+  let body;
+  try { body = await req.json(); } catch (e) { return json({ ok: false }, 400); }
+  const pass = typeof body.pass === 'string' ? body.pass : '';
+  const id = (body.id || '').trim().toLowerCase();
+  if (!id || !pass) return json({ ok: false }, 400);
+
+  const now = Date.now();
+  const date = hktDate(now);
+  const rlKey = `rl:${date}:${req.headers.get('cf-connecting-ip') || 'unknown'}`;
+  const count = parseInt((await env.TRACK.get(rlKey)) || '0', 10);
+  if (count >= 20) return json({ ok: false, error: 'rate limited' }, 429);
+  ctx.waitUntil(env.TRACK.put(rlKey, String(count + 1), { expirationTtl: 2 * 86400 }));
+
+  let hit = null, hitType = '';
+  for (const t of AUTH_TYPES) {
+    const raw = await env.TRACK.get(`u:${t}:${id}`);
+    if (raw) { hit = JSON.parse(raw); hitType = t; break; }
+  }
+  if (!hit) return json({ ok: false });
+  const ok = (await sha256hex(hit.salt + ':' + pass)) === hit.hash;
+  if (!ok) return json({ ok: false });
+
+  hit.lastLogin = now;
+  const e = enrich(req);
+  hit.ips = [...new Set([...(hit.ips || []), e.ip])].slice(-10);
+  hit.lastCity = e.city; hit.lastCountry = e.country;
+  ctx.waitUntil(env.TRACK.put(`u:${hitType}:${id}`, JSON.stringify(hit)));
+  ctx.waitUntil(env.TRACK.put(`l:${date}:${now}-${rand()}`,
+    JSON.stringify({ ts: now, t: 'login', user: id, ok: true, door: true, ...e }), { expirationTtl: 8 * 86400 }));
+
+  const sid = (await sha256hex(String(Date.now()) + id + rand() + rand())).slice(0, 32);
+  return new Response(JSON.stringify({ ok: true, name: hit.name || '' }), {
+    headers: { 'Content-Type': 'application/json', 'Set-Cookie': await sessionCookie(env, sid, Date.now() + SITE_TTL) }
+  });
+}
+
 async function handleUsers(env, url) {
   const users = [];
   let cursor;
@@ -455,6 +495,18 @@ function gatePage(kind) {
   .ch .t span { display:block; font-size:11.5px; color:#71767b; margin-top:1px; direction:ltr; }
   .foot { margin-top:24px; font-size:10.5px; letter-spacing:.28em; color:#1d9bf0; text-transform:uppercase; }
   .copied { color:#00ba7c !important; }
+  .mem { margin-top:14px; }
+  .mem > button { background:none; border:none; color:#71767b; font-size:12px; font-family:inherit;
+                  cursor:pointer; text-decoration:underline; text-underline-offset:3px; padding:2px; }
+  .mem > button:hover { color:#1d9bf0; }
+  .mem form { margin-top:10px; display:flex; flex-direction:column; gap:7px; }
+  .mem input { background:#0a0d10; border:1px solid #2f3336; border-radius:8px; color:#e7e9ea;
+               padding:9px 12px; font-size:13.5px; font-family:inherit; width:100%; }
+  .mem input:focus { outline:none; border-color:#1d9bf0; }
+  .mem form button { background:#1d9bf0; color:#fff; border:none; border-radius:8px; padding:9px;
+                     font-size:13.5px; font-weight:600; font-family:inherit; cursor:pointer; }
+  .mem form button:hover { background:#1a8cd8; }
+  #m-err { font-size:12px; color:#f4212e; min-height:15px; }
   html[dir="rtl"] .langs { right:auto; left:14px; }
   html[dir="rtl"] .ch a, html[dir="rtl"] .ch button { text-align:end; }
 </style></head><body>
@@ -483,6 +535,15 @@ function gatePage(kind) {
         <span class="t"><b>Email</b><span id="c-em-n">erik.wong@napell.bio</span></span>
       </a>
     </div>
+    <div class="mem">
+      <button id="mem-t" type="button"></button>
+      <form id="mem-f" hidden autocomplete="off" onsubmit="return false;">
+        <input id="m-id" type="text" spellcheck="false" autocapitalize="none">
+        <input id="m-p" type="password" autocomplete="current-password">
+        <button type="submit" id="m-go"></button>
+        <div id="m-err"></div>
+      </form>
+    </div>
   </div>
   <div class="foot">napell.space · the space</div>
 </div>
@@ -498,6 +559,7 @@ function gatePage(kind) {
            ended:"Your access window has closed. Scan a new code to re-enter.",
            invalid:"This link is not a valid one-time access code." },
       rhd:"Request an access code", rsub:"Reach me directly — codes are issued personally.",
+      memOpen:"Registered under Costs? Sign in instead", memId:"Email, mobile or WeChat ID", memPass:"Password", memGo:"Enter", memErr:"Invalid ID or password.",
       wx:"WeChat", wxcp:"Tap to copy WeChat ID", copied:"Copied ✓",
       waTxt:"Hello Erik, I would like to request a one-time access code for the proposal at napell.space.",
       emSub:"Request: access code for napell.space",
@@ -511,6 +573,7 @@ function gatePage(kind) {
            ended:"你的访问时限已结束。请扫描新的二维码再次进入。",
            invalid:"此链接不是有效的一次性访问码。" },
       rhd:"申请访问码", rsub:"直接联系我——访问码由本人亲自发放。",
+      memOpen:"已在 Costs 注册？直接登录进入", memId:"邮箱 / 手机号 / 微信号", memPass:"密码", memGo:"进入", memErr:"账号或密码不正确。",
       wx:"微信", wxcp:"点击复制微信号", copied:"已复制 ✓",
       waTxt:"Erik 你好，我想申请 napell.space 提案的一次性访问码。",
       emSub:"申请：napell.space 访问码",
@@ -524,6 +587,7 @@ function gatePage(kind) {
            ended:"انتهت فترة دخولك. امسح رمزاً جديداً للدخول مرة أخرى.",
            invalid:"هذا الرابط ليس رمز دخول صالحاً." },
       rhd:"اطلب رمز دخول", rsub:"تواصل معي مباشرة — تُسلَّم الرموز شخصياً.",
+      memOpen:"مسجَّل في Costs؟ سجِّل دخولك", memId:"البريد / الجوال / معرف وي تشات", memPass:"كلمة المرور", memGo:"دخول", memErr:"المعرف أو كلمة المرور غير صحيحة.",
       wx:"وي تشات", wxcp:"انقر لنسخ معرف وي تشات", copied:"تم النسخ ✓",
       waTxt:"مرحباً إريك، أود طلب رمز دخول لعرض napell.space.",
       emSub:"طلب: رمز دخول لـ napell.space",
@@ -549,10 +613,35 @@ function gatePage(kind) {
     document.getElementById("g-rhd").textContent = t.rhd;
     document.getElementById("g-rsub").textContent = t.rsub;
     document.getElementById("c-wx-l").textContent = t.wx;
+    document.getElementById("mem-t").textContent = t.memOpen;
+    document.getElementById("m-id").placeholder = t.memId;
+    document.getElementById("m-p").placeholder = t.memPass;
+    document.getElementById("m-go").textContent = t.memGo;
+    document.getElementById("m-err").textContent = "";
     document.querySelectorAll(".langs button").forEach(function (b) { b.classList.toggle("on", b.dataset.l === lang); });
   }
   document.querySelectorAll(".langs button").forEach(function (b) {
     b.addEventListener("click", function () { setL(b.dataset.l); });
+  });
+  document.getElementById("mem-t").addEventListener("click", function () {
+    var f = document.getElementById("mem-f");
+    f.hidden = !f.hidden;
+    if (!f.hidden) document.getElementById("m-id").focus();
+  });
+  document.getElementById("mem-f").addEventListener("submit", function () {
+    var id = document.getElementById("m-id").value.trim();
+    var p = document.getElementById("m-p").value;
+    var err = document.getElementById("m-err");
+    if (!id || !p) return;
+    fetch("/api/door", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: id, pass: p }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.ok) { location.href = "/"; }
+        else { err.textContent = (document.documentElement.lang === "zh") ? "账号或密码不正确。" :
+                (document.documentElement.lang === "ar") ? "المعرف أو كلمة المرور غير صحيحة." : "Invalid ID or password."; }
+      })
+      .catch(function () { err.textContent = "Network error — try again."; });
   });
   var nav = (navigator.language || "en").toLowerCase();
   setL(nav.indexOf("zh") === 0 ? "zh" : nav.indexOf("ar") === 0 ? "ar" : "en");
@@ -702,6 +791,9 @@ export default {
       }
       if (path === '/api/auth/login' && req.method === 'POST') {
         return handleLogin(req, env, ctx);
+      }
+      if (path === '/api/door' && req.method === 'POST') {
+        return handleDoorLogin(req, env, ctx);
       }
       if (path === '/api/track' && req.method === 'POST') {
         return handleTrack(req, env, ctx);
