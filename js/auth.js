@@ -270,7 +270,9 @@ const AUTH = {
         this._renderCosts();
         return;
       }
-      return fail(j && j.error === 'exists' ? 'auth_reg_dup' : 'auth_reg_error');
+      const errKey = j && j.error === 'exists' ? 'auth_reg_dup'
+        : j && j.error === 'name_taken' ? 'auth_reg_name_taken' : 'auth_reg_error';
+      return fail(errKey);
     } catch (e) {
       return fail('auth_reg_error');
     }

@@ -772,7 +772,7 @@ const I18N = {
       // ─── Auth / Login ───
       auth_login_title: 'Administrator Access',
       auth_login_desc: 'This section contains confidential business data. Administrator authentication required.',
-      auth_username: 'Username',
+      auth_username: 'Name / Email / Mobile / WeChat ID',
       auth_password: 'Password',
       auth_login_btn: 'Login',
       auth_login_error: 'Invalid credentials. Access denied.',
@@ -785,7 +785,7 @@ const I18N = {
       auth_type_email: 'Email',
       auth_type_mobile: 'Mobile',
       auth_type_wechat: 'WeChat ID',
-      auth_reg_name: 'Name / Company (optional)',
+      auth_reg_name: 'Name / Company (optional — also works as your login name)',
       auth_id_email: 'Email address',
       auth_id_mobile: 'Mobile number (with country code)',
       auth_id_wechat: 'WeChat ID',
@@ -794,6 +794,7 @@ const I18N = {
       auth_reg_btn: 'Create account',
       auth_reg_fill: 'Please complete all fields.',
       auth_reg_dup: 'This account is already registered — please sign in.',
+      auth_reg_name_taken: 'This name is already taken — please use another name, or sign in.',
       auth_reg_error: 'Registration failed. Please try again later.',
 
       // ─── Units ───
@@ -1779,7 +1780,7 @@ const I18N = {
       // ─── Auth / Login ───
       auth_login_title: '管理员登录',
       auth_login_desc: '此部分包含机密商业数据，需要管理员身份验证。',
-      auth_username: '用户名',
+      auth_username: '姓名 / 邮箱 / 手机 / 微信号',
       auth_password: '密码',
       auth_login_btn: '登录',
       auth_login_error: '凭据无效，拒绝访问。',
@@ -1792,7 +1793,7 @@ const I18N = {
       auth_type_email: '邮箱',
       auth_type_mobile: '手机号',
       auth_type_wechat: '微信号',
-      auth_reg_name: '姓名 / 机构（选填）',
+      auth_reg_name: '姓名 / 机构（选填，填写后可用姓名登录）',
       auth_id_email: '邮箱地址',
       auth_id_mobile: '手机号（含国家区号）',
       auth_id_wechat: '微信号',
@@ -1801,6 +1802,7 @@ const I18N = {
       auth_reg_btn: '创建账号',
       auth_reg_fill: '请填写所有必填字段。',
       auth_reg_dup: '该账号已注册，请直接登录。',
+      auth_reg_name_taken: '该姓名已被占用——请换一个姓名，或直接登录。',
       auth_reg_error: '注册失败，请稍后重试。',
 
       // ─── Units ───
@@ -2559,7 +2561,7 @@ const I18N = {
       // ─── Auth / Login ───
       auth_login_title: 'وصول المسؤول',
       auth_login_desc: 'يحتوي هذا القسم على بيانات أعمال سرية. مطلوب مصادقة المسؤول.',
-      auth_username: 'اسم المستخدم',
+      auth_username: 'الاسم / البريد / الجوال / ويتشات',
       auth_password: 'كلمة المرور',
       auth_login_btn: 'تسجيل الدخول',
       auth_login_error: 'بيانات اعتماد غير صالحة. تم رفض الوصول.',

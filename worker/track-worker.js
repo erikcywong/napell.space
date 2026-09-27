@@ -282,6 +282,33 @@ function normId(type, id) {
   return type === 'email' ? v.toLowerCase() : v.replace(/\s+/g, '');
 }
 
+/* Username (login-name) support: the optional name given at registration
+   doubles as a login handle. Pointers live as n:<lowercased name> → {t,id}.
+   Collisions are rejected at registration; legacy users are backfilled
+   lazily on their next successful id-login. */
+function unameKey(name) {
+  return 'n:' + (name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+async function resolveUser(env, id) {
+  for (const t of AUTH_TYPES) {
+    const raw = await env.TRACK.get(`u:${t}:${id}`);
+    if (raw) return { hit: JSON.parse(raw), hitType: t, hitId: id };
+  }
+  // Not a registered ID — try it as a login name
+  const ptr = await env.TRACK.get(unameKey(id));
+  if (ptr) {
+    try {
+      const p = JSON.parse(ptr);
+      if (p && p.t && p.id) {
+        const raw = await env.TRACK.get(`u:${p.t}:${p.id}`);
+        if (raw) return { hit: JSON.parse(raw), hitType: p.t, hitId: p.id };
+      }
+    } catch (e) { /* stale pointer — ignore */ }
+  }
+  return { hit: null, hitType: '', hitId: '' };
+}
+
 function enrich(req) {
   const cf = req.cf || {};
   return {
@@ -316,6 +343,14 @@ async function handleRegister(req, env, ctx) {
   const existing = await env.TRACK.get(key);
   if (existing) return jsonCORS({ ok: false, error: 'exists' }, req, 200);
 
+  // Reserve the login name (if given) and refuse duplicates
+  let nkey = '';
+  if (name) {
+    nkey = unameKey(name);
+    const taken = await env.TRACK.get(nkey);
+    if (taken) return jsonCORS({ ok: false, error: 'name_taken' }, req, 200);
+  }
+
   const salt = rand() + rand();
   const rec = {
     type, id, name,
@@ -327,6 +362,7 @@ async function handleRegister(req, env, ctx) {
     ...enrich(req)
   };
   await env.TRACK.put(key, JSON.stringify(rec));
+  if (nkey) await env.TRACK.put(nkey, JSON.stringify({ t: type, id }));
   // Registration event for the daily digest (30-day TTL)
   const regEv = { ts: now, t: 'reg', type, id, name, ...enrich(req) };
   await env.TRACK.put(`r:${date}:${now}-${rand()}`, JSON.stringify(regEv), { expirationTtl: 30 * 86400 });
@@ -365,11 +401,7 @@ async function handleLogin(req, env, ctx) {
   if (count >= 20) return jsonCORS({ ok: false, error: 'rate limited' }, req, 429);
   ctx.waitUntil(env.TRACK.put(rlKey, String(count + 1), { expirationTtl: 2 * 86400 }));
 
-  let hit = null, hitType = '';
-  for (const t of AUTH_TYPES) {
-    const raw = await env.TRACK.get(`u:${t}:${id}`);
-    if (raw) { hit = JSON.parse(raw); hitType = t; break; }
-  }
+  const { hit, hitType, hitId } = await resolveUser(env, id);
   if (!hit) return jsonCORS({ ok: false }, req);
   const ok = (await sha256hex(hit.salt + ':' + pass)) === hit.hash;
   if (ok) {
@@ -377,10 +409,14 @@ async function handleLogin(req, env, ctx) {
     const e = enrich(req);
     hit.ips = [...new Set([...(hit.ips || []), e.ip])].slice(-10);
     hit.lastCity = e.city; hit.lastCountry = e.country;
-    await env.TRACK.put(`u:${hitType}:${id}`, JSON.stringify(hit));
+    await env.TRACK.put(`u:${hitType}:${hitId}`, JSON.stringify(hit));
+    // Backfill the login-name pointer for users registered before usernames existed
+    if (hit.name && !(await env.TRACK.get(unameKey(hit.name)))) {
+      await env.TRACK.put(unameKey(hit.name), JSON.stringify({ t: hitType, id: hitId }));
+    }
     // Login event — joins the daily report and the instant TRACK alert
     await env.TRACK.put(`l:${date}:${now}-${rand()}`,
-      JSON.stringify({ ts: now, t: 'login', user: id, ok: true, ...e }), { expirationTtl: 8 * 86400 });
+      JSON.stringify({ ts: now, t: 'login', user: hitId, ok: true, ...e }), { expirationTtl: 8 * 86400 });
   }
   return jsonCORS({ ok, name: ok ? hit.name || '' : '' }, req);
 }
@@ -402,11 +438,7 @@ async function handleDoorLogin(req, env, ctx) {
   if (count >= 20) return json({ ok: false, error: 'rate limited' }, 429);
   ctx.waitUntil(env.TRACK.put(rlKey, String(count + 1), { expirationTtl: 2 * 86400 }));
 
-  let hit = null, hitType = '';
-  for (const t of AUTH_TYPES) {
-    const raw = await env.TRACK.get(`u:${t}:${id}`);
-    if (raw) { hit = JSON.parse(raw); hitType = t; break; }
-  }
+  const { hit, hitType, hitId } = await resolveUser(env, id);
   if (!hit) return json({ ok: false });
   const ok = (await sha256hex(hit.salt + ':' + pass)) === hit.hash;
   if (!ok) return json({ ok: false });
@@ -415,11 +447,16 @@ async function handleDoorLogin(req, env, ctx) {
   const e = enrich(req);
   hit.ips = [...new Set([...(hit.ips || []), e.ip])].slice(-10);
   hit.lastCity = e.city; hit.lastCountry = e.country;
-  ctx.waitUntil(env.TRACK.put(`u:${hitType}:${id}`, JSON.stringify(hit)));
+  ctx.waitUntil(env.TRACK.put(`u:${hitType}:${hitId}`, JSON.stringify(hit)));
+  if (hit.name) {
+    ctx.waitUntil(env.TRACK.get(unameKey(hit.name)).then((v) => {
+      if (!v) return env.TRACK.put(unameKey(hit.name), JSON.stringify({ t: hitType, id: hitId }));
+    }));
+  }
   ctx.waitUntil(env.TRACK.put(`l:${date}:${now}-${rand()}`,
-    JSON.stringify({ ts: now, t: 'login', user: id, ok: true, door: true, ...e }), { expirationTtl: 8 * 86400 }));
+    JSON.stringify({ ts: now, t: 'login', user: hitId, ok: true, door: true, ...e }), { expirationTtl: 8 * 86400 }));
 
-  const sid = (await sha256hex(String(Date.now()) + id + rand() + rand())).slice(0, 32);
+  const sid = (await sha256hex(String(Date.now()) + hitId + rand() + rand())).slice(0, 32);
   return new Response(JSON.stringify({ ok: true, name: hit.name || '' }), {
     headers: { 'Content-Type': 'application/json', 'Set-Cookie': await sessionCookie(env, sid, Date.now() + SITE_TTL) }
   });
