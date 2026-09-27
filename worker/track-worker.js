@@ -416,27 +416,148 @@ async function handleUsers(env, url) {
 const SITE_TTL = 60 * 60 * 1000;   // sliding idle window
 const SITE_GRACE = 45 * 1000;      // grace before a "leave" becomes final
 
-function gatePage(title, msg) {
+/* Gate page — branded, tri-lingual (EN / 中文 / العربية, RTL aware).
+   Layout: language pills → brand → confidential status → request channels.
+   kind: 'private' | 'used' | 'ended' | 'invalid' */
+function gatePage(kind) {
   return new Response(`<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Private access — napell.space</title>
 <style>
+  * { box-sizing:border-box; }
   body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-         background:#000; color:#e7e9ea; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; text-align:center; }
-  .g { max-width:420px; padding:40px 28px; }
-  .g .lock { width:52px; height:52px; margin:0 auto 22px; border:1px solid #2f3336; border-radius:14px;
-             display:flex; align-items:center; justify-content:center; color:#1d9bf0; }
-  .g h1 { font-size:20px; margin:0 0 10px; letter-spacing:.02em; }
-  .g p { font-size:14px; color:#71767b; line-height:1.6; margin:0 0 6px; }
-  .g .brand { margin-top:30px; font-size:12px; letter-spacing:.28em; color:#1d9bf0; text-transform:uppercase; }
+         background:#000; color:#e7e9ea; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Arabic",sans-serif; }
+  .frame { position:relative; max-width:440px; width:calc(100% - 48px); margin:32px 0; padding:38px 30px 30px;
+           border:1px solid #282c30; outline:1px solid #1a1d20; outline-offset:5px; text-align:center; }
+  .langs { position:absolute; top:12px; right:14px; display:flex; gap:6px; }
+  .langs button { background:none; border:1px solid #2f3336; color:#71767b; font-size:11px; padding:3px 9px;
+                  border-radius:999px; cursor:pointer; font-family:inherit; }
+  .langs button.on { border-color:#1d9bf0; color:#1d9bf0; }
+  .lock { width:50px; height:50px; margin:6px auto 18px; border:1px solid #2f3336; border-radius:14px;
+          display:flex; align-items:center; justify-content:center; color:#1d9bf0; }
+  .brand h1 { font-size:26px; letter-spacing:.14em; margin:0; font-weight:700; }
+  .brand .sub { font-size:11px; letter-spacing:.26em; color:#71767b; margin-top:5px; }
+  .rule { width:64px; height:2px; background:#1d9bf0; margin:22px auto; }
+  .status .tag { font-size:13px; letter-spacing:.24em; color:#1d9bf0; font-weight:700; }
+  .status h2 { font-size:19px; margin:8px 0 8px; font-weight:600; }
+  .status p { font-size:13.5px; color:#71767b; line-height:1.65; margin:0 auto; max-width:330px; }
+  .req { margin-top:26px; padding-top:22px; border-top:1px solid #282c30; }
+  .req .hd { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .req .sub { font-size:12px; color:#71767b; margin-bottom:14px; }
+  .ch { display:flex; flex-direction:column; gap:8px; }
+  .ch a, .ch button { display:flex; align-items:center; gap:11px; padding:10px 14px; text-decoration:none;
+        border:1px solid #2f3336; border-radius:10px; color:#e7e9ea; font-size:13.5px; font-family:inherit;
+        background:none; cursor:pointer; text-align:start; }
+  .ch a:hover, .ch button:hover { border-color:#1d9bf0; }
+  .ch .ic { width:20px; height:20px; flex:0 0 20px; color:#1d9bf0; }
+  .ch .t { flex:1; }
+  .ch .t b { display:block; font-size:13.5px; font-weight:600; }
+  .ch .t span { display:block; font-size:11.5px; color:#71767b; margin-top:1px; direction:ltr; }
+  .foot { margin-top:24px; font-size:10.5px; letter-spacing:.28em; color:#1d9bf0; text-transform:uppercase; }
+  .copied { color:#00ba7c !important; }
+  html[dir="rtl"] .langs { right:auto; left:14px; }
+  html[dir="rtl"] .ch a, html[dir="rtl"] .ch button { text-align:end; }
 </style></head><body>
-<div class="g">
-  <div class="lock"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-  <h1>${title}</h1>
-  <p>${msg}</p>
-  <p style="margin-top:14px">请扫描您收到的二维码进入 / Scan the QR code you were given to enter.</p>
-  <div class="brand">Napell &middot; The Space</div>
+<div class="frame">
+  <div class="langs">
+    <button data-l="en" class="on">EN</button><button data-l="zh">中文</button><button data-l="ar">ع</button>
+  </div>
+  <div class="lock"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+  <div class="brand"><h1>NAPELL</h1><div class="sub">SEEDLINGS · AEROPONIC COFFEE</div></div>
+  <div class="rule"></div>
+  <div class="status"><div class="tag" id="g-tag"></div><h2 id="g-title"></h2><p id="g-msg"></p></div>
+  <div class="req">
+    <div class="hd" id="g-rhd"></div>
+    <div class="sub" id="g-rsub"></div>
+    <div class="ch">
+      <a id="c-wa" target="_blank" rel="noopener">
+        <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.5-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.8 1.4 1.8 2.2 1.2 1.1 2.3 1.4 2.6 1.6.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.2 1.3z"/></svg>
+        <span class="t"><b>WhatsApp</b><span id="c-wa-n">+852 9318 8252</span></span>
+      </a>
+      <button id="c-wx" type="button">
+        <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M8.7 4C4.9 4 1.8 6.6 1.8 9.9c0 1.8 1 3.4 2.5 4.5l-.6 2 2.2-1.1c.6.2 1.3.3 2 .3h.4a5.5 5.5 0 0 1-.2-1.5c0-3.1 3-5.6 6.6-5.6h.4C14.5 6 11.9 4 8.7 4zM6.4 7.3c.5 0 .8.3.8.8s-.4.8-.8.8-.9-.4-.9-.8.4-.8.9-.8zm4.6 0c.5 0 .8.3.8.8s-.3.8-.8.8-.9-.4-.9-.8.4-.8.9-.8zM15.4 9.7c-3.2 0-5.8 2.2-5.8 4.9 0 2.7 2.6 4.9 5.8 4.9.6 0 1.2-.1 1.8-.3l1.9.9-.5-1.7c1.3-.9 2.1-2.3 2.1-3.8 0-2.7-2.6-4.9-5.8-4.9zm-2 2.5c.4 0 .7.3.7.7s-.3.7-.7.7-.7-.3-.7-.7.3-.7.7-.7zm4 0c.4 0 .7.3.7.7s-.3.7-.7.7-.7-.3-.7-.7.3-.7.7-.7z"/></svg>
+        <span class="t"><b id="c-wx-l">WeChat</b><span id="c-wx-n">+86 158 0022 2338</span></span>
+      </button>
+      <a id="c-em">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        <span class="t"><b>Email</b><span id="c-em-n">erik.wong@napell.bio</span></span>
+      </a>
+    </div>
+  </div>
+  <div class="foot">napell.space · the space</div>
 </div>
+<script>
+(function () {
+  var K = ${JSON.stringify(kind)};
+  var T = {
+    en: {
+      tag: "CONFIDENTIAL",
+      t: { private:"A private presentation", used:"Access code already used", ended:"Session ended", invalid:"Invalid access code" },
+      m: { private:"Entry is by invitation only. Each invitation opens the proposal once — access stays live for 60 minutes after entry, and closes for good after you leave.",
+           used:"Each code opens the door exactly once. Please request a new one below.",
+           ended:"Your access window has closed. Scan a new code to re-enter.",
+           invalid:"This link is not a valid one-time access code." },
+      rhd:"Request an access code", rsub:"Reach me directly — codes are issued personally.",
+      wx:"WeChat", wxcp:"Tap to copy WeChat ID", copied:"Copied ✓",
+      waTxt:"Hello Erik, I would like to request a one-time access code for the proposal at napell.space.",
+      emSub:"Request: access code for napell.space",
+      emBody:"Hello Erik,%0D%0A%0D%0AI would like to request a one-time access code for the proposal at napell.space.%0D%0A%0D%0AName: %0D%0AOrganisation: "
+    },
+    zh: {
+      tag: "机密文件",
+      t: { private:"仅限受邀者的私密提案", used:"访问码已被使用", ended:"访问会话已结束", invalid:"访问码无效" },
+      m: { private:"本提案凭邀请进入。每份邀请仅可打开一次，进入后可浏览 60 分钟，离开后即刻失效。",
+           used:"每个访问码只能开启一次。请在下方重新申请。",
+           ended:"你的访问时限已结束。请扫描新的二维码再次进入。",
+           invalid:"此链接不是有效的一次性访问码。" },
+      rhd:"申请访问码", rsub:"直接联系我——访问码由本人亲自发放。",
+      wx:"微信", wxcp:"点击复制微信号", copied:"已复制 ✓",
+      waTxt:"Erik 你好，我想申请 napell.space 提案的一次性访问码。",
+      emSub:"申请：napell.space 访问码",
+      emBody:"Erik 你好：%0D%0A%0D%0A我想申请 napell.space 提案的一次性访问码。%0D%0A%0D%0A姓名： %0D%0A机构： "
+    },
+    ar: {
+      tag: "سري للغاية",
+      t: { private:"عرض خاص بدعوة فقط", used:"رمز الدخول مستخدم بالفعل", ended:"انتهت جلسة الدخول", invalid:"رمز دخول غير صالح" },
+      m: { private:"الدخول بدعوة فقط. كل دعوة تفتح العرض مرة واحدة — يبقى الدخول متاحاً 60 دقيقة بعد الدخول، وينتهي نهائياً بعد مغادرتك.",
+           used:"كل رمز يفتح الباب مرة واحدة فقط. يرجى طلب رمز جديد أدناه.",
+           ended:"انتهت فترة دخولك. امسح رمزاً جديداً للدخول مرة أخرى.",
+           invalid:"هذا الرابط ليس رمز دخول صالحاً." },
+      rhd:"اطلب رمز دخول", rsub:"تواصل معي مباشرة — تُسلَّم الرموز شخصياً.",
+      wx:"وي تشات", wxcp:"انقر لنسخ معرف وي تشات", copied:"تم النسخ ✓",
+      waTxt:"مرحباً إريك، أود طلب رمز دخول لعرض napell.space.",
+      emSub:"طلب: رمز دخول لـ napell.space",
+      emBody:"مرحباً إريك،%0D%0A%0D%0Aأود طلب رمز دخول لعرض napell.space.%0D%0A%0D%0Aالاسم: %0D%0Aالجهة: "
+    }
+  };
+  var wa = "https://wa.me/85293188252?text=" + encodeURIComponent(T.en.waTxt);
+  var em = "mailto:erik.wong@napell.bio?subject=" + encodeURIComponent(T.en.emSub);
+  document.getElementById("c-wa").href = wa;
+  document.getElementById("c-em").href = em;
+  document.getElementById("c-wx").addEventListener("click", function () {
+    var n = document.getElementById("c-wx-n"), l = document.getElementById("c-wx-l"), lang = document.documentElement.lang || "en";
+    function done() { var o = l.textContent; l.textContent = T[lang] ? T[lang].copied : "Copied ✓"; l.classList.add("copied");
+      setTimeout(function(){ l.textContent = o; l.classList.remove("copied"); }, 1800); }
+    if (navigator.clipboard) navigator.clipboard.writeText(n.textContent).then(done, done); else done();
+  });
+  function setL(lang) {
+    var t = T[lang]; document.documentElement.lang = lang;
+    document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+    document.getElementById("g-tag").textContent = t.tag;
+    document.getElementById("g-title").textContent = t.t[K];
+    document.getElementById("g-msg").textContent = t.m[K];
+    document.getElementById("g-rhd").textContent = t.rhd;
+    document.getElementById("g-rsub").textContent = t.rsub;
+    document.getElementById("c-wx-l").textContent = t.wx;
+    document.querySelectorAll(".langs button").forEach(function (b) { b.classList.toggle("on", b.dataset.l === lang); });
+  }
+  document.querySelectorAll(".langs button").forEach(function (b) {
+    b.addEventListener("click", function () { setL(b.dataset.l); });
+  });
+  var nav = (navigator.language || "en").toLowerCase();
+  setL(nav.indexOf("zh") === 0 ? "zh" : nav.indexOf("ar") === 0 ? "ar" : "en");
+})();
+</script>
 </body></html>`, {
     status: 200,
     headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
@@ -465,11 +586,11 @@ async function handleAccess(req, env, ctx) {
   const url = new URL(req.url);
   const tok = (url.searchParams.get('t') || '').trim().toLowerCase();
   if (!/^[0-9a-f]{16,64}$/.test(tok)) {
-    return gatePage('Invalid access code', 'This link is not a valid one-time access code.');
+    return gatePage('invalid');
   }
   const cur = await env.SITE.get('t:' + tok);
   if (cur !== '1') {
-    return gatePage('Access code already used', 'Each QR code opens the door exactly once. Please request a new one.');
+    return gatePage('used');
   }
   ctx.waitUntil(env.SITE.put('t:' + tok, JSON.stringify({ used: Date.now(), ip: req.headers.get('cf-connecting-ip') || '' })));
   const sid = (await sha256hex(String(Date.now()) + tok + rand() + rand())).slice(0, 32);
@@ -501,10 +622,10 @@ const SITE_MIME = {
 
 async function serveSite(req, env, ctx) {
   const s = await readSession(req, env);
-  if (!s) return gatePage('Private site', 'This is a private presentation. Entry is by invitation only.');
+  if (!s) return gatePage('private');
   const revoked = await env.SITE.get('x:' + s.sid);
   if (revoked && Date.now() >= Number(revoked)) {
-    return gatePage('Session ended', 'Your access window has closed. Please scan a new QR code to re-enter.');
+    return gatePage('ended');
   }
 
   let p;
