@@ -55,7 +55,7 @@ const I18N = {
       gal_cap7: 'The aeroponic advantage — a robust, soil-free white root system held in a raft net pot',
       gal_cap8: 'A coffee plant established in a vertical aeroponic tower planter inside the greenhouse',
 
-      v_title: 'The Full Coffee Chain — Powered by Controlled Cultivation',
+      v_title: 'The Full Coffee Chain — Redefined by Controlled Cultivation',
       v_intro: 'Most global coffee players avoid owning farms: cultivation is high-risk, long-cycle and low-return, clashing with the asset-light, high-turnover logic of downstream brands. Napell inverts this. Aeroponics plus tissue culture dissolves the natural risk of cultivation — turning coffee from a weather-exposed crop into an industrial product with designed parameters. That certainty becomes the value anchor for the entire chain: roasting, curve IP, carbon assets, coffee banking, REITs and chain brands all pay a premium for it.',
 
       d1_title: 'The Inversion: Why the Industry Avoids Cultivation — and How We Fix It',
@@ -1062,7 +1062,7 @@ const I18N = {
       gal_cap7: '雾培优势 —— 漂浮定植篮中无土、健壮的白色根系',
       gal_cap8: '定植于立式雾培种植塔的咖啡植株（温室内）',
 
-      v_title: '全咖啡产业链 — 以可控种植端为价值锚点',
+      v_title: '完整咖啡链 — 由受控种植技术重新定义',
       v_intro: '全球咖啡企业大多回避自建农场：种植端高风险、长周期、低回报，与下游品牌商的轻资产、高周转逻辑根本冲突。纳培选择反其道而行——雾化水培加组培技术消解了种植的自然风险，把咖啡从"靠天吃饭的农产品"重新定义为"参数可设计的工业品"。这份确定性随即成为全链条的价值锚点：烘焙、曲线IP、碳资产、豆银行、REITs、连锁品牌，都在为确定性支付溢价。',
 
       d1_title: '逆转逻辑：行业为何不碰种植端 — 而我们如何破解',
@@ -2069,7 +2069,7 @@ const I18N = {
       gal_cap7: 'ميزة الزراعة الهوائية — نظام جذور أبيض قوي بلا تربة في وعاء شبكي عائم',
       gal_cap8: 'نبات قهوة مستقر في برج زراعة هوائي رأسي داخل البيت المحمي',
 
-      v_title: 'سلسلة القهوة الكاملة — بقوة زراعة مُتحكَّم بها',
+      v_title: 'سلسلة القهوة الكاملة — يُعاد تعريفها بفضل الزراعة المُتحكَّم بها',
       v_intro: 'معظم شركات القهوة العالمية تتجنب امتلاك المزارع: الزراعة عالية المخاطر وطويلة الدورة ومنخفضة العائد، مما يتعارض مع منطق العلامات التجارية النهائية القائم على الأصول الخفيفة والدورة السريعة. تختار نابيل العكس — الإيكاروبونكس مع زراعة الأنسجة يزيلان المخاطر الطبيعية للزراعة، فيتحول البن من "محصول زراعي يعتمد على الطقس" إلى "منتج صناعي بمعايير قابلة للتصميم". وتصبح هذه اليقينية مرساة القيمة لسلسلة بأكملها: التحميص، وملكية منحنيات التحميص، وأصول الكربون، وبنك البن، و صناديق REITs، والعلامة التجارية للسلاسل — الجميع يدفع علاوة مقابل اليقين.',
 
       d1_title: 'المنطق المعاكس: لماذا تتجنب الصناعة الزراعة — وكيف نحل المشكلة',
