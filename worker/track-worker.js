@@ -406,6 +406,153 @@ async function handleUsers(env, url) {
   return json(users);
 }
 
+/* ─── QR-gated site access (Option C: sliding TTL + leave-kill with grace) ───
+   www.napell.space/* is served by this worker from the SITE KV mirror.
+   Entry only via one-time QR tokens: /access?t=TOKEN burns the token and
+   sets a signed session cookie (60-min sliding idle window). Leaving the
+   site (pagehide without an internal link click) schedules the session's
+   death after a 45s grace — a reload cancels the pending kill. */
+
+const SITE_TTL = 60 * 60 * 1000;   // sliding idle window
+const SITE_GRACE = 45 * 1000;      // grace before a "leave" becomes final
+
+function gatePage(title, msg) {
+  return new Response(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private access — napell.space</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:#000; color:#e7e9ea; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; text-align:center; }
+  .g { max-width:420px; padding:40px 28px; }
+  .g .lock { width:52px; height:52px; margin:0 auto 22px; border:1px solid #2f3336; border-radius:14px;
+             display:flex; align-items:center; justify-content:center; color:#1d9bf0; }
+  .g h1 { font-size:20px; margin:0 0 10px; letter-spacing:.02em; }
+  .g p { font-size:14px; color:#71767b; line-height:1.6; margin:0 0 6px; }
+  .g .brand { margin-top:30px; font-size:12px; letter-spacing:.28em; color:#1d9bf0; text-transform:uppercase; }
+</style></head><body>
+<div class="g">
+  <div class="lock"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+  <h1>${title}</h1>
+  <p>${msg}</p>
+  <p style="margin-top:14px">请扫描您收到的二维码进入 / Scan the QR code you were given to enter.</p>
+  <div class="brand">Napell &middot; The Space</div>
+</div>
+</body></html>`, {
+    status: 200,
+    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }
+  });
+}
+
+async function signSession(env, sid, exp) {
+  return sha256hex((env.GATE_SECRET || '') + '.' + sid + '.' + exp);
+}
+
+async function readSession(req, env) {
+  const m = (req.headers.get('cookie') || '').match(/(?:^|;\s*)nsx=([0-9a-f]+)\.(\d+)\.([0-9a-f]+)/);
+  if (!m) return null;
+  const sid = m[1], exp = Number(m[2]), sig = m[3];
+  if (!exp || Date.now() > exp) return null;
+  if (sig !== (await signSession(env, sid, String(exp)))) return null;
+  return { sid, exp };
+}
+
+async function sessionCookie(env, sid, exp) {
+  const sig = await signSession(env, sid, String(exp));
+  return `nsx=${sid}.${exp}.${sig}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${Math.floor(SITE_TTL / 1000)}`;
+}
+
+async function handleAccess(req, env, ctx) {
+  const url = new URL(req.url);
+  const tok = (url.searchParams.get('t') || '').trim().toLowerCase();
+  if (!/^[0-9a-f]{16,64}$/.test(tok)) {
+    return gatePage('Invalid access code', 'This link is not a valid one-time access code.');
+  }
+  const cur = await env.SITE.get('t:' + tok);
+  if (cur !== '1') {
+    return gatePage('Access code already used', 'Each QR code opens the door exactly once. Please request a new one.');
+  }
+  ctx.waitUntil(env.SITE.put('t:' + tok, JSON.stringify({ used: Date.now(), ip: req.headers.get('cf-connecting-ip') || '' })));
+  const sid = (await sha256hex(String(Date.now()) + tok + rand() + rand())).slice(0, 32);
+  const exp = Date.now() + SITE_TTL;
+  return new Response(null, {
+    status: 302,
+    headers: {
+      'Location': '/',
+      'Set-Cookie': await sessionCookie(env, sid, exp),
+      'Cache-Control': 'no-store'
+    }
+  });
+}
+
+async function handleLeave(req, env) {
+  const s = await readSession(req, env);
+  if (s) {
+    // Schedule death after the grace period; a reload cancels it.
+    await env.SITE.put('x:' + s.sid, String(Date.now() + SITE_GRACE), { expirationTtl: 86400 });
+  }
+  return new Response(null, { status: 204 });
+}
+
+const SITE_MIME = {
+  html: 'text/html; charset=utf-8', css: 'text/css; charset=utf-8', js: 'application/javascript; charset=utf-8',
+  jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', svg: 'image/svg+xml', ico: 'image/x-icon',
+  txt: 'text/plain; charset=utf-8', json: 'application/json', woff2: 'font/woff2', webp: 'image/webp'
+};
+
+async function serveSite(req, env, ctx) {
+  const s = await readSession(req, env);
+  if (!s) return gatePage('Private site', 'This is a private presentation. Entry is by invitation only.');
+  const revoked = await env.SITE.get('x:' + s.sid);
+  if (revoked && Date.now() >= Number(revoked)) {
+    return gatePage('Session ended', 'Your access window has closed. Please scan a new QR code to re-enter.');
+  }
+
+  let p;
+  try { p = decodeURIComponent(new URL(req.url).pathname); } catch (e) { p = '/'; }
+  if (p.endsWith('/')) p += 'index.html';
+  const candidates = [p];
+  if (!p.includes('.')) candidates.push(p + '/index.html', p + '.html');
+
+  let value = null, meta = null, used = p;
+  for (const c of candidates) {
+    const r = await env.SITE.getWithMetadata('f:' + c, { type: 'arrayBuffer' });
+    if (r.value !== null) { value = r.value; meta = r.metadata || {}; used = c; break; }
+  }
+
+  const ext = (used.slice(used.lastIndexOf('.') + 1) || 'html').toLowerCase();
+  const ct = (meta && meta.contentType) || SITE_MIME[ext] || 'application/octet-stream';
+  const isHtml = ct.includes('html');
+
+  const headers = {
+    'Content-Type': ct,
+    'Cache-Control': isHtml ? 'private, no-store' : 'public, max-age=3600',
+    'Set-Cookie': await sessionCookie(env, s.sid, Date.now() + SITE_TTL)
+  };
+  if (value === null) {
+    return new Response(isHtml ? '' : null, { status: 404, headers });
+  }
+  ctx.waitUntil(env.SITE.delete('x:' + s.sid)); // page view cancels a pending "leave"
+  if ((req.method || 'GET') === 'HEAD') return new Response(null, { status: 200, headers });
+  if (isHtml) return new Response(new TextDecoder().decode(value), { status: 200, headers });
+  return new Response(value, { status: 200, headers });
+}
+
+async function handleTokens(env, url, ctx) {
+  const n = Math.min(parseInt(url.searchParams.get('n') || '1', 10) || 1, 50);
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const b = new Uint8Array(16);
+    crypto.getRandomValues(b);
+    const t = [...b].map((x) => x.toString(16).padStart(2, '0')).join('');
+    out.push('https://www.napell.space/access?t=' + t);
+    ctx.waitUntil(env.SITE.put('t:' + t, '1'));
+  }
+  if (url.searchParams.get('format') === 'text') {
+    return new Response(out.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+  }
+  return json(out);
+}
+
 /* ─── Router ─── */
 
 async function aggregateAndMail(env, date) {
@@ -421,40 +568,55 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     const path = url.pathname;
+    const isApi = url.hostname === 'api.napell.space' || path.startsWith('/api/');
 
-    // CORS preflight for the auth endpoints
-    if (req.method === 'OPTIONS' && (path === '/api/auth/register' || path === '/api/auth/login')) {
-      return new Response(null, { status: 204, headers: corsHeaders(req) });
-    }
-
-    if (path === '/api/auth/register' && req.method === 'POST') {
-      return handleRegister(req, env, ctx);
-    }
-    if (path === '/api/auth/login' && req.method === 'POST') {
-      return handleLogin(req, env, ctx);
-    }
-
-    if (path === '/api/track' && req.method === 'POST') {
-      return handleTrack(req, env, ctx);
-    }
-
-    if ((path === '/api/stats' || path === '/api/test' || path === '/api/users') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
-      if (path === '/api/test') {
-        const ok = await sendMail(env, '[napell.space] telemetry test', 'Telemetry worker is live. If you can read this, the mail channel works — the daily report will arrive at 08:00 HKT.');
-        return json({ sent: ok, status: sendMail.lastStatus, body: (sendMail.lastBody || '').slice(0, 300) });
+    if (isApi) {
+      // CORS preflight for the auth endpoints
+      if (req.method === 'OPTIONS' && (path === '/api/auth/register' || path === '/api/auth/login')) {
+        return new Response(null, { status: 204, headers: corsHeaders(req) });
       }
-      if (path === '/api/users') {
-        return handleUsers(env, url);
+
+      if (path === '/api/auth/register' && req.method === 'POST') {
+        return handleRegister(req, env, ctx);
       }
-      const day = url.searchParams.get('day') || hktDate(Date.now());
-      const rec = await loadDay(env, day);
-      if (url.searchParams.get('format') === 'text') {
-        return new Response(buildReportText(rec), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+      if (path === '/api/auth/login' && req.method === 'POST') {
+        return handleLogin(req, env, ctx);
       }
-      for (const ip of Object.values(rec.ips)) ip.sids = [...ip.sids];
-      return json(rec);
+      if (path === '/api/track' && req.method === 'POST') {
+        return handleTrack(req, env, ctx);
+      }
+      if (path === '/api/leave' && req.method === 'POST') {
+        return handleLeave(req, env);
+      }
+
+      if ((path === '/api/stats' || path === '/api/test' || path === '/api/users' || path === '/api/tokens') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
+        if (path === '/api/test') {
+          const ok = await sendMail(env, '[napell.space] telemetry test', 'Telemetry worker is live. If you can read this, the mail channel works — the daily report will arrive at 08:00 HKT.');
+          return json({ sent: ok, status: sendMail.lastStatus, body: (sendMail.lastBody || '').slice(0, 300) });
+        }
+        if (path === '/api/users') {
+          return handleUsers(env, url);
+        }
+        if (path === '/api/tokens') {
+          return handleTokens(env, url, ctx);
+        }
+        const day = url.searchParams.get('day') || hktDate(Date.now());
+        const rec = await loadDay(env, day);
+        if (url.searchParams.get('format') === 'text') {
+          return new Response(buildReportText(rec), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+        }
+        for (const ip of Object.values(rec.ips)) ip.sids = [...ip.sids];
+        return json(rec);
+      }
+
+      return new Response('not found', { status: 404 });
     }
 
+    // ── Gated presentation site (www.napell.space) ──
+    if ((req.method === 'GET' || req.method === 'HEAD')) {
+      if (path === '/access') return handleAccess(req, env, ctx);
+      return serveSite(req, env, ctx);
+    }
     return new Response('not found', { status: 404 });
   },
 

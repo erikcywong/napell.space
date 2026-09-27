@@ -700,6 +700,30 @@ window.renderDynamicContent = function(lang) {
   if (page === 'home' && typeof renderHomeContent === 'function') renderHomeContent(lang);
 };
 
+/* ─── Leave beacon for the QR-gated site (Option C) ───
+   When the visitor leaves the presentation (external link, tab close),
+   tell the worker to schedule the session's death after its short grace
+   window. Clicks on same-origin links mark an internal navigation so a
+   normal page change never triggers the kill; a reload is also covered
+   by the worker's grace period. */
+(function () {
+  document.addEventListener('click', (e) => {
+    const a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    const h = a.getAttribute('href') || '';
+    if (h && !/^(https?:)?\/\//i.test(h) && h.indexOf('mailto:') !== 0 && h.indexOf('tel:') !== 0) {
+      try { sessionStorage.setItem('nsx-nav', '1'); } catch (err) { /* ignore */ }
+    }
+  }, { capture: true });
+  window.addEventListener('pagehide', () => {
+    let internal = false;
+    try { internal = sessionStorage.getItem('nsx-nav') === '1'; sessionStorage.removeItem('nsx-nav'); } catch (err) { /* ignore */ }
+    if (internal) return;
+    if (navigator.sendBeacon) navigator.sendBeacon('/api/leave', '');
+    else if (typeof fetch === 'function') fetch('/api/leave', { method: 'POST', body: '', keepalive: true }).catch(() => {});
+  });
+})();
+
 /* ─── GUARD — content capture deterrents ───
    No client-side measure is absolute, but this blocks casual capture:
    right-click menus, copy/cut, image dragging, save/print/view-source
