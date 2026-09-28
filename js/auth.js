@@ -271,7 +271,8 @@ const AUTH = {
         return;
       }
       const errKey = j && j.error === 'exists' ? 'auth_reg_dup'
-        : j && j.error === 'name_taken' ? 'auth_reg_name_taken' : 'auth_reg_error';
+        : j && j.error === 'name_taken' ? 'auth_reg_name_taken'
+        : j && j.error === 'rate limited' ? 'auth_login_ratelimit' : 'auth_reg_error';
       return fail(errKey);
     } catch (e) {
       return fail('auth_reg_error');
@@ -317,9 +318,11 @@ const AUTH = {
 
     // Legacy admin accounts verify locally; registered accounts verify on the server.
     let valid = await this.attemptLogin(username, password);
+    let rateLimited = false;
     if (!valid) {
       const server = await this._serverLogin(username.trim(), password);
       valid = !!(server && server.ok);
+      rateLimited = !!(server && server.error === 'rate limited');
     }
 
     // Telemetry: report every attempt (username only — never the password).
@@ -333,7 +336,7 @@ const AUTH = {
     } else {
       // Show error
       if (errorEl) {
-        errorEl.textContent = I18N.t('auth_login_error');
+        errorEl.textContent = I18N.t(rateLimited ? 'auth_login_ratelimit' : 'auth_login_error');
         errorEl.style.display = 'block';
       }
       // Shake animation

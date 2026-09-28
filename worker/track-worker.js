@@ -675,6 +675,10 @@ function gatePage(kind) {
       .then(function (r) { return r.json(); })
       .then(function (j) {
         if (j && j.ok) { location.href = "/"; }
+        else if (j && j.error === "rate limited") {
+          err.textContent = (document.documentElement.lang === "zh") ? "尝试次数过多，请于香港时间午夜后再试。" :
+            (document.documentElement.lang === "ar") ? "محاولات كثيرة جداً — أعد المحاولة بعد منتصف الليل." : "Too many attempts — please try again after midnight (HKT).";
+        }
         else { err.textContent = (document.documentElement.lang === "zh") ? "账号或密码不正确。" :
                 (document.documentElement.lang === "ar") ? "المعرف أو كلمة المرور غير صحيحة." : "Invalid ID or password."; }
       })

@@ -786,6 +786,7 @@ const I18N = {
       auth_password: 'Password',
       auth_login_btn: 'Login',
       auth_login_error: 'Invalid credentials. Access denied.',
+      auth_login_ratelimit: 'Too many attempts from this network. Please try again after midnight (HKT).',
       auth_logout: 'Logout',
       auth_tab_login: 'Sign in',
       auth_tab_reg: 'Register',
@@ -1804,6 +1805,7 @@ const I18N = {
       auth_password: '密码',
       auth_login_btn: '登录',
       auth_login_error: '凭据无效，拒绝访问。',
+      auth_login_ratelimit: '尝试次数过多，请于香港时间午夜后再试。',
       auth_logout: '退出登录',
       auth_tab_login: '登录',
       auth_tab_reg: '注册',
@@ -2595,6 +2597,7 @@ const I18N = {
       auth_password: 'كلمة المرور',
       auth_login_btn: 'تسجيل الدخول',
       auth_login_error: 'بيانات اعتماد غير صالحة. تم رفض الوصول.',
+      auth_login_ratelimit: 'محاولات كثيرة جداً من هذه الشبكة. أعد المحاولة بعد منتصف الليل (بتوقيت هونغ كونغ).',
       auth_logout: 'تسجيل الخروج',
 
       // ─── Units ───
