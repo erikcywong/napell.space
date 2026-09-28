@@ -126,6 +126,8 @@ const I18N = {
       seg6_name: 'Chain Brand & Agent Network',
       seg6_body: 'Consistency no longer depends on barista or roaster craft — it is enforced by data-driven standardization from the bean up. Equipment leasing (the Bellwether model) plus roast-curve licensing gives franchisees a complete stack. Regional Agents carry light-asset field functions: equipment service, curve updates, carbon data collection — a distribution network that feeds intelligence back to the origin.',
       seg6_io: '↑ Receives: standardized, certain product quality · ↓ Returns: distribution scale and field data at marginal cost',
+      seg6_note_k: 'The data estate — the brain of the entire chain',
+      seg6_note: 'Because we own the whole chain, we own its data estate: cultivation recipes, roast curves, carbon ledgers, warehouse flows, trade prices, retail behaviour — one proprietary database no competitor can assemble. This is the brain of the entire industry chain: Agents are not chatbots but its operating hands, querying the same knowledge base to prescribe a cultivation adjustment, update a franchise curve, price a collateral lot or answer a customer. Every transaction the brand network closes writes back into the brain — the chain compounds intelligence, while competitors only compound stores.',
 
       bench_title: 'How Incumbents Own Cultivation — and Why Ours Is Different',
       bench_desc: 'Direct farm ownership is the exception, not the rule — and incumbents use it as an accent, not a foundation.',
@@ -1142,6 +1144,8 @@ const I18N = {
       seg6_name: '连锁品牌与Agent体系',
       seg6_body: '出品一致性不再依赖咖啡师或烘焙师手艺——而是由从豆开始的标准化数据流程保障。设备租赁（Bellwether模式）叠加曲线IP授权，为加盟商提供完整技术栈。区域Agent承担轻资产地推职能：设备维护、曲线更新、碳数据采集——把一线情报以边际成本回馈数据原点。',
       seg6_io: '↑ 获得：标准化、确定性的产品品质 · ↓ 回馈：分销规模与一线数据',
+      seg6_note_k: '数据资产——整条产业链的大脑',
+      seg6_note: '因为我们拥有全产业链，所以我们拥有它的数据资产：种植配方、烘焙曲线、碳账本、仓储流转、贸易价格、零售行为——沉淀为一座竞争对手无法拼凑的专属资料库。这就是整个产业链的大脑：Agent不是聊天机器人，而是大脑的操作手——查询同一知识库，即可开出处方般的种植调整、更新加盟曲线、给抵押批次定价、回答顾客提问。品牌网络完成的每一笔交易都会回写大脑——我们的产业链在复利式地积累智能，而对手只是在复利式地开门店。',
 
       bench_title: '巨头如何"拥有"种植端 — 以及我们为何不同',
       bench_desc: '直接拥有农场是例外而非常态——而且巨头只是把它当作"点缀"，而非底座。',
@@ -2158,6 +2162,8 @@ const I18N = {
       seg6_name: 'العلامة التجارية للسلاسل وشبكة الوكلاء',
       seg6_body: 'الاتساق لم يعد يعتمد على مهارة الباريستا أو المحمّص — بل يُفرض بتقييس قائم على البيانات من حبة البن. تأجير المعدات (نموذج Bellwether) مع ترخيص منحنيات التحميص يوفر للامتيازية حزمة كاملة. يضطلع الوكلاء الإقليميون بوظائف ميدانية بأصول خفيفة: صيانة المعدات، تحديث المنحنيات، جمع بيانات الكربون — شبكة توزيع تعيد المعلومات الميدانية إلى أصل البيانات.',
       seg6_io: '↑ يتلقى: جودة منتج معيارية ويقينية · ↓ يعيد: نطاق توزيع وبيانات ميدانية بتكلفة حدية',
+      seg6_note_k: 'أصول البيانات — دماغ السلسلة بأكملها',
+      seg6_note: 'لأننا نملك السلسلة كاملة، نملك أصول بياناتها: وصفات الزراعة، ومنحنيات التحميص، وسجلات الكربون، وتدفقات المستودعات، وأسعار التجارة، وسلوك التجزئة — قاعدة بيانات حصرية لا يستطيع أي منافس تجميعها. هذا هو دماغ سلسلة الصناعة بأكملها: الوكلاء ليسوا روبوتات محادثة بل أيدي هذا الدماغ العاملة — يستشيرون قاعدة المعرفة نفسها ليصفوا تعديلاً زراعياً، أو يحدّثوا منحنى امتياز، أو يسعّروا دفعة ضمانات، أو يجيبوا عميلاً. كل صفقة تُنجزها شبكة العلامة تُكتب مرة أخرى في الدماغ — سلسلتنا تتراكم بالذكاء، بينما يتراكم المنافسون بالمتاجر فقط.',
 
       bench_title: 'كيف تمتلك الشركات الكبرى الزراعة — ولماذا نحن مختلفون',
       bench_desc: 'امتلاك المزارع مباشرةً هو الاستثناء لا القاعدة — والشركات الكبرى تستخدمه كلمسة وليس أساساً.',
