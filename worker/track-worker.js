@@ -815,6 +815,33 @@ function json(res, status = 200) {
   return new Response(JSON.stringify(res, null, 2), { status, headers: { 'Content-Type': 'application/json' } });
 }
 
+/* Cloud sync — mirrors the GitHub repo's site files into the SITE KV so the
+   site can be published from any device: edit on github.com (or GitHub mobile),
+   push, then open /api/sync?key=SYNC_KEY in a browser. No local PC needed.
+   Optional ?branch=dev to sync a non-main branch. */
+const SITE_INCLUDE = /\.(html|css|js|jpg|jpeg|png|svg|ico|txt|json|webp|woff2)$/i;
+const SITE_SKIP = /^(\.github|\.workbuddy|tools|worker|node_modules)\//;
+
+async function handleSync(env, url) {
+  const branch = url.searchParams.get('branch') || 'main';
+  const gh = { headers: { 'User-Agent': 'napell-sync' } };
+  const treeRes = await fetch(`https://api.github.com/repos/erikcywong/napell.space/git/trees/${branch}?recursive=1`, gh);
+  if (!treeRes.ok) return json({ ok: false, error: 'github tree ' + treeRes.status }, 502);
+  const tree = (await treeRes.json()).tree || [];
+  const files = tree.filter((t) => t.type === 'blob' && SITE_INCLUDE.test(t.path) && !SITE_SKIP.test(t.path));
+  let synced = 0;
+  const failed = [];
+  for (const f of files) {
+    const raw = await fetch(`https://raw.githubusercontent.com/erikcywong/napell.space/${branch}/${f.path}`, gh);
+    if (!raw.ok) { failed.push(f.path); continue; }
+    const buf = await raw.arrayBuffer();
+    const ext = (f.path.slice(f.path.lastIndexOf('.') + 1) || 'txt').toLowerCase();
+    await env.SITE.put('f:/' + f.path, buf, { metadata: { contentType: SITE_MIME[ext] || 'application/octet-stream' } });
+    synced++;
+  }
+  return json({ ok: failed.length === 0, branch, synced, total: files.length, failed });
+}
+
 export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
@@ -841,6 +868,9 @@ export default {
       }
       if (path === '/api/leave' && req.method === 'POST') {
         return handleLeave(req, env);
+      }
+      if (path === '/api/sync' && env.SYNC_KEY && url.searchParams.get('key') === env.SYNC_KEY) {
+        return handleSync(env, url);
       }
 
       if ((path === '/api/stats' || path === '/api/test' || path === '/api/users' || path === '/api/tokens') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
