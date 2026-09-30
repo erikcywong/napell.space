@@ -10,6 +10,14 @@
    Every other page is reached with the chrome already up, so it must not re-run the sequence. */
 const LANDING_PAGE = 'mission';
 
+/* The entry sequence is presented ONCE per browser session. This flag is written the moment
+   the sequence starts — not when it finishes — so a visitor who dismisses the language modal,
+   reloads, or lands back on the landing page can never be shown the intro (or the black cover)
+   a second time. Clicking "Vision" in the nav therefore behaves like a normal link, not a loop. */
+const INTRO_KEY = 'napell-intro-done';
+function introDone() { try { return sessionStorage.getItem(INTRO_KEY) === '1'; } catch (e) { return false; } }
+function markIntroDone() { try { sessionStorage.setItem(INTRO_KEY, '1'); } catch (e) { /* ignore */ } }
+
 /* ─── Navigation Component ─── */
 function renderNav(activePage) {
   // Two tiers, mapped to how an investor reads the site:
@@ -58,7 +66,7 @@ function renderNav(activePage) {
   return `
     <nav class="navbar">
       <div class="navbar-inner">
-        <a href="index.html" class="nav-brand" aria-label="napell.space home">
+        <a href="mission.html" class="nav-brand" aria-label="napell.space home">
           <div class="nav-brand-icon">
             <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -132,6 +140,7 @@ function renderLangModal() {
   return `
     <div class="lang-modal" id="lang-modal">
       <div class="lang-modal-card">
+        <button type="button" class="lang-modal-close" onclick="dismissLangModal()" aria-label="Close">&#10005;</button>
         <div class="lang-modal-icon">🌐</div>
         <h2 class="lang-modal-title" data-i18n="modal_title"></h2>
         <p class="lang-modal-subtitle" data-i18n="modal_subtitle"></p>
@@ -484,6 +493,7 @@ function removeSkipIntro() {
    if they already pressed [ Enter the Space ] the piano keeps playing. */
 function skipIntro() {
   splashSkipped = true;
+  markIntroDone();
   sessionStorage.setItem('napell-slogan-shown', '1');
   sessionStorage.setItem('cti-modal-shown', '1');
   if (typeof I18N !== 'undefined' && typeof I18N.hideModal === 'function') I18N.hideModal();
@@ -494,6 +504,32 @@ function skipIntro() {
   removeSkipIntro();
   removeSplashBackdrop();
 }
+
+/* The language picker must never trap the visitor. Picking a language is optional:
+   the ✕ button, Esc, or a click on the dimmed backdrop skips the whole intro and reveals
+   the page, keeping the auto-detected language (changeable any time from the nav switcher).
+   Before this, the modal could not be dismissed at all — it swallowed every click, so the
+   landing page appeared frozen in a loop. */
+function dismissLangModal() {
+  const modal = document.getElementById('lang-modal');
+  if (!modal || !modal.classList.contains('active')) return;
+  skipIntro();
+}
+
+document.addEventListener('click', (e) => {
+  const modal = document.getElementById('lang-modal');
+  if (!modal || !modal.classList.contains('active')) return;
+  if (e.target === modal) dismissLangModal(); // clicked the backdrop, not the card
+}, true);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' && e.key !== 'Esc') return;
+  const modal = document.getElementById('lang-modal');
+  if (modal && modal.classList.contains('active')) {
+    e.preventDefault();
+    dismissLangModal();
+  }
+});
 
 function removeSplashBackdrop() {
   const bd = document.getElementById('splash-backdrop');
@@ -535,10 +571,20 @@ function maybeShowSlogan(delay = 0) {
   }
   if (params.get('skip') === '1') {
     splashSkipped = true;
+    markIntroDone();
     sessionStorage.setItem('napell-slogan-shown', '1');
     sessionStorage.setItem('cti-modal-shown', '1');
     const mc = document.getElementById('modal-container');
     if (mc) mc.innerHTML = ''; // initPage pre-rendered the modal — drop it with the rest
+    removeSplashBackdrop();
+    return;
+  }
+
+  // Already presented this session (watched through, skipped, or abandoned mid-way):
+  // lift the cover and stop — no brand card, no slogans, no language modal, no flash.
+  if (introDone()) {
+    splashSkipped = true;
+    sessionStorage.setItem('napell-slogan-shown', '1');
     removeSplashBackdrop();
     return;
   }
@@ -552,6 +598,7 @@ function maybeShowSlogan(delay = 0) {
   }
   // Pure black from the very first paint: nothing shows behind or before the language toggle
   ensureSplashBackdrop();
+  markIntroDone(); // the sequence is now committed — it must never start again this session
   if (splashDone) {
     showLangModalIfNeeded(400);
     return;
@@ -731,6 +778,35 @@ window.renderDynamicContent = function(lang) {
     if (navigator.sendBeacon) navigator.sendBeacon('/api/leave', '');
     else if (typeof fetch === 'function') fetch('/api/leave', { method: 'POST', body: '', keepalive: true }).catch(() => {});
   });
+})();
+
+/* ─── Same-page nav links are inert ───
+   Clicking "Vision" while already reading Vision must not reload the page: a reload re-paints
+   the black cover and reads as a loop, even though nothing new is shown. Same for the brand
+   logo (now pointing straight at the landing page instead of bouncing through index.html) and
+   for any nav item that matches the current file. The click is absorbed and the mobile drawer
+   closes, so the page simply stays put. */
+(function () {
+  const fileOf = (href) => {
+    try { return (new URL(href, location.href).pathname.split('/').pop()) || 'index.html'; }
+    catch (e) { return ''; }
+  };
+  document.addEventListener('click', (e) => {
+    const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a || a.target === '_blank') return;
+    const href = a.getAttribute('href') || '';
+    if (!href || /^(https?:|mailto:|tel:|#)/i.test(href)) return;
+    const here = location.pathname.split('/').pop() || 'index.html';
+    // index.html and the landing page are the same destination — "/" is served as index.html
+    // which immediately replaces itself with the landing page.
+    const target = fileOf(href);
+    const samePage = target === here ||
+      (target === 'index.html' && here === LANDING_PAGE) ||
+      (target === LANDING_PAGE && here === 'index.html');
+    if (!samePage) return;
+    e.preventDefault();
+    if (typeof closeMobileNav === 'function') closeMobileNav();
+  }, { capture: true });
 })();
 
 /* ─── GUARD — content capture deterrents ───

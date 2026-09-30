@@ -2967,6 +2967,10 @@ const I18N = {
       // taller than the viewport and .lang-modal scrolls internally (overflow-y: auto),
       // which a locked body would prevent.
       document.body.style.overflow = '';
+      // Presented once per session, period: remembering this at display time (rather than
+      // only on confirm) stops the modal from re-opening on every page while a visitor
+      // ignores it — that read as an endless loop. The nav switcher stays available.
+      try { sessionStorage.setItem('cti-modal-shown', '1'); } catch (e) { /* ignore */ }
     }
   },
 
