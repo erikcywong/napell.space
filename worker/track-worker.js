@@ -3220,11 +3220,16 @@ ${L}
 </body></html>`;
 }
 
-async function handleQr(env, url) {
+async function handleQr(env, url, req) {
   const key = url.searchParams.get('key') || '';
   const fmt = (url.searchParams.get('format') || '').toLowerCase();
   const scale = Math.min(Math.max(parseInt(url.searchParams.get('scale') || '12', 10) || 12, 4), 24);
   const single = (url.searchParams.get('t') || '').trim().toLowerCase();
+  const mint = url.searchParams.get('n');
+
+  if (!single && mint === null) {                     // /api/qr with no params = operator console
+    return new Response(consolePage(), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
+  }
 
   let tokens = [];
   if (single) {
@@ -3233,7 +3238,7 @@ async function handleQr(env, url) {
     if (cur === null) return json({ ok: false, error: 'unknown token' }, 404);
     tokens.push({ token: single, state: cur === '1' ? 'unused' : 'used' });
   } else {
-    const n = Math.min(Math.max(parseInt(url.searchParams.get('n') || '1', 10) || 1, 1), 10);
+    const n = Math.min(Math.max(parseInt(mint, 10) || 1, 1), 20);
     for (let i = 0; i < n; i++) {
       const b = new Uint8Array(16);
       crypto.getRandomValues(b);
@@ -3247,7 +3252,7 @@ async function handleQr(env, url) {
     t.label = t.token.slice(0, 8).toUpperCase();
   }
 
-  if (fmt === 'json') return json({ ok: true, tokens, qr: tokens.map((t) => `/api/qr?key=${key}&t=${t.token}`) });
+  if (fmt === 'json') return json({ ok: true, tokens, qr: tokens.map((t) => `/api/qr?t=${t.token}`) });
 
   if (tokens.length === 1) {
     const t = tokens[0];
@@ -3264,7 +3269,64 @@ async function handleQr(env, url) {
   return new Response(qrPage(tokens, encodeURIComponent(key)), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
 }
 
+/* Operator console — the phone-friendly home of the QR tooling. Reached via
+   /api/op?key=<SYNC_KEY> once (sets a 90-day signed cookie) or with ?key=. */
+function consolePage() {
+  const L = {
+    title: 'Napell 云端发码台', sub: 'One-time investor access codes — issued from the cloud',
+    gen1: '生成 1 个新码 → 直接出 PNG（长按存照片）',
+    gen5: '生成 5 个新码 → 列表页（逐个长按保存）',
+    gen10: '生成 10 个新码 → 列表页',
+    look: '查询已发出的码（输入 token 前 8 位或完整 token）',
+    pub: '发布最新网站代码（GitHub → 线上）',
+    tip: '长按二维码图片 → 存储到照片 / Long-press → Save to Photos'
+  };
+  return `<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${L.title}</title>
+<style>
+ body{margin:0;padding:30px 18px 56px;background:#000;color:#e7e9ea;font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;}
+ h1{font-size:20px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 4px;}
+ p.sub{color:#71767b;font-size:12.5px;margin:0 0 26px;}
+ a.act{display:block;padding:14px 16px;margin-bottom:10px;border:1px solid #2a2e32;border-radius:12px;
+   color:#e7e9ea;text-decoration:none;font-size:14px;background:#0d0f11;}
+ a.act:hover{border-color:#1d9bf0;color:#1d9bf0;}
+ form{margin:18px 0 10px;display:flex;gap:8px;}
+ input{flex:1;padding:12px;border-radius:10px;border:1px solid #2a2e32;background:#0d0f11;color:#e7e9ea;font-size:14px;}
+ button{padding:12px 16px;border:0;border-radius:10px;background:#1d9bf0;color:#fff;font-weight:600;}
+ .tip{color:#71767b;font-size:12px;margin-top:22px;}
+ hr{border:0;border-top:1px solid #1c1f22;margin:24px 0;}
+</style></head><body>
+<h1>${L.title}</h1>
+<p class="sub">${L.sub}</p>
+<a class="act" href="/api/qr?n=1">${L.gen1}</a>
+<a class="act" href="/api/qr?n=5">${L.gen5}</a>
+<a class="act" href="/api/qr?n=10">${L.gen10}</a>
+<form id="lk" onsubmit="event.preventDefault();location.href='/api/qr?t='+encodeURIComponent(document.getElementById('t').value.trim().toLowerCase());">
+  <input id="t" placeholder="token…" autocomplete="off" spellcheck="false">
+  <button>查询</button>
+</form>
+<p style="color:#71767b;font-size:12px;margin:0 0 4px;">${L.look}</p>
+<hr>
+<a class="act" href="/api/sync">${L.pub}</a>
+<p class="tip">${L.tip}</p>
+</body></html>`;
+}
+
 /* ─── Router ─── */
+
+/* Operator auth for the tooling endpoints (/api/qr, /api/sync): either the
+   SYNC_KEY as ?key=, or the long-lived signed cookie set by /api/op?key=…
+   so a phone only has to carry the key once. */
+async function opAuthorized(env, req, url) {
+  if (env.SYNC_KEY && url.searchParams.get('key') === env.SYNC_KEY) return true;
+  const m = (req.headers.get('Cookie') || '').match(/(?:^|;\s*)nop=([^;]+)/);
+  if (!m) return false;
+  const [exp, sig] = m[1].split('.');
+  if (!exp || !sig || Number(exp) < Date.now()) return false;
+  const want = (await sha256hex((env.GATE_SECRET || '') + '.op.' + exp)).slice(0, 32);
+  return want === sig;
+}
 
 async function aggregateAndMail(env, date) {
   const rec = await loadDay(env, date);
@@ -3329,11 +3391,24 @@ export default {
       if (path === '/api/leave' && req.method === 'POST') {
         return handleLeave(req, env);
       }
-      if (path === '/api/sync' && env.SYNC_KEY && url.searchParams.get('key') === env.SYNC_KEY) {
+      if (path === '/api/op' && env.SYNC_KEY && url.searchParams.get('key') === env.SYNC_KEY) {
+        const days = Math.min(Math.max(parseInt(url.searchParams.get('days') || '90', 10) || 90, 1), 365);
+        const exp = Date.now() + days * 86400000;
+        const sig = (await sha256hex((env.GATE_SECRET || '') + '.op.' + exp)).slice(0, 32);
+        return new Response(null, {
+          status: 302,
+          headers: {
+            'Location': '/api/qr',
+            'Set-Cookie': `nop=${exp}.${sig}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${Math.floor(days * 86400)}`,
+            'Cache-Control': 'no-store'
+          }
+        });
+      }
+      if (path === '/api/sync' && await opAuthorized(env, req, url)) {
         return handleSync(env, url);
       }
-      if (path === '/api/qr' && env.SYNC_KEY && url.searchParams.get('key') === env.SYNC_KEY) {
-        return handleQr(env, url);
+      if (path === '/api/qr' && await opAuthorized(env, req, url)) {
+        return handleQr(env, url, req);
       }
 
       if ((path === '/api/stats' || path === '/api/test' || path === '/api/users' || path === '/api/tokens') && env.STATS_KEY && url.searchParams.get('key') === env.STATS_KEY) {
