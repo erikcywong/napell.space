@@ -222,15 +222,9 @@ const APP_DATA = {
     { phase_key: 'ico_phase_2', desc_key: 'ico_phase_2_desc', status_key: 'ico_phase_2_status', status_type: 'planning' },
     { phase_key: 'ico_phase_3', desc_key: 'ico_phase_3_desc', status_key: 'ico_phase_3_status', status_type: 'future' },
     { phase_key: 'ico_phase_4', desc_key: 'ico_phase_4_desc', status_key: 'ico_phase_4_status', status_type: 'future' }
-  ],
-
-  // ─── Value Chain Points ───
-  value_points: [
-    { title_key: 'vc_point_title_1', desc_key: 'vc_point_desc_1', icon: '🛡️' },
-    { title_key: 'vc_point_title_2', desc_key: 'vc_point_desc_2', icon: '🌡️' },
-    { title_key: 'vc_point_title_3', desc_key: 'vc_point_desc_3', icon: '🔗' },
-    { title_key: 'vc_point_title_4', desc_key: 'vc_point_desc_4', icon: '🧩' },
-    { title_key: 'vc_point_title_5', desc_key: 'vc_point_desc_5', icon: '💧' },
-    { title_key: 'vc_point_title_6', desc_key: 'vc_point_desc_6', icon: '⚡' }
   ]
+
+  // NOTE: the former `value_points` array (6 cards) was removed — those six
+  // points restated the six levers above and the traditional-vs-aeroponic
+  // comparison table on efficiency.html. Value Chain now carries one stat row.
 };
