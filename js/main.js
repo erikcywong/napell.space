@@ -3,6 +3,13 @@
  * Navigation, language switching, dynamic content rendering
  */
 
+/* ─── Entry sequence ───
+   The splash (language modal → brand card → three slogans → reveal) plays on ONE page only:
+   the landing page, which is Vision (mission.html). Root "/" bounces there via index.html.
+   After the splash lifts, the visitor is already reading Vision — nothing else redirects.
+   Every other page is reached with the chrome already up, so it must not re-run the sequence. */
+const LANDING_PAGE = 'mission';
+
 /* ─── Navigation Component ─── */
 function renderNav(activePage) {
   // Two tiers, mapped to how an investor reads the site:
@@ -501,7 +508,7 @@ function removeSplashBackdrop() {
    Opening it also lays down the black backdrop so the page stays hidden behind it. */
 function showLangModalIfNeeded(delay = 0) {
   if (sessionStorage.getItem('cti-modal-shown')) return;
-  if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
+  if (document.body.dataset.page !== LANDING_PAGE) return;
   setTimeout(() => {
     if (splashSkipped || sessionStorage.getItem('cti-modal-shown')) return;
     if (!document.getElementById('lang-modal')) {
@@ -514,8 +521,9 @@ function showLangModalIfNeeded(delay = 0) {
 }
 
 function maybeShowSlogan(delay = 0) {
-  // Show ONCE per browser session, on the landing page (Vision is the site entry)
-  if (document.body.dataset.page !== 'vision' && document.body.dataset.page !== 'home') return;
+  // Show ONCE per browser session, on the landing page — Vision is the site entry:
+  // the splash lifts and this very page is the first thing the visitor reads.
+  if (document.body.dataset.page !== LANDING_PAGE) return;
 
   // Deep-link options for links we hand out (mail, deck, chat):
   //   ?lang=zh|en|ar  force the reading language
