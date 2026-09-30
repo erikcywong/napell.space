@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, noai, noimageai">
+  <meta name="googlebot" content="noindex, nofollow, nosnippet, noarchive">
+  <meta name="googlebot-news" content="noindex, nofollow">
+  <meta name="ai-content-declaration" content="prohibited">
+  <title>Vision — napell.space</title>
+  <meta name="description" content="napell.space vision: to become the full-stack operator of climate-resilient specialty coffee worldwide — aeroponic cultivation, IoT data, roast-curve IP, carbon assets, supply-chain finance, chain retail and an AI decision brain, closed into one loop.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
+  <link rel="stylesheet" href="css/style.css?v=57">
+  <style>
+    /* ── Vision page specific ─────────────────────────────────────── */
+
+    /* The vision statement — the one sentence the whole site serves. */
+    .mi-statement {
+      background: linear-gradient(135deg, rgba(29,155,240,0.11), rgba(124,92,255,0.10), rgba(0,186,124,0.09));
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 34px 36px;
+      margin: 26px 0 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .mi-statement::before {
+      content: ''; position: absolute; top: -160px; inset-inline-end: -160px;
+      width: 340px; height: 340px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(29,155,240,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mi-statement-k {
+      position: relative;
+      font-size: 11px; font-weight: 700; letter-spacing: 2.4px;
+      color: var(--text-muted); text-transform: uppercase; margin-bottom: 16px;
+    }
+    .mi-statement-p {
+      position: relative;
+      font-size: clamp(18px, 2.3vw, 25px);
+      font-weight: 800; line-height: 1.62; letter-spacing: -0.2px;
+      color: var(--text-primary);
+    }
+
+    /* Seven links — every link feeds the next one. */
+    .mi-chain {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 16px; margin-top: 24px;
+    }
+    .mi-link {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 18px 18px 16px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .mi-link:hover { border-color: var(--border-hover); background: var(--bg-card-hover); }
+    .mi-link-n {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+      color: #1d9bf0; letter-spacing: 1px; margin-bottom: 9px;
+    }
+    .mi-link h4 { font-size: 14.5px; color: var(--text-primary); margin-bottom: 7px; }
+    .mi-link p { font-size: 12.8px; color: var(--text-secondary); line-height: 1.65; }
+    .mi-link.close { border-color: rgba(0,186,124,0.35); }
+    .mi-link.close .mi-link-n { color: var(--green); }
+
+    /* Closed-loop strip */
+    .mi-loop { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 22px; }
+    .mi-loop span {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 8px 14px; font-size: 12.5px; color: var(--text-primary);
+    }
+    .mi-loop span.on { border-color: rgba(29,155,240,0.5); color: #1d9bf0; background: rgba(29,155,240,0.10); font-weight: 600; }
+    .mi-loop i { color: #1d9bf0; font-style: normal; font-weight: 700; }
+    .mi-loop i.lp { color: var(--green); }
+
+    /* Climate-resilience base layer */
+    .mi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 22px; }
+    .mi-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+    .mi-card h4 { font-size: 14px; color: var(--green); margin-bottom: 8px; }
+    .mi-card p { font-size: 12.8px; color: var(--text-secondary); line-height: 1.65; }
+
+    /* Hand-off strip: Vision (the destination) → Thesis (the route) */
+    .mi-next {
+      margin-top: 26px; padding: 15px 18px;
+      border: 1px solid rgba(29,155,240,0.35); border-inline-start: 3px solid #1d9bf0;
+      border-radius: var(--radius-md); background: rgba(29,155,240,0.07);
+      font-size: 13.5px; line-height: 1.7; color: var(--text-secondary);
+    }
+    .mi-next a { color: #1d9bf0; font-weight: 700; text-decoration: none; border-bottom: 1px solid rgba(29,155,240,0.45); }
+    .mi-next a:hover { border-bottom-color: #1d9bf0; }
+
+    @media (max-width: 640px) {
+      .mi-statement { padding: 26px 22px; }
+    }
+  </style>
+</head>
+<body data-page="mission">
+
+  <div id="nav-container"></div>
+
+  <main class="page-content" style="padding-top: 96px;">
+    <div class="container">
+
+      <!-- Hero -->
+      <div class="page-header">
+        <h1 class="page-title" data-i18n="mi_title"></h1>
+        <p class="page-intro" data-i18n="mi_intro"></p>
+      </div>
+
+      <!-- The vision statement itself -->
+      <div class="mi-statement">
+        <div class="mi-statement-k" data-i18n="mi_stmt_k"></div>
+        <p class="mi-statement-p" data-i18n="mi_stmt"></p>
+      </div>
+
+      <!-- Section 1: the seven links -->
+      <section class="section" style="margin-top: 56px;">
+        <h2 class="section-title" data-i18n="mi_chain_t"></h2>
+        <p class="section-desc" data-i18n="mi_chain_d"></p>
+        <div class="mi-chain">
+          <div class="mi-link"><div class="mi-link-n">01</div><h4 data-i18n="mi_l1_t"></h4><p data-i18n="mi_l1_d"></p></div>
+          <div class="mi-link"><div class="mi-link-n">02</div><h4 data-i18n="mi_l2_t"></h4><p data-i18n="mi_l2_d"></p></div>
+          <div class="mi-link"><div class="mi-link-n">03</div><h4 data-i18n="mi_l3_t"></h4><p data-i18n="mi_l3_d"></p></div>
+          <div class="mi-link"><div class="mi-link-n">04</div><h4 data-i18n="mi_l4_t"></h4><p data-i18n="mi_l4_d"></p></div>
+          <div class="mi-link"><div class="mi-link-n">05</div><h4 data-i18n="mi_l5_t"></h4><p data-i18n="mi_l5_d"></p></div>
+          <div class="mi-link"><div class="mi-link-n">06</div><h4 data-i18n="mi_l6_t"></h4><p data-i18n="mi_l6_d"></p></div>
+          <div class="mi-link close"><div class="mi-link-n">07</div><h4 data-i18n="mi_l7_t"></h4><p data-i18n="mi_l7_d"></p></div>
+        </div>
+      </section>
+
+      <!-- Section 2: why the loop closes -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="mi_loop_t"></h2>
+        <p class="section-desc" data-i18n="mi_loop_d"></p>
+        <div class="mi-loop">
+          <span class="on" data-i18n="mi_l1_t"></span><i>→</i>
+          <span class="on" data-i18n="mi_l2_t"></span><i>→</i>
+          <span data-i18n="mi_l3_t"></span><i>→</i>
+          <span data-i18n="mi_l4_t"></span><i>→</i>
+          <span data-i18n="mi_l5_t"></span><i>→</i>
+          <span data-i18n="mi_l6_t"></span><i>→</i>
+          <span data-i18n="mi_l7_t"></span><i class="lp">↺</i>
+        </div>
+      </section>
+
+      <!-- Section 3: climate resilience, the base layer -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="mi_cr_t"></h2>
+        <p class="section-desc" data-i18n="mi_cr_d"></p>
+        <div class="mi-grid">
+          <div class="mi-card"><h4 data-i18n="mi_cr1_t"></h4><p data-i18n="mi_cr1_d"></p></div>
+          <div class="mi-card"><h4 data-i18n="mi_cr2_t"></h4><p data-i18n="mi_cr2_d"></p></div>
+          <div class="mi-card"><h4 data-i18n="mi_cr3_t"></h4><p data-i18n="mi_cr3_d"></p></div>
+        </div>
+      </section>
+
+      <p class="fx-note" data-i18n="mi_note"></p>
+
+      <!-- Hand-off: how this vision actually gets built -->
+      <div class="mi-next"><span data-i18n-html="mi_next"></span></div>
+
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+  <div id="modal-container"></div>
+
+  <script src="js/i18n.js?v=57"></script>
+  <script src="js/data.js?v=57"></script>
+  <script src="js/main.js?v=57"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@
   <meta name="ai-content-declaration" content="prohibited">
   <title>Investor Thesis — napell.space</title>
   <meta name="description" content="napell.space investor thesis: heavy assets first. The first cheque goes into aeroponic cultivation and tissue culture; efficient production takes specialty-coffee leadership within five years, the scaled farm becomes the self-funding cash engine, and that cash switches on the high-frequency layer — with commercial beans and REITs to finish.">
-  <link rel="stylesheet" href="css/style.css?v=56">
+  <link rel="stylesheet" href="css/style.css?v=57">
   <style>
     /* Thesis page specific */
     .thesis-statement {
@@ -107,9 +107,84 @@
       .th-alloc-pct { grid-column: 2 / 3; grid-row: 1; }
       .th-alloc-bar { grid-column: 1 / -1; grid-row: 2; }
     }
+    /* ── Entry splash — the framing that precedes the thesis (once per session) ── */
+    .th-splash { display: none; }
+    html.th-splashing .th-splash {
+      display: flex; align-items: center; justify-content: center;
+      position: fixed; inset: 0; z-index: 2900;
+      background: #000000; padding: 32px 22px;
+      opacity: 1; transition: opacity 0.6s ease;
+    }
+    html.th-splashing body { overflow: hidden; }
+    .th-splash.gone { opacity: 0; pointer-events: none; }
+    .th-splash::before {
+      content: ''; position: absolute; width: 780px; height: 780px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(29,155,240,0.13) 0%, rgba(124,92,255,0.06) 45%, transparent 70%);
+      pointer-events: none;
+    }
+    .th-splash-card {
+      position: relative; max-width: 780px; text-align: center;
+      animation: thSplashPop 0.85s cubic-bezier(0.18, 0.89, 0.32, 1.18) both;
+    }
+    .th-splash-kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: 2.4px;
+      color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .th-splash-lead {
+      font-size: clamp(18px, 2.5vw, 26px); font-weight: 800;
+      line-height: 1.5; letter-spacing: -0.3px; color: #ffffff;
+    }
+    .th-splash-rule {
+      width: 62px; height: 2px; margin: 24px auto; border-radius: 2px;
+      background: linear-gradient(90deg, #1d9bf0, #7c5cff);
+    }
+    .th-splash-note {
+      font-size: clamp(13px, 1.45vw, 15px); line-height: 1.85;
+      color: var(--text-secondary); max-width: 660px; margin: 0 auto;
+    }
+    .th-splash-btn {
+      margin-top: 32px; font-family: inherit; font-size: 13.5px; font-weight: 700;
+      letter-spacing: 0.3px; color: #ffffff;
+      background: rgba(29,155,240,0.14); border: 1px solid rgba(29,155,240,0.5);
+      border-radius: 999px; padding: 12px 28px; cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .th-splash-btn:hover { background: rgba(29,155,240,0.24); border-color: #1d9bf0; transform: translateY(-1px); }
+    .th-splash-skip {
+      margin-top: 18px; font-size: 12px; color: var(--text-muted);
+      cursor: pointer; letter-spacing: 0.02em; transition: color 0.2s ease;
+    }
+    .th-splash-skip:hover { color: var(--text-secondary); }
+    @keyframes thSplashPop {
+      from { opacity: 0; transform: translateY(16px) scale(0.985); }
+      to { opacity: 1; transform: none; }
+    }
   </style>
+  <script>
+    /* Decide before the first paint whether the entry splash runs at all: once it
+       has been seen in this browser session the page paints straight to the
+       content, so a repeat visit never flashes the curtain. */
+    try {
+      if (!sessionStorage.getItem('napell-th-splash')) {
+        document.documentElement.classList.add('th-splashing');
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body data-page="thesis">
+
+  <!-- Entry splash — the framing that has to be read before the thesis itself.
+       Only rendered while <html> carries .th-splashing (set by the head script). -->
+  <div id="th-splash" class="th-splash">
+    <div class="th-splash-card">
+      <div class="th-splash-kicker" data-i18n="th_sp_k"></div>
+      <p class="th-splash-lead" data-i18n="th_sp_lead"></p>
+      <div class="th-splash-rule"></div>
+      <p class="th-splash-note" data-i18n="th_sp_note"></p>
+      <button type="button" class="th-splash-btn" id="th-splash-btn" data-i18n="th_sp_btn"></button>
+      <div class="th-splash-skip" id="th-splash-skip" role="button" tabindex="0" data-i18n="th_sp_skip"></div>
+    </div>
+  </div>
 
   <div id="nav-container"></div>
 
@@ -456,8 +531,49 @@
   <div id="footer-container"></div>
   <div id="modal-container"></div>
 
-  <script src="js/i18n.js?v=56"></script>
-  <script src="js/data.js?v=56"></script>
-  <script src="js/main.js?v=56"></script>
+  <script src="js/i18n.js?v=57"></script>
+  <script src="js/data.js?v=57"></script>
+  <script src="js/main.js?v=57"></script>
+  <script>
+    /* Dismiss the entry splash — [ button ], [ Skip ], Esc, wheel or swipe.
+       The "seen" flag is written on dismiss, so an interrupted read still counts. */
+    (function () {
+      var root = document.documentElement;
+      var el = document.getElementById('th-splash');
+      if (!el) return;
+      if (!root.classList.contains('th-splashing')) { el.remove(); return; }
+
+      var done = false;
+      function dismiss() {
+        if (done) return;
+        done = true;
+        try { sessionStorage.setItem('napell-th-splash', '1'); } catch (e) {}
+        el.classList.add('gone');
+        document.body.style.overflow = '';
+        setTimeout(function () {
+          root.classList.remove('th-splashing');
+          if (el.parentNode) el.parentNode.removeChild(el);
+        }, 650);
+      }
+
+      document.body.style.overflow = 'hidden';
+      var btn = document.getElementById('th-splash-btn');
+      if (btn) btn.addEventListener('click', dismiss);
+      var skip = document.getElementById('th-splash-skip');
+      if (skip) {
+        skip.addEventListener('click', dismiss);
+        skip.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dismiss(); }
+        });
+      }
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dismiss(); });
+      el.addEventListener('wheel', dismiss, { passive: true });
+      var startY = null;
+      el.addEventListener('touchstart', function (e) { startY = e.touches[0].clientY; }, { passive: true });
+      el.addEventListener('touchend', function (e) {
+        if (startY !== null && Math.abs(e.changedTouches[0].clientY - startY) > 40) dismiss();
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>

@@ -9,6 +9,7 @@ function renderNav(activePage) {
   //   decide (case → numbers → capital) is always visible,
   //   the supporting detail sits one hover away, Contact is the standing action.
   const pages = [
+    { id: 'mission', key: 'nav_mission', href: 'mission.html' },
     { id: 'vision', key: 'nav_vision', href: 'vision.html' },
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
     { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
