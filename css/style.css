@@ -662,22 +662,6 @@ body.rtl .nav-menu { left: auto; right: 0; }
   opacity: 0.85;
 }
 
-/* ─── Value Point Card ─── */
-.vp-card {
-  display: flex;
-  gap: 16px;
-  padding: 20px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  transition: all var(--transition);
-}
-.vp-card:hover { border-color: var(--accent); transform: translateX(4px); }
-body.rtl .vp-card:hover { transform: translateX(-4px); }
-.vp-icon { font-size: 28px; flex-shrink: 0; }
-.vp-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-.vp-content p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-
 /* ─── Comparison Table ─── */
 .comp-table { width: 100%; border-collapse: collapse; }
 .comp-table th, .comp-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); text-align: left; }
