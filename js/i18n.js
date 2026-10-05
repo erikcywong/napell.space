@@ -45,7 +45,7 @@ const I18N = {
       mi_chain_t: 'Seven links, one loop',
       mi_chain_d: 'Each link produces what the next one needs — and the data the next one cannot generate on its own.',
       mi_l1_t: 'Aeroponic cultivation',
-      mi_l1_d: 'Soilless, controllable, replicable capacity units — taking origin back from the weather.',
+      mi_l1_d: 'Soilless, controllable, replicable capacity units — taking origin back from the weather. Specialty and microlot only: aeroponic cost sits above the commodity band at any reachable yield, so this link is built for price, not for tonnage.',
       mi_l2_t: 'IoT data',
       mi_l2_d: 'Temperature, humidity, EC, light and energy logged continuously — producing recipes you can repeat, not experience you have to hope for.',
       mi_l3_t: 'Roast-curve IP',
@@ -73,8 +73,8 @@ const I18N = {
 
       // ─── Thesis entry splash (thesis.html) ───
       th_sp_k: 'Investor Thesis · The framing',
-      th_sp_lead: 'Use “aeroponics + IoT + AI agents” as the stable-quality engine for high-value specialty coffee: win the standards and the brand in China’s specialty market first, then layer data, curves, carbon, finance, retail and REITs on top — and only then enter the commercial coffee market.',
-      th_sp_note: 'But it has to be staged, and separated by asset and by risk: cultivation is a high-volatility asset, while warehousing, roasting, stores and data are financialisable assets. Commercial-grade beans cannot be forced through aeroponics — they can only be played as specialty, certified, climate-resilient blends.',
+      th_sp_lead: 'Use “aeroponics + IoT + AI agents” as the stable-quality engine for high-value specialty coffee: win the standards and the brand in China’s specialty market first, then layer data, curves, carbon, finance, retail and REITs on top. Commercial coffee is not a later phase — the arithmetic has already excluded it.',
+      th_sp_note: 'The staging is deliberate, separated by asset and by risk: cultivation is a high-volatility asset, while warehousing, roasting, stores and data are financialisable assets. And the bean side carries one hard rule — aeroponic cost sits above the commodity price band at any yield we can physically reach, so we produce specialty and microlot only. Bulking into commercial grade is not a growth path; it is a subsidy paid to the market.',
       th_sp_btn: 'Open the thesis →',
       th_sp_skip: 'Skip',
 
@@ -141,7 +141,7 @@ const I18N = {
       seg_title: 'Six Mutually-Empowering Segments',
       seg_desc: 'Each segment receives certainty from the cultivation core and returns data, demand or capital to it — that circularity is the moat.',
       seg1_name: 'Controlled Cultivation → Processing & Roasting',
-      seg1_body: 'Because variety, flavor precursors, moisture and batch timing are designed at the cultivation stage, roasters no longer blind-match bean lots. Roast profiles can be reverse-engineered from known input parameters — "dual consistency" (genetic via tissue culture, metabolic via aeroponics) that traditional farming cannot deliver.',
+      seg1_body: 'Because variety, flavor precursors, moisture and batch timing are designed at the cultivation stage, roasters no longer blind-match bean lots. Roast profiles can be reverse-engineered from known input parameters — "dual consistency" (genetic via tissue culture, metabolic via aeroponics) that traditional farming cannot deliver. One constraint is structural: this segment ships specialty and microlot lots only. Commercial grade is not a fallback market for us — at any yield we can physically reach, aeroponic cost sits above the commodity price band, so every extra commercial kilo is a loss, not a sale.',
       seg1_io: '↑ Receives: known, stable input parameters · ↓ Returns: quality feedback that refines cultivation recipes',
       seg2_name: 'Roast-Curve IP Platform',
       seg2_body: 'Each curve is no longer a roaster\'s private craft but a "cultivation-to-roast data package": curve + the exact input parameters it was built on. Tradeable, licensable, reusable — a SaaS revenue line for third-party roasters and cafés, and near-zero-cost consistency for our own chain stores.',
@@ -196,7 +196,7 @@ const I18N = {
       nav_thesis: "Thesis",
       th_title: "Investor Thesis",
       th_intro: "Capital sinks into production first; the high-frequency layer is paid for with what the farm lays. Why heavy assets come first — and how that wins specialty-coffee leadership in five years without leaning on equity.",
-      th_oneliner: "Heavy assets first: the first cheque goes into aeroponic cultivation and tissue culture. An efficient production end takes us to specialty-coffee leadership within five years, then into commercial beans. The scaled farm is the hen that lays golden eggs — it cuts our dependence on outside capital and funds the high-frequency layer (AI Agent, zero-carbon marketplace, coffee savings bank, shared roasting, curve IP), with REITs as the final capitalisation step.",
+      th_oneliner: "Heavy assets first — and two engines, not one. The seedling line is the cash engine: 4-month cycles, three batches a year, 73.5% gross margin, and a government tender that already specifies our purity and root specs. The bean line is the pricing anchor: specialty and microlot only, because aeroponic cost sits above the commodity band at every yield we can physically reach. We grow less coffee, and we sell none of it cheap. Together they fund the high-frequency layer (AI Agent, zero-carbon marketplace, coffee savings bank, shared roasting, curve IP), with REITs as the final capitalisation step.",
       th_layers_t: "The Chain in Three Layers",
       th_l1_t: "Priority 1 — Production end (heavy assets)",
       th_l1_d: "Aeroponic cultivation · tissue culture — unit-cost moat, certified low-carbon scarce supply, and the cash engine that funds every later layer",
@@ -241,12 +241,12 @@ const I18N = {
       th_cap_t: "Capital Path",
       th_cap_d: "Our capital plan is deliberately counter-cyclical to the standard play: money goes into production first, and frequency is bought later with the farm's own cash.",
       th_cap_pos_t: "Five-year positioning",
-      th_cap_pos_d: "One focus for five years: take specialty coffee with an efficient production end. Specialty first, commercial beans second; build the cash engine first, switch on high frequency second.",
+      th_cap_pos_d: "One focus for five years: take specialty coffee with an efficient production end. Specialty only — excluding commercial grade is a cost decision, not a preference. Build the cash engine first, switch on high frequency second.",
       th_cap_f1: "Heavy assets in",
       th_cap_f2: "Specialty share",
       th_cap_f3: "Cash engine",
       th_cap_f4: "High frequency on",
-      th_cap_f5: "Commercial beans · REITs",
+      th_cap_f5: "Microlot pricing · REITs",
       th_cap_alloc_t: "Where the seed cheque goes",
       th_cap_a1: "Modular aeroponic pods + tissue-culture lab",
       th_cap_a2: "Certification · traceability · carbon metering",
@@ -267,9 +267,9 @@ const I18N = {
       th_cap_s3_d: "At scale, unit cost keeps falling and gross margin passes 70%: the capacity itself generates steady positive cash flow. The high-frequency layer is switched on only now — AI Agent, zero-carbon marketplace, savings-bank light, shared roasting, curve IP — and it is paid for out of operating cash, so growth no longer needs the next round.",
       th_cap_s3_m: "Milestone — operating cash flow covers high-frequency investment; external-funding dependence below 30%.",
       th_cap_s4_n: "Expansion · 60 months +",
-      th_cap_s4_t: "Commercial beans and capitalisation",
-      th_cap_s4_d: "The proven cost structure is pointed at commercial-grade beans for volume and cash amplification, and stable assets — growing facilities, central roastery, warehousing — are packaged into Pre-REITs and REITs. Carbon and data assets lift the whole valuation, and recycled capital returns to cultivation and globalisation.",
-      th_cap_s4_m: "Milestone — commercial-bean volume online, and a first asset package with stable leases ready for REITs.",
+      th_cap_s4_t: "Microlot pricing power and capitalisation",
+      th_cap_s4_d: "The proven cost structure is aimed at the top of the price ladder, not at tonnage: waste nothing on commercial grade, hold the microlot band with certified, climate-resilient lots, and package the stable assets — growing facilities, central roastery, warehousing — into Pre-REITs and REITs. Carbon and data assets lift the whole valuation, and recycled capital returns to cultivation and globalisation.",
+      th_cap_s4_m: "Milestone — first microlot lots transacting above the specialty band, and a first asset package with stable leases ready for REITs.",
       th_fly_c1: "Aeroponic capacity",
       th_fly_c2: "Certified specialty supply",
       th_fly_c3: "Unit-cost moat",
@@ -431,7 +431,7 @@ const I18N = {
       th_fr_f4_d: "No large upfront franchise fee — onboarding covers training at cost. Licence, inputs, spread and commission all scale with delivered kilograms: incentive alignment by construction. It also matches the heavy-assets-first rule — franchising opens only after our own pods have proven the unit economics.",
 
 
-      future_title: 'Why This Path Pays — The Commercial Value of a Renovated Chain',
+      future_title: 'Why This Path Pays — The Economic Value of a Renovated Chain',
       future_desc: 'The traditional chain captures value downstream: growers keep under 1% of retail coffee value while brands and retailers keep most. Controlled cultivation does not just join that chain — it re-architects where value is created and who is positioned to capture it.',
       st_mkt: 'Global coffee market size (retail + foodservice, 2026 est.) — yet the origin captures almost none of it',
       st_grow: 'Share of retail coffee value that reaches growers today — the structural weakness our model starts from',
@@ -1021,7 +1021,41 @@ const I18N = {
       ak_cta_b2: 'Book a 30-minute call',
       ak_cta_b3: 'NDA and data room',
       ak_cta_note: 'Illustrative model — not a forecast and not an offer of securities. Figures at FX 6.8 unless stated. Sources: Yunnan Department of Agriculture and Rural Affairs (2026 China Tropical Crop Industry Conference); Yunnan provincial government procurement notices (Linxiang District 2026 seedling tender); Nujiang and Menglian prefecture coffee work plans; CIRAD and Frontiers in Plant Science on coffee somatic embryogenesis and rooted mini-cuttings.',
-      unit_m: 'm'
+      unit_m: 'm',
+      sp_title: "The Rule: Specialty Only",
+      sp_desc: "Aeroponic cultivation has a cost curve, and it does not sit where the commodity market sits. The table below is the whole argument: for each price band, what yield per tree would be needed just to break even — and whether that yield is physically reachable for arabica.",
+      sp_rule_k: "The bottom line",
+      sp_rule: "Commercial coffee is not a market we are postponing; it is a market the arithmetic has already closed. Break-even against the ICE benchmark needs 92–116 tonnes per hectare — 11 to 14 times Brazil’s average yield. Every extra commercial kilo we produce is a loss, not a sale.",
+      sp_h1: "Price band",
+      sp_h2: "2026 price",
+      sp_h3: "Break-even yield per tree",
+      sp_h4: "Verdict",
+      sp_t1: "Commercial · ICE-priced",
+      sp_y1: "5.1–6.4 kg",
+      sp_v1: "Not reachable · every extra kg is a loss",
+      sp_t2: "Specialty commodity · C+50–100%",
+      sp_y2: "2.5–3.4 kg",
+      sp_v2: "Beyond arabica’s ceiling",
+      sp_t3: "Specialty single-origin contract · C+150–200%",
+      sp_y3: "1.7–2.0 kg",
+      sp_v3: "At the extreme edge",
+      sp_t4: "Microlot · auction",
+      sp_y4: "0.36–1.09 kg",
+      sp_v4: "✓ Our target band",
+      sp_t5: "Roasted retail · DTC",
+      sp_y5: "0.24–0.63 kg",
+      sp_v5: "✓ Captured by the chain",
+      sp_t6: "Own stores · per-cup equivalent",
+      sp_y6: "0.13–0.19 kg",
+      sp_v6: "✓ Captured by the chain",
+      sp_dual_t: "Two Engines, Two Jobs",
+      sp_dual_d: "The rule above does not shrink the programme — it splits it. Seedlings carry the cash; beans carry the price.",
+      sp_e1_t: "Seedling line — the cash engine",
+      sp_e1_d: "4-month cycles, three batches a year, 73.5% gross margin, and a government tender that already writes our purity and root specs into the document. This is the line that funds everything else, and it does not depend on the coffee price at all.",
+      sp_e2_t: "Bean line — the pricing anchor",
+      sp_e2_d: "Specialty and microlot only — on purpose, and by arithmetic. Low volume, high unit value, fully traceable, EUDR-native. It exists to hold the top of the price ladder, and to give the other six links a feedstock they can price against.",
+      sp_note: "Cost model built on the site’s own hardware parameters (system footprint, 1.48 kW per system, ¥0.629/kWh, 15-year straight-line depreciation, 200 systems per hectare module) at 18,000 trees per hectare. Price bands are 2026 market observations; the break-even yields are derived, not assumed.",
+      ak_scope_note: "Scope: this request funds the propagation and tissue-culture line — the cash engine. The bean line is developed in parallel under one rule: specialty and microlot only. Commercial-grade coffee is excluded by cost, not by preference.",
     },
 
     zh: {
@@ -1057,7 +1091,7 @@ const I18N = {
       mi_chain_t: '七个环节，一条闭环',
       mi_chain_d: '每一环都产生下一环需要的输入，同时也产生下一环无法自己获得的数据。',
       mi_l1_t: '雾化水培种植',
-      mi_l1_d: '无土、可控、可复制的产能单元——把「产地」从天气手里拿回来。',
+      mi_l1_d: '无土、可控、可复制的产能单元——把「产地」从天气手里拿回来。只做精品与微批次：在任何可达产量下，雾培成本都高于大宗价位带，所以这一环为价格而建，不为吨位而建。',
       mi_l2_t: 'IoT 数据',
       mi_l2_d: '温湿度、EC、光照与能耗被连续记录——产出的是可以复现的配方，而不是只能祈祷的经验。',
       mi_l3_t: '烘焙曲线 IP',
@@ -1085,8 +1119,8 @@ const I18N = {
 
       // ─── 投资论点开屏（thesis.html）───
       th_sp_k: '投资论点 · 前提框架',
-      th_sp_lead: '用「雾化水培 + IoT + AI Agent」做高价值精品咖啡的稳定品质引擎：先在中国精品市场建立标准与品牌，再把数据、曲线、碳、金融、连锁、REITs 全部叠加，最后进入商业咖啡市场。',
-      th_sp_note: '但必须分阶段、分资产、分风险：种植是高波动资产，仓储 / 烘焙 / 门店 / 数据是可金融化资产；商业豆不能靠雾化水培硬打，只能做「精品化 / 认证化 / 气候韧性拼配」。',
+      th_sp_lead: '用「雾化水培 + IoT + AI Agent」做高价值精品咖啡的稳定品质引擎：先在中国精品市场建立标准与品牌，再把数据、曲线、碳、金融、连锁、REITs 全部叠加。商业咖啡不是下一个阶段——算术已经把它排除在外。',
+      th_sp_note: '分阶段、分资产、分风险：种植是高波动资产，仓储 / 烘焙 / 门店 / 数据是可金融化资产。豆这一侧只有一条硬规则——在我们物理上能实现的任何产量下，雾培的完全成本都高于大宗价位带，所以我们只做精品与微批次。靠走量做商品级不是增长路径，是给市场发补贴。',
       th_sp_btn: '揭开论证 →',
       th_sp_skip: '跳过',
 
@@ -1153,7 +1187,7 @@ const I18N = {
       seg_title: '六大互相赋能板块',
       seg_desc: '每个板块从种植核心获得确定性，又把数据、需求或资本回馈给种植端——这种循环即护城河。',
       seg1_name: '可控种植端 → 加工与烘焙',
-      seg1_body: '品种、风味前体、含水率与批次时点在种植阶段即被设计，烘焙师无需再"盲测匹配"豆批。烘焙曲线可基于已知原料参数反向设计——组培带来基因一致性、雾培带来代谢一致性，这种"双一致性"是传统种植无法实现的。',
+      seg1_body: '品种、风味前体、含水率与批次时点在种植阶段即被设计，烘焙师无需再"盲测匹配"豆批。烘焙曲线可基于已知原料参数反向设计——组培带来基因一致性、雾培带来代谢一致性，这种"双一致性"是传统种植无法实现的。其中一条约束是结构性的：本环节只产出精品与微批次。商品级咖啡对我们不是退路市场——在我们物理上能达到的任何产量下，雾培成本都高于大宗价位带，所以每多产一公斤商品豆，是亏损，不是销售。',
       seg1_io: '↑ 获得：已知且稳定的原料参数 · ↓ 回馈：反哺种植配方的品质数据',
       seg2_name: '烘焙曲线IP平台',
       seg2_body: '每条曲线不再是烘焙师的私人经验，而是"种植-烘焙联合数据包"：曲线 + 其构建所依据的精确原料参数。可交易、可授权、可复用——面向第三方烘焙商与咖啡馆的SaaS收入线，也让自有连锁以极低成本复制高度一致的出品。',
@@ -1208,7 +1242,7 @@ const I18N = {
       nav_thesis: "投资论点",
       th_title: "投资论点",
       th_intro: "资本先沉到生产端,高频层则靠农场自己下的蛋来养。为什么我们把重资产放在第一位——以及这条路径如何在五年内拿到精品咖啡的领导地位,并且不靠股权融资续命。",
-      th_oneliner: "重资产先行:第一笔资本投向雾化水培种植与组培。用高效的生产端在五年内占领精品咖啡市场,继而切入商业豆。规模化的农场就是那只“会生金蛋的母鸡”——它降低我们对资金的依赖,并用它的蛋养起高频层(AI Agent、零碳商城、咖啡储蓄银行、共享烘焙、曲线 IP),最后以 REITs 完成资本化。",
+      th_oneliner: "重资产先行——而且是两台引擎，不是一台。种苗线是现金引擎：4 个月一轮、一年三批、73.5% 毛利，而且政府招标文件已经写死了纯度与主根规格。豆线是定价锚：只做精品与微批次，因为在我们物理上能达到的任何产量下，雾培成本都高于大宗价位带。我们种的豆更少，但一颗都不便宜卖。两条线共同养起高频层（AI Agent、零碳商城、咖啡储蓄银行、共享烘焙、曲线 IP），最后以 REITs 完成资本化。",
       th_layers_t: "三层链条结构",
       th_l1_t: "第一优先 · 生产端(重资产)",
       th_l1_d: "雾化水培种植 · 组培技术——单位成本护城河、经认证的低碳稀缺供给,以及养活其后每一个板块的现金引擎",
@@ -1253,12 +1287,12 @@ const I18N = {
       th_cap_t: "资本路径",
       th_cap_d: "我们的资本安排是刻意反周期的:钱先进生产端,高频层随后用农场自己的现金去买。",
       th_cap_pos_t: "五年定位",
-      th_cap_pos_d: "五年只做一件事:用高效的生产端拿下精品咖啡。先精品、后商业豆;先建现金引擎,再开高频。",
+      th_cap_pos_d: "五年只做一件事：用高效的生产端拿下精品咖啡。只做精品——排除商业豆是成本决定的，不是偏好。先建现金引擎，再开高频。",
       th_cap_f1: "重资产先行",
       th_cap_f2: "精品市占",
       th_cap_f3: "现金引擎",
       th_cap_f4: "启动高频",
-      th_cap_f5: "商业豆 · REITs",
+      th_cap_f5: "微批次定价权 · REITs",
       th_cap_alloc_t: "种子轮的钱投向哪里",
       th_cap_a1: "模块化雾培舱 + 组培实验室",
       th_cap_a2: "认证 · 可追溯 · 碳计量体系",
@@ -1279,9 +1313,9 @@ const I18N = {
       th_cap_s3_d: "达到规模后，单位成本继续下探，毛利越过 70%：产能本身开始产生稳定经营现金流。高频层这时才启动——AI Agent、零碳商城、轻量储蓄银行、共享烘焙、曲线 IP——并完全由经营现金流供养，增长不再依赖下一轮融资。",
       th_cap_s3_m: "里程碑——经营现金流覆盖高频层投入;对外部资金的依赖度降至 30% 以下。",
       th_cap_s4_n: "扩张期 · 60 个月以上",
-      th_cap_s4_t: "商业豆与资本化",
-      th_cap_s4_d: "把已验证的成本结构投向商业豆，换取规模与现金放大；稳定资产——种植设施、中央烘焙厂、仓储——打包进 Pre-REITs 与 REITs。碳资产与数据资产共同抬高整体估值，回收的资金再回到种植与全球化扩张。",
-      th_cap_s4_m: "里程碑——商业豆产能上线,并形成首个具备稳定租约的资产包,满足 REITs 条件。",
+      th_cap_s4_t: "微批次定价权与资本化",
+      th_cap_s4_d: "把已验证的成本结构对准价格梯子的上段，而不是对准吨位：不在商品级上浪费一粒豆，用经认证、气候韧性的批次守住微批次价位带；稳定资产——种植设施、中央烘焙厂、仓储——打包进 Pre-REITs 与 REITs。碳资产与数据资产共同抬高整体估值，回收的资金再回到种植与全球化扩张。",
+      th_cap_s4_m: "里程碑——首批微批次豆以高于精品带的价位成交，并形成首个具备稳定租约的资产包，满足 REITs 条件。",
       th_fly_c1: "雾培产能",
       th_fly_c2: "认证精品供给",
       th_fly_c3: "单位成本护城河",
@@ -1443,7 +1477,7 @@ const I18N = {
       th_fr_f4_d: "不收大额前期加盟费——入驻培训按成本价。授权、投入品、价差与佣金全部随交付公斤数放大:激励对齐由结构保证,也符合重资产优先原则——只有自有舱体验证了单体经济学之后,加盟才开放。",
 
 
-      future_title: '为何这条路值得走 — 重构型咖啡链的商业价值',
+      future_title: '为何这条路值得走 — 重构型咖啡链的经济价值',
       future_desc: '传统链条的价值沉淀在下游：种植端仅获得零售咖啡价值的不到1%，品牌与零售端拿走大头。可控种植端不只是"加入"这条链——而是重新架构价值在哪里被创造、以及谁有资格去捕获它。',
       st_mkt: '全球咖啡市场规模（零售+餐饮渠道，2026年估算）——而原产地几乎分不到其中任何一份',
       st_grow: '如今种植端能拿到的零售价值份额——正是我们模式要解决的起点性弱点',
@@ -2033,7 +2067,41 @@ const I18N = {
       ak_cta_b2: '预约 30 分钟通话',
       ak_cta_b3: '签署 NDA 与数据室',
       ak_cta_note: '本文为示意性模型，不是预测，也不构成证券要约。除特别说明外，金额均按汇率 6.8 折算。数据来源：云南省农业农村厅（2026 中国热带作物产业大会）；云南省政府采购公告（临翔区 2026 年咖啡种苗采购）；怒江州与孟连县咖啡产业工作要点；CIRAD 及 Frontiers in Plant Science 关于咖啡体细胞胚发生与微型扦插繁殖的研究。',
-      unit_m: '米'
+      unit_m: '米',
+      sp_title: "一条铁律：只做精品",
+      sp_desc: "雾化水培有它自己的成本曲线，而这条曲线不落在大宗市场所在的位置。下表就是全部论证：对每一个价位带，单株要产多少绿豆才够打平——以及这个产量对阿拉比卡是否物理可达。",
+      sp_rule_k: "底线",
+      sp_rule: "商品咖啡不是我们推迟进入的市场，而是算术已经关掉的市场。要按 ICE 基准打平，需要每公顷 92–116 吨——是巴西平均单产的 11 到 14 倍。所以我们每多产一公斤商品豆，是亏损，不是销售。",
+      sp_h1: "价位带",
+      sp_h2: "2026 年价",
+      sp_h3: "打平所需单株年产",
+      sp_h4: "结论",
+      sp_t1: "商品级 · ICE 定价",
+      sp_y1: "5.1–6.4 kg",
+      sp_v1: "物理不可达 · 每多产 1 kg 多亏 1 kg",
+      sp_t2: "精品商品 · C+50–100%",
+      sp_y2: "2.5–3.4 kg",
+      sp_v2: "超出阿拉比卡上限",
+      sp_t3: "精品单一产地合约 · C+150–200%",
+      sp_y3: "1.7–2.0 kg",
+      sp_v3: "极限可达",
+      sp_t4: "微批次 · 竞标",
+      sp_y4: "0.36–1.09 kg",
+      sp_v4: "✓ 目标价位",
+      sp_t5: "烘焙后零售 · DTC",
+      sp_y5: "0.24–0.63 kg",
+      sp_v5: "✓ 由链条捕获",
+      sp_t6: "自有门店 · 每杯折算",
+      sp_y6: "0.13–0.19 kg",
+      sp_v6: "✓ 由链条捕获",
+      sp_dual_t: "两台引擎，两种职能",
+      sp_dual_d: "上面这条铁律不会缩小方案，而是把方案一分为二：种苗扛现金，豆子扛价格。",
+      sp_e1_t: "种苗线 · 现金引擎",
+      sp_e1_d: "4 个月一轮、一年三批、73.5% 毛利，而且政府招标文件已经把我们的纯度与主根规格写进条款。这是养活其他一切的产线，而且它完全不依赖咖啡价格。",
+      sp_e2_t: "豆线 · 定价锚",
+      sp_e2_d: "只做精品与微批次——这是刻意的，也是算术决定的。低产量、高单价、全程可追溯、EUDR 原生合规。它的存在是为了守住价格梯子的上段，并给其余六个环节一个可以用来定价的原料锚。",
+      sp_note: "成本模型依据站点自身的硬件参数搭建（系统尺寸、单系统 1.48 kW、电 ¥0.629/kWh、15 年直线折旧、每公顷模块 200 套系统），按每公顷 18,000 株计算。价位带为 2026 年市场实测；打平产量为推导值，非假设值。",
+      ak_scope_note: "范围说明：本次募集投向种苗繁育与组培线——现金引擎。豆线并行推进，遵循一条铁律：只做精品与微批次。排除商品级咖啡是成本决定的，不是偏好。",
     },
 
     ar: {
@@ -2069,7 +2137,7 @@ const I18N = {
       mi_chain_t: 'سبع حلقات، حلقة واحدة مُغلقة',
       mi_chain_d: 'كل حلقة تُنتج ما تحتاجه الحلقة التالية — والبيانات التي لا تستطيع الحلقة التالية توليدها بنفسها.',
       mi_l1_t: 'الزراعة الأيروبونية',
-      mi_l1_d: 'وحدات إنتاج بلا تربة، قابلة للتحكّم والتكرار — تُعيد «المنشأ» من يد الطقس.',
+      mi_l1_d: 'وحدات إنتاج بلا تربة، قابلة للتحكّم والتكرار — تُعيد «المنشأ» من يد الطقس. مختصّة ودفعات صغيرة فقط: كلفة الزراعة الأيروبونية تتجاوز نطاق سعر السلعة عند أي إنتاجية قابلة للتحقيق، لذا بُنيت هذه الحلقة للسعر لا للكمّية.',
       mi_l2_t: 'بيانات إنترنت الأشياء',
       mi_l2_d: 'الحرارة والرطوبة والتوصيل الكهربائي والإضاءة والطاقة تُسجَّل باستمرار — فتنتج وصفات قابلة للتكرار، لا خبرة تُترك للحظ.',
       mi_l3_t: 'ملكية منحنيات التحميص',
@@ -2097,8 +2165,8 @@ const I18N = {
 
       // ─── شاشة دخول أطروحة الاستثمار (thesis.html) ───
       th_sp_k: 'أطروحة الاستثمار · الإطار',
-      th_sp_lead: 'نستخدم «الزراعة الأيروبونية + إنترنت الأشياء + وكلاء الذكاء الاصطناعي» كمحرّك جودة مستقرّة للقهوة المختصّة عالية القيمة: نكسب المعايير والعلامة في سوق القهوة المختصّة في الصين أولاً، ثم نُضيف البيانات والمنحنيات والكربون والتمويل والتجزئة وصناديق الريت (REITs)، وأخيراً ندخل سوق القهوة التجارية.',
-      th_sp_note: 'لكن يجب أن يكون ذلك على مراحل، وبفصل الأصول والمخاطر: الزراعة أصل عالي التقلّب، أما التخزين والتحميص والفروع والبيانات فأصول قابلة للتمويل. ولا يمكن دفع القهوة التجارية بالزراعة الأيروبونية قسراً — بل فقط كمزيج مختصّ ومُعتمَد وقادر على الصمود المناخي.',
+      th_sp_lead: 'نستخدم «الزراعة الأيروبونية + إنترنت الأشياء + وكلاء الذكاء الاصطناعي» كمحرّك جودة مستقرّة للقهوة المختصّة عالية القيمة: نكسب المعايير والعلامة في سوق القهوة المختصّة في الصين أولاً، ثم نُضيف البيانات والمنحنيات والكربون والتمويل والتجزئة وصناديق الريت (REITs). أما القهوة التجارية فليست مرحلة تالية — بل استبعدتها الحسابات.',
+      th_sp_note: 'التدرّج مقصود، مع الفصل بين الأصول والمخاطر: الزراعة أصل عالي التقلّب، أما التخزين والتحميص والفروع والبيانات فأصول قابلة للتمويل. وفي جانب الحبوب قاعدة صلبة واحدة — كلفة الزراعة الأيروبونية تتجاوز نطاق سعر السلعة عند أي إنتاجية ممكنة عملياً، لذلك ننتج القهوة المختصّة والدفعات الصغيرة فقط. والتوسّع في القهوة التجارية ليس مسار نمو، بل دعم مدفوع للسوق.',
       th_sp_btn: 'افتح الأطروحة →',
       th_sp_skip: 'تخطٍّ',
 
@@ -2165,7 +2233,7 @@ const I18N = {
       seg_title: 'ستة قطاعات تُمكِّن بعضها البعض',
       seg_desc: 'كل قطاع يتلقى اليقين من نواة الزراعة ويعيد البيانات أو الطلب أو رأس المال إليها — هذه الدائرية هي الخندق التنافسي.',
       seg1_name: 'الزراعة المُتحكَّم بها ← المعالجة والتحميص',
-      seg1_body: 'بما أن الصنف ومقدَّمات النكهة والرطوبة وتوقيت الدفعات تُصمَّم في مرحلة الزراعة، لم يعد محمّصو البن بحاجة إلى "المطابقة العمياء" للدفعات. يمكن هندسة منحنيات التحميص عكسياً من معايير المدخلات المعروفة — "اتساق مزدوج" (وراثي عبر زراعة الأنسجة، أيضي عبر الإيكاروبونكس) لا يمكن للزراعة التقليدية تحقيقه.',
+      seg1_body: 'بما أن الصنف ومقدَّمات النكهة والرطوبة وتوقيت الدفعات تُصمَّم في مرحلة الزراعة، لم يعد محمّصو البن بحاجة إلى "المطابقة العمياء" للدفعات. يمكن هندسة منحنيات التحميص عكسياً من معايير المدخلات المعروفة — "اتساق مزدوج" (وراثي عبر زراعة الأنسجة، أيضي عبر الإيكاروبونكس) لا يمكن للزراعة التقليدية تحقيقه. وثمّة قيد بنيوي واحد: هذا القطاع ينتج الدفعات المختصّة والصغيرة فقط. القهوة التجارية ليست سوقاً بديلاً لنا — فعند أي إنتاجية ممكنة عملياً تتجاوز الكلفة نطاق سعر السلعة، لذا كل كيلوغرام تجاري إضافي خسارة، لا بيع.',
       seg1_io: '↑ يتلقى: معايير مدخلات معروفة ومستقرة · ↓ يعيد: بيانات جودة تُحسِّن وصفات الزراعة',
       seg2_name: 'منصة ملكية منحنيات التحميص',
       seg2_body: 'لم يعد كل منحنى حرفة خاصة بمحمّص، بل "حزمة بيانات زراعة-تحميص": المنحنى + معايير المدخلات الدقيقة التي بُني عليها. قابل للتداول والترخيص وإعادة الاستخدام — خط إيرادات SaaS للمحمّصين والمقاهي الخارجيين، واتساق شبه مجاني التكلفة لمتاجر سلسلتنا.',
@@ -2220,7 +2288,7 @@ const I18N = {
       nav_thesis: "أطروحة الاستثمار",
       th_title: "أطروحة الاستثمار",
       th_intro: "كيف نرتّب سلسلة القهوة الكاملة — التردد العالي أولاً والأصول الثقيلة أخيراً — ولماذا تبقى الزراعة في المقدمة منذ اليوم الأول.",
-      th_oneliner: "نفتح الزراعة على نطاق صغير، لكن مواردنا التجارية تُوجَّه لمنافذ التردد العالي: وكيل ذكاء اصطناعي كمركز، وتسوق zero-carbon وبنك توفير البن والتحميص المشترك وملكية منحنيات التحميص للتردد، وتجارة البن الأخضر والمحمص للتدفق النقدي، والامتياز للتوسع — والتمويل الجماعي وREITs للرسملة في النهاية.",
+      th_oneliner: "الأصول الثقيلة أولاً — وبمحرّكين لا محرّك واحد. خط الشتلات هو محرّك النقد: دورات من أربعة أشهر، وثلاث دفعات سنوياً، وهامش إجمالي ٧٣٫٥٪، ومناقصة حكومية تحدّد مسبقاً مواصفات النقاء والجذر. وخط الحبوب هو مرساة التسعير: مختصّة ودفعات صغيرة فقط، لأن كلفة الزراعة الأيروبونية تتجاوز نطاق سعر السلعة عند أي إنتاجية ممكنة عملياً. نزرع قهوة أقل، ولا نبيع منها شيئاً بسعر رخيص. ومعاً يموّلان طبقة التردد العالي (وكيل ذكاء اصطناعي، سوق صفري الكربون، بنك توفير البن، التحميص المشترك، ملكية منحنيات التحميص)، مع صناديق الريت (REITs) كخطوة رسملة أخيرة.",
       th_layers_t: "السلسلة في ثلاث طبقات",
       th_fly_t: "عجلة رأس المال — المزرعة أولاً ثم التردد العالي",
       th_sotp_t: "قيّم كل طبقة بعدستها الخاصة (SOTP)",
@@ -2245,7 +2313,7 @@ const I18N = {
       th_fr_fix_t: "أربعة تصحيحات نضيفها على نموذج الامتياز التقليدي",
 
 
-      future_title: 'لماذا يستحق هذا الطريق — القيمة التجارية لسلسلة قهوة مُعاد هيكلتها',
+      future_title: 'لماذا يستحق هذا الطريق — القيمة الاقتصادية لسلسلة قهوة مُعاد هيكلتها',
       future_desc: 'تلتقط السلسلة التقليدية القيمة في اتجاه المصب: يحصل المزارعون على أقل من 1% من قيمة القهوة التجزئة بينما تستحوذ العلامات والمتاجر على معظمها. الزراعة المُتحكَّم بها لا "تنضم" إلى تلك السلسلة فحسب — بل تعيد هندسة مكان خلق القيمة ومن يملك موقع التقاطها.',
       st_mkt: 'حجم سوق القهوة العالمي (تجزئة + ضيافة، تقدير 2026) — ومع ذلك لا يلتقط المنشأ أي حصة تُذكر منه',
       st_grow: 'حصة قيمة التجزئة التي تصل إلى المزارعين اليوم — الضعف الهيكلي الذي يبدأ نموذجنا من معالجته',
@@ -2706,6 +2774,40 @@ const I18N = {
       ak_cta_b2: 'احجز مكالمة 30 دقيقة',
       ak_cta_b3: 'اتفاقية سرية وغرفة بيانات',
       vc_six_t: "ستة روافع نمسك بها",
+      sp_title: "القاعدة: القهوة المختصّة فقط",
+      sp_desc: "للزراعة الأيروبونية منحنى كلفة، وهو لا يقع حيث يقع سوق السلعة. الجدول أدناه هو الحجّة كاملة: عند كل نطاق سعري، ما الإنتاجية المطلوبة لكل شجرة لمجرد التعادل — وهل هي ممكنة فيزيائياً للبن العربي.",
+      sp_rule_k: "الخلاصة",
+      sp_rule: "القهوة التجارية ليست سوقاً نؤجّلها، بل سوق أغلقتها الحسابات. التعادل مقابل مؤشر ICE يحتاج ٩٢–١١٦ طناً للهكتار — أي ١١ إلى ١٤ ضعف متوسط إنتاجية البرازيل. وكل كيلوغرام تجاري إضافي ننتجه خسارة، لا بيع.",
+      sp_h1: "النطاق السعري",
+      sp_h2: "سعر 2026",
+      sp_h3: "الإنتاجية المطلوبة للتعادل",
+      sp_h4: "الحكم",
+      sp_t1: "تجارية · بأسعار ICE",
+      sp_y1: "٥٫١–٦٫٤ كغ",
+      sp_v1: "غير ممكنة · كل كيلوغرام إضافي خسارة",
+      sp_t2: "مختصّة تجارية · C+50–100%",
+      sp_y2: "٢٫٥–٣٫٤ كغ",
+      sp_v2: "يتجاوز الحدّ الفيزيائي للبن العربي",
+      sp_t3: "عقد مختصّ أحادي المنشأ · C+150–200%",
+      sp_y3: "١٫٧–٢٫٠ كغ",
+      sp_v3: "على الحدّ الأقصى",
+      sp_t4: "دفعات صغيرة · المزاد",
+      sp_y4: "٠٫٣٦–١٫٠٩ كغ",
+      sp_v4: "✓ نطاقنا المستهدف",
+      sp_t5: "تجزئة محمّصة · مباشرة",
+      sp_y5: "٠٫٢٤–٠٫٦٣ كغ",
+      sp_v5: "✓ تلتقطه السلسلة",
+      sp_t6: "فروعنا · مكافئ الكوب",
+      sp_y6: "٠٫١٣–٠٫١٩ كغ",
+      sp_v6: "✓ تلتقطه السلسلة",
+      sp_dual_t: "محرّكان، مهمّتان",
+      sp_dual_d: "القاعدة أعلاه لا تُقلّص البرنامج، بل تقسمه: الشتلات تحمل النقد، والحبوب تحمل السعر.",
+      sp_e1_t: "خط الشتلات · محرّك النقد",
+      sp_e1_d: "دورات من أربعة أشهر، وثلاث دفعات سنوياً، وهامش إجمالي ٧٣٫٥٪، ومناقصة حكومية تنصّ مسبقاً على مواصفات النقاء والجذر. هذا هو الخط الذي يموّل كل ما سواه، ولا يعتمد على سعر القهوة إطلاقاً.",
+      sp_e2_t: "خط الحبوب · مرساة التسعير",
+      sp_e2_d: "مختصّة ودفعات صغيرة فقط — عن قصد وبحكم الحساب. كمّية منخفضة، وقيمة وحدة عالية، وتتبّع كامل، وتوافق أصلي مع EUDR. وجودها لتثبيت أعلى سلّم الأسعار، ولتمنح الحلقات الستّ الأخرى مادة أولية تُسعَّر على أساسها.",
+      sp_note: "بُني نموذج الكلفة على معايير المعدّات الخاصة بالموقع (مساحة النظام، ١٫٤٨ كيلوواط لكل نظام، ٠٫٦٢٩ يوان/كيلوواط ساعة، إهلاك خطّي على ١٥ سنة، ٢٠٠ نظام لوحدة الهكتار) على أساس ١٨٠٠٠ شجرة للهكتار. النطاقات السعرية من ملاحظات السوق لعام ٢٠٢٦؛ وإنتاجيات التعادل مُستنبَطة لا مفترضة.",
+      ak_scope_note: "النطاق: هذا الطلب يموّل خط إكثار الشتلات وزراعة الأنسجة — محرّك النقد. أما خط الحبوب فيُطوَّر بالتوازي وفق قاعدة واحدة: مختصّة ودفعات صغيرة فقط. واستبعاد القهوة التجارية قرار كلفة، لا تفضيل.",
     }
   },
 
@@ -2715,17 +2817,29 @@ const I18N = {
    * Always applies translations, then shows language modal on first visit
    */
   init() {
-    const stored = localStorage.getItem('cti-lang');
-    if (stored && this.translations[stored]) {
-      this._lang = stored;
+    // ?lang=en|zh|ar forces the language for this load — deep links, previews and QA.
+    // Without it a shared link opens in whatever language the visitor's browser happens
+    // to use, and there is no way to hand an investor a specific-language URL.
+    let forced = null;
+    try { forced = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+    if (forced && this.translations[forced]) {
+      this._lang = forced;
+      try { localStorage.setItem('cti-lang', forced); } catch (e) {}
+      // the visitor already declared a language — do not ask again
+      try { sessionStorage.setItem('cti-modal-shown', '1'); } catch (e) {}
     } else {
-      // Detect browser language
-      const browserLang = navigator.language || navigator.userLanguage;
-      if (browserLang) {
-        const lang = browserLang.toLowerCase();
-        if (lang.startsWith('zh')) this._lang = 'zh';
-        else if (lang.startsWith('ar')) this._lang = 'ar';
-        else this._lang = 'en';
+      const stored = localStorage.getItem('cti-lang');
+      if (stored && this.translations[stored]) {
+        this._lang = stored;
+      } else {
+        // Detect browser language
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (browserLang) {
+          const lang = browserLang.toLowerCase();
+          if (lang.startsWith('zh')) this._lang = 'zh';
+          else if (lang.startsWith('ar')) this._lang = 'ar';
+          else this._lang = 'en';
+        }
       }
     }
 
