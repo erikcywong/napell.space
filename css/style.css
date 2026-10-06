@@ -1512,3 +1512,76 @@ img, a, video { -webkit-user-drag: none; user-drag: none; }
     text-align: center;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   Shared content components — used by more than one page.
+   These were previously inline in thesis.html only, which left the same
+   markup unstyled on The Ask. Moved here so every page renders alike.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Card grid */
+.th-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 20px; }
+.th-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+.th-card h4 { font-size: 14px; margin-bottom: 8px; color: #1d9bf0; }
+.th-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+.th-card.gold h4 { color: #d4a017; }
+.th-card.green h4 { color: var(--green); }
+.th-card.purple h4 { color: #7c5cff; }
+
+/* Numbered rows */
+.th-num { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border-color); }
+.th-num:last-child { border-bottom: none; }
+.th-num-badge { width: 40px; height: 40px; border-radius: 50%; background: rgba(29,155,240,0.12); border: 1.5px solid #1d9bf0; color: #1d9bf0; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.th-num h4 { font-size: 14.5px; color: var(--text-primary); margin-bottom: 6px; }
+.th-num p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+/* Risk cards */
+.th-risks { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 20px; }
+.th-risk { background: var(--bg-card); border: 1px solid rgba(244,33,46,0.25); border-radius: var(--radius-md); padding: 16px; }
+.th-risk h4 { font-size: 13.5px; color: var(--red); margin-bottom: 7px; }
+.th-risk p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+
+/* Statement block + sub-heading */
+.th-stmt { background: linear-gradient(135deg, rgba(29,155,240,0.10), rgba(0,186,124,0.08)); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px 22px; margin-top: 16px; }
+.th-stmt h4 { font-size: 13px; color: #1d9bf0; margin-bottom: 8px; letter-spacing: 0.5px; }
+.th-stmt p { font-size: 14px; color: var(--text-primary); font-weight: 600; line-height: 1.7; }
+.th-sub { font-size: 15px; color: var(--text-primary); margin: 26px 0 2px; font-weight: 700; }
+
+/* Flow strip */
+.th-flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+.th-flow span { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 14px; font-size: 12.5px; color: var(--text-secondary); }
+.th-flow span.on { border-color: rgba(29,155,240,0.55); color: #1d9bf0; background: rgba(29,155,240,0.10); font-weight: 600; }
+.th-flow span.gold { border-color: rgba(212,160,23,0.45); color: #d4a017; background: rgba(212,160,23,0.08); }
+.th-flow i { color: var(--text-muted); font-style: normal; font-size: 12px; }
+
+/* Allocation bars */
+.th-alloc { display: grid; gap: 11px; margin-top: 14px; }
+.th-alloc-row { display: grid; grid-template-columns: minmax(190px, 1.1fr) 2fr 52px; gap: 12px; align-items: center; }
+.th-alloc-l { font-size: 13px; color: var(--text-primary); }
+.th-alloc-bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.th-alloc-bar i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #1d9bf0, #7c5cff); }
+.th-alloc-pct { font-size: 13px; font-weight: 700; color: #1d9bf0; text-align: right; font-family: var(--font-mono); }
+
+/* Emphasis callout + financing line */
+.th-callout { margin-top: 20px; background: linear-gradient(135deg, rgba(212,160,23,0.10), rgba(29,155,240,0.08)); border: 1px solid rgba(212,160,23,0.32); border-radius: var(--radius-md); padding: 22px 24px; }
+.th-callout h4 { font-size: 15px; color: #d4a017; margin-bottom: 10px; }
+.th-callout p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+.th-fin { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); font-size: 12px; color: #00ba7c; line-height: 1.55; }
+
+/* Hand-off strip: Thesis (the logic) → The Ask (the request) */
+.th-next { margin-top: 22px; padding: 15px 18px; border: 1px solid rgba(29,155,240,0.35); border-left: 3px solid #1d9bf0; border-radius: var(--radius-md); background: rgba(29,155,240,0.07); font-size: 13.5px; line-height: 1.7; color: var(--text-secondary); }
+.th-next a { color: #1d9bf0; font-weight: 700; text-decoration: none; border-bottom: 1px solid rgba(29,155,240,0.45); }
+.th-next a:hover { border-bottom-color: #1d9bf0; }
+
+/* Highlighted table row (the number that matters in that table) */
+.data-table tr.anchor td { color: #1d9bf0; font-weight: 600; }
+
+/* Source note stacked under a table cell */
+.ak-src-block { display: block; font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .th-alloc-row { grid-template-columns: 1fr 48px; }
+  .th-alloc-l { grid-column: 1 / 2; grid-row: 1; }
+  .th-alloc-pct { grid-column: 2 / 3; grid-row: 1; }
+  .th-alloc-bar { grid-column: 1 / -1; grid-row: 2; }
+}
