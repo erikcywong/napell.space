@@ -29,6 +29,7 @@ function renderNav(activePage) {
     { id: 'home', key: 'nav_home', href: 'index.html?home=1' },
     { id: 'thesis', key: 'nav_thesis', href: 'thesis.html' },
     { id: 'ask', key: 'nav_ask', href: 'ask.html' },
+    { id: 'team', key: 'nav_team', href: 'team.html' },
     { key: 'nav_g_tech', children: [
       { id: 'overview', key: 'nav_overview', href: 'overview.html' },
       { id: 'efficiency', key: 'nav_efficiency', href: 'efficiency.html' },
