@@ -40,6 +40,14 @@ function renderNav(activePage) {
       { id: 'collaboration', key: 'nav_collaboration', href: 'collaboration.html' },
       { id: 'gallery', key: 'nav_gallery', href: 'gallery.html' }
     ]},
+    { key: 'nav_g_bestar', children: [
+      { id: 'bestar', key: 'nav_bs_summary', href: 'bestar.html' },
+      { id: 'bestar-issue', key: 'nav_bs_issue', href: 'bestar-issue.html' },
+      { id: 'bestar-fit', key: 'nav_bs_fit', href: 'bestar-fit.html' },
+      { id: 'bestar-strategy', key: 'nav_bs_strategy', href: 'bestar-strategy.html' },
+      { id: 'bestar-roadmap', key: 'nav_bs_roadmap', href: 'bestar-roadmap.html' },
+      { id: 'bestar-appendix', key: 'nav_bs_appendix', href: 'bestar-appendix.html' }
+    ]},
     { id: 'contact', key: 'nav_contact', href: 'contact.html', cta: true }
   ];
 
@@ -52,8 +60,11 @@ function renderNav(activePage) {
       return `<li><a class="nav-link ${cls}" href="${p.href}" data-i18n="${p.key}"></a></li>`;
     }
     const inGroup = p.children.some(c => c.id === act);
+    // Costs and the BeanStar diagnosis sit behind the login gate — mark them locked
+    const GATED_IDS = ['costs', 'riyadh', 'bestar', 'bestar-issue', 'bestar-fit',
+                       'bestar-strategy', 'bestar-roadmap', 'bestar-appendix'];
     const items = p.children.map(c =>
-      `<a class="nav-menu-link ${act === c.id ? 'active' : ''} ${c.id === 'costs' ? 'nav-link-locked' : ''}" href="${c.href}" data-i18n="${c.key}"></a>`
+      `<a class="nav-menu-link ${act === c.id ? 'active' : ''} ${GATED_IDS.includes(c.id) ? 'nav-link-locked' : ''}" href="${c.href}" data-i18n="${c.key}"></a>`
     ).join('');
     return `<li class="nav-group">
       <button type="button" class="nav-link nav-group-label ${inGroup ? 'active' : ''}" aria-haspopup="true" aria-expanded="false" onclick="toggleNavGroup(event, this)">

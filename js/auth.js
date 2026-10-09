@@ -406,7 +406,12 @@ const AUTH = {
    */
   init() {
     const page = document.body.dataset.page;
-    const isProtected = page === 'costs' || page === 'riyadh';
+    // Gated sections: Costs (+ its Riyadh subpage) and the BeanStar supply
+    // diagnosis. The latter is a CONFIDENTIAL document addressed to a named
+    // counterparty, so it follows the same login-first convention.
+    const GATED = ['costs', 'riyadh', 'bestar', 'bestar-issue', 'bestar-fit',
+                   'bestar-strategy', 'bestar-roadmap', 'bestar-appendix'];
+    const isProtected = GATED.includes(page);
     if (!isProtected) return;
 
     if (this.isAuthenticated()) {
