@@ -11,15 +11,38 @@ const AUTH = {
   _userHash: '32c71c17cb86286e78764c7f1c6f84f85853deaf9d1f17b03f5e868cd8a1d2a9',
   _userHash2: '9345a35a6fdf174dff7219282a3ae4879790dbb785c70f6fff91e32fafd66eab',
   _passHash: 'b78a31f0e9654801916a1eda6286b3d4b8756d66803ba1b71151f8fd12d7ed10',
-  // The Ask has its OWN account, session key and hash — site-wide login
-  // (legacy admins or registered accounts) never unlocks it. Invite-only:
-  // credentials are handed out via WeChat.
-  _askUserHash: '08f0edde887016e448d2b0d20a79d3a2e0e8af5c467af7110a525be0e899f8e9',  // specialty-investor
-  _askPassHash: '28370eee30bc18b744d644789452cd6658843eb97cf7ca7c3d98b3374bf76cf3',  // (never in plain text here)
+  // ── Invite-only gates ─────────────────────────────────────────────────
+  // Every protected section owns its account AND its session key:
+  //   · a site-wide login never unlocks a private section
+  //   · one section's session never opens another
+  // Credentials are handed out via WeChat only (no self-registration).
+  _gates: {
+    ask: {                                   // The Ask — financing terms
+      key: 'napell-ask-auth',
+      userHash: '08f0edde887016e448d2b0d20a79d3a2e0e8af5c467af7110a525be0e899f8e9',  // specialty-investor
+      passHash: '28370eee30bc18b744d644789452cd6658843eb97cf7ca7c3d98b3374bf76cf3',
+      titleKey: 'ak_gate_t',
+      descKey: 'ak_gate_d'
+    },
+    costs: {                                 // Technology ▸ Cost Analysis
+      key: 'napell-costs-private',
+      userHash: 'e81881964f1da91cde1771a72a018a20ae874aff4b6fe6eb7e6da1788f2c6059',  // cost-investor
+      passHash: '8fe48845cee2a0a15fb724e3ee850ce44f9decc0b5c83e03b549e12534d515ec',
+      titleKey: 'cost_gate_t',
+      descKey: 'cost_gate_d'
+    },
+    riyadh: {                                // Cost Analysis subpage — same credentials
+      key: 'napell-costs-private',
+      userHash: 'e81881964f1da91cde1771a72a018a20ae874aff4b6fe6eb7e6da1788f2c6059',
+      passHash: '8fe48845cee2a0a15fb724e3ee850ce44f9decc0b5c83e03b549e12534d515ec',
+      titleKey: 'cost_gate_t',
+      descKey: 'cost_gate_d'
+    }
+  },
+  _gate: null,          // active gate for the current page (null = public page)
   _sessionKey: 'napell-costs-auth',
-  _askSessionKey: 'napell-ask-auth',
   _sessionTTL: 30 * 24 * 3600 * 1000,  // auto-login remembered for 30 days
-  _mode: 'admin',  // 'admin' (costs/riyadh — with register tab) | 'ask' (The Ask — invite only, no register)
+  _mode: 'admin',  // 'invite' (gated section) | 'admin' (legacy, unused by pages)
 
   /**
    * Hash a string with SHA-256 using Web Crypto API
@@ -66,10 +89,10 @@ const AUTH = {
   async attemptLogin(username, password) {
     const userHash = await this._sha256(username.trim());
     const passHash = await this._sha256(password);
-    if (this._mode === 'ask') {
-      // Ask gate accepts ONLY its dedicated invite account — legacy admins
-      // and server-registered accounts are intentionally rejected here.
-      const ok = userHash === this._askUserHash && passHash === this._askPassHash;
+    if (this._gate) {
+      // Gated sections accept ONLY their dedicated invite account — legacy
+      // admins and server-registered accounts are intentionally rejected.
+      const ok = userHash === this._gate.userHash && passHash === this._gate.passHash;
       if (ok) this._setSession();
       return ok;
     }
@@ -96,17 +119,18 @@ const AUTH = {
     const existing = document.getElementById('auth-modal');
     if (existing) existing.remove();
 
-    const isAsk = this._mode === 'ask';
-    const titleKey = isAsk ? 'ak_gate_t' : 'auth_login_title';
-    const descKey = isAsk ? 'ak_gate_d' : 'auth_login_desc';
+    const gate = this._gate;                 // null on legacy admin pages
+    const isInvite = !!gate;
+    const titleKey = gate ? gate.titleKey : 'auth_login_title';
+    const descKey = gate ? gate.descKey : 'auth_login_desc';
 
-    const tabsHtml = isAsk ? '' : `
+    const tabsHtml = isInvite ? '' : `
         <div class="auth-tabs">
           <button type="button" class="auth-tab active" id="auth-tab-login" data-i18n="auth_tab_login"></button>
           <button type="button" class="auth-tab" id="auth-tab-reg" data-i18n="auth_tab_reg"></button>
         </div>`;
 
-    const regHtml = isAsk ? '' : `
+    const regHtml = isInvite ? '' : `
         <form id="reg-form" autocomplete="off" onsubmit="return false;" style="display:none;">
           <div class="auth-field">
             <label for="reg-type" data-i18n="auth_reg_type"></label>
@@ -346,11 +370,12 @@ const AUTH = {
     // Disable button during verification
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
 
-    // Ask gate verifies locally against its dedicated account ONLY — no server
-    // fallback, so site-wide registered accounts can never open The Ask.
+    // Ask / Cost Analysis gates verify locally against their dedicated
+    // account ONLY — no server fallback, so site-wide registered accounts
+    // can never open a private section.
     let valid = await this.attemptLogin(username, password);
     let rateLimited = false;
-    if (!valid && this._mode !== 'ask') {
+    if (!valid && !this._gate) {
       const server = await this._serverLogin(username.trim(), password);
       valid = !!(server && server.ok);
       rateLimited = !!(server && server.error === 'rate limited');
@@ -438,12 +463,13 @@ const AUTH = {
    */
   init() {
     const page = document.body.dataset.page;
-    const isProtected = page === 'costs' || page === 'riyadh' || page === 'ask';
-    if (!isProtected) return;
-    this._mode = page === 'ask' ? 'ask' : 'admin';
-    // Each gate reads its own session key — logging into the site does NOT
-    // create an Ask session, and vice versa.
-    this._sessionKey = this._mode === 'ask' ? this._askSessionKey : 'napell-costs-auth';
+    const gate = this._gates[page];
+    if (!gate) return;                     // public page — nothing to gate
+    this._gate = gate;
+    this._mode = 'invite';
+    // Each section reads its OWN session key — logging into one section
+    // (or into the site) does not unlock another.
+    this._sessionKey = gate.key;
 
     if (this.isAuthenticated()) {
       // Already authed — reveal content and render
