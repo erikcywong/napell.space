@@ -11,7 +11,13 @@ const AUTH = {
   _userHash: '32c71c17cb86286e78764c7f1c6f84f85853deaf9d1f17b03f5e868cd8a1d2a9',
   _userHash2: '9345a35a6fdf174dff7219282a3ae4879790dbb785c70f6fff91e32fafd66eab',
   _passHash: 'b78a31f0e9654801916a1eda6286b3d4b8756d66803ba1b71151f8fd12d7ed10',
+  // The Ask has its OWN account, session key and hash — site-wide login
+  // (legacy admins or registered accounts) never unlocks it. Invite-only:
+  // credentials are handed out via WeChat.
+  _askUserHash: '08f0edde887016e448d2b0d20a79d3a2e0e8af5c467af7110a525be0e899f8e9',  // specialty-investor
+  _askPassHash: '28370eee30bc18b744d644789452cd6658843eb97cf7ca7c3d98b3374bf76cf3',  // (never in plain text here)
   _sessionKey: 'napell-costs-auth',
+  _askSessionKey: 'napell-ask-auth',
   _sessionTTL: 30 * 24 * 3600 * 1000,  // auto-login remembered for 30 days
   _mode: 'admin',  // 'admin' (costs/riyadh — with register tab) | 'ask' (The Ask — invite only, no register)
 
@@ -60,6 +66,13 @@ const AUTH = {
   async attemptLogin(username, password) {
     const userHash = await this._sha256(username.trim());
     const passHash = await this._sha256(password);
+    if (this._mode === 'ask') {
+      // Ask gate accepts ONLY its dedicated invite account — legacy admins
+      // and server-registered accounts are intentionally rejected here.
+      const ok = userHash === this._askUserHash && passHash === this._askPassHash;
+      if (ok) this._setSession();
+      return ok;
+    }
     if ((userHash === this._userHash || userHash === this._userHash2) && passHash === this._passHash) {
       this._setSession();
       return true;
@@ -333,10 +346,11 @@ const AUTH = {
     // Disable button during verification
     if (btn) { btn.disabled = true; btn.textContent = '...'; }
 
-    // Legacy admin accounts verify locally; registered accounts verify on the server.
+    // Ask gate verifies locally against its dedicated account ONLY — no server
+    // fallback, so site-wide registered accounts can never open The Ask.
     let valid = await this.attemptLogin(username, password);
     let rateLimited = false;
-    if (!valid) {
+    if (!valid && this._mode !== 'ask') {
       const server = await this._serverLogin(username.trim(), password);
       valid = !!(server && server.ok);
       rateLimited = !!(server && server.error === 'rate limited');
@@ -347,6 +361,7 @@ const AUTH = {
     if (window.TRACK) TRACK.login(username.trim(), valid);
 
     if (valid) {
+      this._setSession();
       this.hideLoginModal();
       this.revealContent();
       this._renderCosts();
@@ -426,6 +441,9 @@ const AUTH = {
     const isProtected = page === 'costs' || page === 'riyadh' || page === 'ask';
     if (!isProtected) return;
     this._mode = page === 'ask' ? 'ask' : 'admin';
+    // Each gate reads its own session key — logging into the site does NOT
+    // create an Ask session, and vice versa.
+    this._sessionKey = this._mode === 'ask' ? this._askSessionKey : 'napell-costs-auth';
 
     if (this.isAuthenticated()) {
       // Already authed — reveal content and render
