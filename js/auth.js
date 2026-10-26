@@ -13,6 +13,7 @@ const AUTH = {
   _passHash: 'b78a31f0e9654801916a1eda6286b3d4b8756d66803ba1b71151f8fd12d7ed10',
   _sessionKey: 'napell-costs-auth',
   _sessionTTL: 30 * 24 * 3600 * 1000,  // auto-login remembered for 30 days
+  _mode: 'admin',  // 'admin' (costs/riyadh — with register tab) | 'ask' (The Ask — invite only, no register)
 
   /**
    * Hash a string with SHA-256 using Web Crypto API
@@ -82,35 +83,17 @@ const AUTH = {
     const existing = document.getElementById('auth-modal');
     if (existing) existing.remove();
 
-    const modal = document.createElement('div');
-    modal.id = 'auth-modal';
-    modal.className = 'auth-modal active';
-    modal.innerHTML = `
-      <div class="auth-modal-card">
-        <div class="auth-modal-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-        </div>
-        <h2 class="auth-modal-title" id="auth-title" data-i18n="auth_login_title"></h2>
-        <p class="auth-modal-desc" id="auth-desc" data-i18n="auth_login_desc"></p>
+    const isAsk = this._mode === 'ask';
+    const titleKey = isAsk ? 'ak_gate_t' : 'auth_login_title';
+    const descKey = isAsk ? 'ak_gate_d' : 'auth_login_desc';
+
+    const tabsHtml = isAsk ? '' : `
         <div class="auth-tabs">
           <button type="button" class="auth-tab active" id="auth-tab-login" data-i18n="auth_tab_login"></button>
           <button type="button" class="auth-tab" id="auth-tab-reg" data-i18n="auth_tab_reg"></button>
-        </div>
-        <form id="auth-form" autocomplete="off" onsubmit="return false;">
-          <div class="auth-field">
-            <label for="auth-user" data-i18n="auth_username"></label>
-            <input type="text" id="auth-user" autocomplete="off" autocapitalize="none" spellcheck="false" required>
-          </div>
-          <div class="auth-field">
-            <label for="auth-pass" data-i18n="auth_password"></label>
-            <input type="password" id="auth-pass" autocomplete="new-password" required>
-          </div>
-          <div class="auth-error" id="auth-error"></div>
-          <button type="submit" class="auth-login-btn" id="auth-submit" data-i18n="auth_login_btn"></button>
-        </form>
+        </div>`;
+
+    const regHtml = isAsk ? '' : `
         <form id="reg-form" autocomplete="off" onsubmit="return false;" style="display:none;">
           <div class="auth-field">
             <label for="reg-type" data-i18n="auth_reg_type"></label>
@@ -135,7 +118,35 @@ const AUTH = {
           </div>
           <div class="auth-error" id="reg-error"></div>
           <button type="submit" class="auth-login-btn" id="reg-submit" data-i18n="auth_reg_btn"></button>
+        </form>`;
+
+    const modal = document.createElement('div');
+    modal.id = 'auth-modal';
+    modal.className = 'auth-modal active';
+    modal.innerHTML = `
+      <div class="auth-modal-card">
+        <div class="auth-modal-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h2 class="auth-modal-title" id="auth-title" data-i18n="${titleKey}"></h2>
+        <p class="auth-modal-desc" id="auth-desc" data-i18n="${descKey}"></p>
+        ${tabsHtml}
+        <form id="auth-form" autocomplete="off" onsubmit="return false;">
+          <div class="auth-field">
+            <label for="auth-user" data-i18n="auth_username"></label>
+            <input type="text" id="auth-user" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+          </div>
+          <div class="auth-field">
+            <label for="auth-pass" data-i18n="auth_password"></label>
+            <input type="password" id="auth-pass" autocomplete="new-password" required>
+          </div>
+          <div class="auth-error" id="auth-error"></div>
+          <button type="submit" class="auth-login-btn" id="auth-submit" data-i18n="auth_login_btn"></button>
         </form>
+        ${regHtml}
       </div>
     `;
     document.body.appendChild(modal);
@@ -167,19 +178,25 @@ const AUTH = {
       });
     });
 
-    // Tab switching between Sign in and Register
-    document.getElementById('auth-tab-login').addEventListener('click', () => this._switchTab('login'));
-    document.getElementById('auth-tab-reg').addEventListener('click', () => this._switchTab('reg'));
+    // Tab switching between Sign in and Register (admin-mode pages only)
+    const tabLogin = document.getElementById('auth-tab-login');
+    const tabReg = document.getElementById('auth-tab-reg');
+    if (tabLogin && tabReg) {
+      tabLogin.addEventListener('click', () => this._switchTab('login'));
+      tabReg.addEventListener('click', () => this._switchTab('reg'));
+    }
 
-    // Registration id label follows the selected method
+    // Registration id label follows the selected method (admin-mode pages only)
     const regType = document.getElementById('reg-type');
-    regType.addEventListener('change', () => this._updateRegIdLabel());
-    this._updateRegIdLabel();
+    if (regType) {
+      regType.addEventListener('change', () => this._updateRegIdLabel());
+      this._updateRegIdLabel();
 
-    document.getElementById('reg-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      this._handleRegister();
-    });
+      document.getElementById('reg-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        this._handleRegister();
+      });
+    }
   },
 
   _switchTab(tab) {
@@ -406,8 +423,9 @@ const AUTH = {
    */
   init() {
     const page = document.body.dataset.page;
-    const isProtected = page === 'costs' || page === 'riyadh';
+    const isProtected = page === 'costs' || page === 'riyadh' || page === 'ask';
     if (!isProtected) return;
+    this._mode = page === 'ask' ? 'ask' : 'admin';
 
     if (this.isAuthenticated()) {
       // Already authed — reveal content and render
