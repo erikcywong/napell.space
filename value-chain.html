@@ -9,7 +9,7 @@
   <meta name="ai-content-declaration" content="prohibited">
   <title>Value Chain — napell.space</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d9bf0'/><text x='50' y='68' font-size='38' font-weight='bold' text-anchor='middle' fill='%23000'>N</text></svg>">
-  <link rel="stylesheet" href="css/style.css?v=68">
+  <link rel="stylesheet" href="css/style.css?v=69">
   <style>
     .vc-levers { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 20px; }
     .vc-lever { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
@@ -17,6 +17,13 @@
     .vc-lever h4 { font-size: 14px; color: var(--text-primary); margin-bottom: 7px; }
     .vc-lever p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; }
     .vc-lever .lv-get { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); font-size: 12px; color: #00ba7c; line-height: 1.55; }
+    .vc-gates { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 20px; }
+    .vc-gate { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; }
+    .vc-gate .g-num { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 800; color: #1d9bf0; letter-spacing: 1px; margin-bottom: 4px; }
+    .vc-gate .g-tag { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 1.2px; color: var(--text-muted); margin-bottom: 8px; }
+    .vc-gate h4 { font-size: 14px; color: var(--text-primary); margin-bottom: 7px; }
+    .vc-gate p { font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; }
+    .gate-note { margin-top: 20px; padding: 15px 18px; border: 1px solid rgba(0,186,124,0.32); border-left: 3px solid #00ba7c; border-radius: var(--radius-md); background: rgba(0,186,124,0.06); font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
   </style>
 </head>
 <body data-page="value-chain">
@@ -96,6 +103,45 @@
       </div>
     </div>
 
+    <!-- Six admission gates for a bean -->
+    <div class="section">
+      <h2 class="section-title" data-i18n="vc_gate_t"></h2>
+      <p class="section-desc" data-i18n="vc_gate_lead"></p>
+      <div class="vc-gates">
+        <div class="vc-gate">
+          <span class="g-num">01</span><span class="g-tag">TITLE</span>
+          <h4 data-i18n="vc_g1_t"></h4>
+          <p data-i18n="vc_g1_d"></p>
+        </div>
+        <div class="vc-gate">
+          <span class="g-num">02</span><span class="g-tag">CUSTODY</span>
+          <h4 data-i18n="vc_g2_t"></h4>
+          <p data-i18n="vc_g2_d"></p>
+        </div>
+        <div class="vc-gate">
+          <span class="g-num">03</span><span class="g-tag">LABORATORY</span>
+          <h4 data-i18n="vc_g3_t"></h4>
+          <p data-i18n="vc_g3_d"></p>
+        </div>
+        <div class="vc-gate">
+          <span class="g-num">04</span><span class="g-tag">AUDIT</span>
+          <h4 data-i18n="vc_g4_t"></h4>
+          <p data-i18n="vc_g4_d"></p>
+        </div>
+        <div class="vc-gate">
+          <span class="g-num">05</span><span class="g-tag">DISCLOSURE</span>
+          <h4 data-i18n="vc_g5_t"></h4>
+          <p data-i18n="vc_g5_d"></p>
+        </div>
+        <div class="vc-gate">
+          <span class="g-num">06</span><span class="g-tag">RECALL</span>
+          <h4 data-i18n="vc_g6_t"></h4>
+          <p data-i18n="vc_g6_d"></p>
+        </div>
+      </div>
+      <p class="gate-note" data-i18n="vc_gate_note"></p>
+    </div>
+
     <!-- Key Metrics -->
     <div class="section">
       <div class="stat-grid">
@@ -122,9 +168,9 @@
   <div id="footer-container"></div>
   <div id="modal-container"></div>
 
-  <script src="js/i18n.js?v=68"></script>
-  <script src="js/data.js?v=68"></script>
-  <script src="js/main.js?v=68"></script>
+  <script src="js/i18n.js?v=69"></script>
+  <script src="js/data.js?v=69"></script>
+  <script src="js/main.js?v=69"></script>
   <script>
     function renderValueChainContent(lang) {
       // Tooltips
