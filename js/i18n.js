@@ -195,7 +195,7 @@ const I18N = {
 
       nav_thesis: "Thesis",
       th_title: "Investor Thesis",
-      th_intro: "Capital sinks into production first; the high-frequency layer is paid for with what the farm lays. Why heavy assets create value first — and how that order wins speciality-coffee pricing power within five years on the farm's own cash, not on the next round.",
+      th_intro: "Capital sinks into production first; the high-frequency layer is paid for with what the farm lays. Why heavy assets create value first — and how that order wins speciality-coffee pricing power within ten years on the farm's own cash, not on the next round.",
       th_oneliner: "Heavy assets first — and two engines, not one. The seedling line is the cash engine: 4-month cycles, three batches a year, 73.5% gross margin, and a government tender that already specifies our purity and root specs. The bean line is the pricing anchor: specialty and microlot only, because aeroponic cost sits above the commodity band at every yield we can physically reach. We grow less coffee, and we sell none of it cheap. Together they fund the high-frequency layer (AI Agent, zero-carbon marketplace, coffee savings bank, shared roasting, curve IP), with REITs as the final capitalisation step.",
       th_layers_t: "The Chain in Three Layers",
       th_l1_t: "Priority 1 — Production end (heavy assets)",
@@ -1375,7 +1375,7 @@ const I18N = {
 
       nav_thesis: "投资论点",
       th_title: "投资论点",
-      th_intro: "资本先沉到生产端,高频层则靠农场自己下的蛋来养。为什么重资产先创造价值——以及这条顺序如何用农场自己的现金在五年内拿下精品咖啡的定价权,而不是靠下一轮融资。",
+      th_intro: "资本先沉到生产端,高频层则靠农场自己下的蛋来养。为什么重资产先创造价值——以及这条顺序如何用农场自己的现金在十年内拿下精品咖啡的定价权,而不是靠下一轮融资。",
       th_oneliner: "重资产先行——而且是两台引擎，不是一台。种苗线是现金引擎：4 个月一轮、一年三批、73.5% 毛利，而且政府招标文件已经写死了纯度与主根规格。豆线是定价锚：只做精品与微批次，因为在我们物理上能达到的任何产量下，雾培成本都高于大宗价位带。我们种的豆更少，但一颗都不便宜卖。两条线共同养起高频层（AI Agent、零碳商城、咖啡储蓄银行、共享烘焙、曲线 IP），最后以 REITs 完成资本化。",
       th_layers_t: "三层链条结构",
       th_l1_t: "第一优先 · 生产端(重资产)",
@@ -2555,7 +2555,7 @@ const I18N = {
 
       nav_thesis: "أطروحة الاستثمار",
       th_title: "أطروحة الاستثمار",
-      th_intro: "رأس المال يغوص في الإنتاج أولاً، وطبقة التردد العالي تموّلها المزرعة من بيضها. لماذا تخلق الأصول الثقيلة القيمة أولاً — وكيف يمنح هذا الترتيب سلطة تسعير القهوة المختصّة خلال خمس سنوات من نقد المزرعة، لا من الجولة القادمة.",
+      th_intro: "رأس المال يغوص في الإنتاج أولاً، وطبقة التردد العالي تموّلها المزرعة من بيضها. لماذا تخلق الأصول الثقيلة القيمة أولاً — وكيف يمنح هذا الترتيب سلطة تسعير القهوة المختصّة خلال عشر سنوات من نقد المزرعة، لا من الجولة القادمة.",
       th_oneliner: "الأصول الثقيلة أولاً — وبمحرّكين لا محرّك واحد. خط الشتلات هو محرّك النقد: دورات من أربعة أشهر، وثلاث دفعات سنوياً، وهامش إجمالي ٧٣٫٥٪، ومناقصة حكومية تحدّد مسبقاً مواصفات النقاء والجذر. وخط الحبوب هو مرساة التسعير: مختصّة ودفعات صغيرة فقط، لأن كلفة الزراعة الأيروبونية تتجاوز نطاق سعر السلعة عند أي إنتاجية ممكنة عملياً. نزرع قهوة أقل، ولا نبيع منها شيئاً بسعر رخيص. ومعاً يموّلان طبقة التردد العالي (وكيل ذكاء اصطناعي، سوق صفري الكربون، بنك توفير البن، التحميص المشترك، ملكية منحنيات التحميص)، مع صناديق الريت (REITs) كخطوة رسملة أخيرة.",
       th_layers_t: "السلسلة في ثلاث طبقات",
       th_fly_t: "عجلة رأس المال — المزرعة أولاً ثم التردد العالي",
